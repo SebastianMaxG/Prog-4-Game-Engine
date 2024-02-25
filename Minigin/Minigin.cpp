@@ -9,8 +9,8 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-
-SDL_Window* g_window{};
+#include <chrono>
+#include <thread>
 
 void PrintSDLVersion()
 {
@@ -40,7 +40,9 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath)
+dae::Minigin::Minigin(const std::string& dataPath)
+	: ms_per_frame()
+	, fixed_time_step(0.01)
 {
 	PrintSDLVersion();
 	
@@ -49,7 +51,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
 
-	g_window = SDL_CreateWindow(
+	m_windowPtr = SDL_CreateWindow(
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
@@ -57,27 +59,42 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		480,
 		SDL_WINDOW_OPENGL
 	);
-	if (g_window == nullptr) 
+
+	if (m_windowPtr == nullptr) 
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 
-	Renderer::GetInstance().Init(g_window);
+	Renderer::GetInstance().Init(m_windowPtr);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+
+
 }
 
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
-	SDL_DestroyWindow(g_window);
-	g_window = nullptr;
+	SDL_DestroyWindow(m_windowPtr);
+	m_windowPtr = nullptr;
 	SDL_Quit();
 }
 
 void dae::Minigin::Run(const std::function<void()>& load)
 {
 	load();
+	DEVMODE dm;
+	memset(&dm, 0, sizeof(dm));
+	dm.dmSize = sizeof(dm);
+	if (EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dm) != 0)
+	{
+		ms_per_frame = 1000 / static_cast<int>(dm.dmDisplayFrequency);
+	}
+	else
+	{
+		ms_per_frame = 1000 / max_framerate;
+	}
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
@@ -85,10 +102,31 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
+	auto lastTime = std::chrono::high_resolution_clock::now();
+	double lag{};
 	while (doContinue)
 	{
+		const auto current = std::chrono::high_resolution_clock::now();
+		double deltaTime = std::chrono::duration<double>(current - lastTime).count();
+		lastTime = current;
+		lag += deltaTime;
+
 		doContinue = input.ProcessInput();
-		sceneManager.Update();
+
+		while (lag >= fixed_time_step)
+		{
+			sceneManager.FixedUpdate(fixed_time_step);
+			lag -= fixed_time_step;
+		}
+		sceneManager.Update(deltaTime);
 		renderer.Render();
+
+		const auto sleep_time = current + std::chrono::milliseconds(ms_per_frame) - std::chrono::high_resolution_clock::now();
+		std::this_thread::sleep_for(sleep_time);
 	}
+}
+
+SDL_Window* dae::Minigin::GetSDLWindow()
+{
+	return m_windowPtr;
 }

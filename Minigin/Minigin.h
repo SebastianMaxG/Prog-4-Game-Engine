@@ -15,5 +15,15 @@ namespace dae
 		Minigin(Minigin&& other) = delete;
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
+
+		SDL_Window* GetSDLWindow();
+	private:
+		SDL_Window* m_windowPtr{};
+
+		double fixed_time_step;
+		int ms_per_frame;
+
+		int max_framerate{120}; // max framerate if v-sync is off
+		bool v_sync{true};
 	};
 }
