@@ -41,3 +41,21 @@ float dae::Transform::GetRotation() const
 {
 	return m_Rotation;
 }
+
+dae::Transform dae::Transform::operator-(const Transform& other) const
+{
+	Transform result{};
+	result.m_Position = m_Position - other.m_Position;
+	result.m_Rotation = m_Rotation - other.m_Rotation;
+	result.m_Scale = m_Scale / other.m_Scale;
+	return result;
+}
+
+dae::Transform dae::Transform::operator+(const Transform& other) const
+{
+	Transform result{};
+	result.m_Position = m_Position + other.m_Position;
+	result.m_Rotation = m_Rotation + other.m_Rotation;
+	result.m_Scale = m_Scale * other.m_Scale;
+	return result;
+}

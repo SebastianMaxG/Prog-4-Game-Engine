@@ -62,7 +62,6 @@ namespace dae
 		{
 			m_Components.insert(componentPtr);
 		}
-		componentPtr->SetGameObject(this);
 		if (m_TransformComponent)
 			componentPtr->SetTransformComponent(std::weak_ptr(m_TransformComponent));
 	}
@@ -123,5 +122,60 @@ namespace dae
 			}
 		}
 		return nullptr;
+	}
+	void GameObject::SetParent(GameObject* parentPtr, bool keepWorldPosition)
+	{
+		if (parentPtr == this or m_ChildrenPtrs.contains(parentPtr) or m_ParentPtr == parentPtr)
+		{
+			return;
+		}
+		if (m_TransformComponent)
+		{
+			if (parentPtr == nullptr)
+			{
+				m_TransformComponent->SetLocalTransform(m_TransformComponent->GetWorldTransform());
+				m_TransformComponent->SetIsRoot(true);
+			}
+			else
+			{
+				if (keepWorldPosition)
+				{
+					m_TransformComponent->SetLocalTransform
+					(m_TransformComponent->GetWorldTransform() 
+						- m_ParentPtr->GetTransform()->GetWorldTransform());
+				}
+				SetDirty();
+				m_TransformComponent->SetIsRoot(false);
+			}
+		}
+		if (m_ParentPtr)
+		{
+			m_ParentPtr->RemoveChild(this);
+		}
+		m_ParentPtr = parentPtr;
+		if (m_ParentPtr)
+		{
+			m_ParentPtr->AddChild(this);
+		}
+		// update the transform
+	}
+	void GameObject::SetDirty()
+	{
+		for (GameObject* child : m_ChildrenPtrs)
+		{
+			child->SetDirty();
+		}
+		if (m_TransformComponent)
+		{
+			m_TransformComponent->SetDirty();
+		}
+	}
+	void GameObject::AddChild(GameObject* childPtr)
+	{
+		m_ChildrenPtrs.emplace(childPtr);
+	}
+	void GameObject::RemoveChild(GameObject* childPtr)
+	{
+		m_ChildrenPtrs.erase(childPtr);
 	}
 }

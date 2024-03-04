@@ -16,10 +16,11 @@ void dae::FPSComponent::Update(double deltaTime)
 	m_FpsCounter++;
 	if (m_FpsTimer > m_FpsUpdateDelay)
 	{
-		m_Fps = (int)(10.0*m_FpsCounter / m_FpsTimer) / 10.0;
-		SetText(std::format("{}",m_Fps) + " FPS");
+		m_Fps = m_FpsCounter / m_FpsTimer;
+		SetText(std::format("{0:.1f} FPS",m_Fps));
 		m_FpsTimer = 0;
 		m_FpsCounter = 0;
 	}
 	__super::Update(deltaTime);
+	
 }

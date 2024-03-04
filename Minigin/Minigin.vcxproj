@@ -179,6 +179,7 @@
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
+    <ClInclude Include="OrbitComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -201,6 +202,7 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
+    <ClCompile Include="OrbitComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

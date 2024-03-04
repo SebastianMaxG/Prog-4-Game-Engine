@@ -5,8 +5,8 @@
 
 
 
-dae::BaseComponent::BaseComponent(GameObject* m_GameObjectPtr)
-	:m_GameObjectPtr(m_GameObjectPtr)
+dae::BaseComponent::BaseComponent(GameObject* gameObjectPtr)
+	:m_GameObjectPtr(gameObjectPtr)
 	, m_IsActive(false)
 	, m_IsInitialized(false)
 {

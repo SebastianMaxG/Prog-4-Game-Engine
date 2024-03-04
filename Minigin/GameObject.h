@@ -17,6 +17,7 @@ namespace dae
 	public:
 		 void FixedUpdate(double deltaTime);
 		 void Update(double deltaTime);
+		 //void LateUpdate(double deltaTime);
 		 void Render() const;
 
 		GameObject() = default;
@@ -30,11 +31,24 @@ namespace dae
 		void RemoveComponent(std::shared_ptr<BaseComponent> componentPtr);
 		const BaseComponent* GetComponent(const std::string& name);
 		const BaseComponent* GetComponent(const std::type_info& type);
+		const TransformComponent* GetTransform() const { return m_TransformComponent.get(); }
+
+		void SetParent(GameObject* parentPtr, bool keepWorldPosition);
+		GameObject* GetParent() const { return m_ParentPtr; };
+
+		void SetDirty();
 	private:
 		std::set<std::shared_ptr<BaseComponent>> m_Components;
 		std::set<std::shared_ptr<VisualComponent>> m_VisualComponents;
 		std::set<std::shared_ptr<PhysicsComponent>> m_PhysicsComponents;
 		std::shared_ptr<TransformComponent> m_TransformComponent;
+
+		GameObject* m_ParentPtr = nullptr;
+		std::set<GameObject*> m_ChildrenPtrs;
+
+
+		void AddChild(GameObject* childPtr);
+		void RemoveChild(GameObject* childPtr);
 
 	};
 }

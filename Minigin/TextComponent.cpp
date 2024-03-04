@@ -43,7 +43,7 @@ void dae::TextComponent::Render() const
 		auto pos = m_Transform.GetPosition();
 		if (!m_TransformComponent.expired())
 		{
-			pos += m_TransformComponent.lock().get()->GetPosition();
+			pos += m_TransformComponent.lock()->GetPosition();
 		}
 		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}

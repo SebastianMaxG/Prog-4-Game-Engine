@@ -21,6 +21,11 @@ namespace dae
 
 		const glm::vec3& GetScale() const;
 		float GetRotation() const;
+
+		//make a minus operator for transform
+		Transform operator-(const Transform& other) const;
+		Transform operator+(const Transform& other) const;
+
 	private:
 
 
