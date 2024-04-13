@@ -1,5 +1,7 @@
 #include "FPSComponent.h"
 #include <format>
+// TODO: make it so that FPSComponent makes use of a textcomponent
+
 dae::FPSComponent::FPSComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Font> font, Transform transform, SDL_Color color)
 	: TextComponent(m_GameObjectPtr, "666 FPS", font,transform, color)
 	, m_Fps(0)
@@ -11,7 +13,6 @@ dae::FPSComponent::FPSComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Fon
 
 void dae::FPSComponent::Update(double deltaTime)
 {
-	//make the fps 1 decimal
 	m_FpsTimer += deltaTime;
 	m_FpsCounter++;
 	if (m_FpsTimer > m_FpsUpdateDelay)

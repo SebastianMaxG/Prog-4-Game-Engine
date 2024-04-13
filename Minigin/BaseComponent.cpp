@@ -76,8 +76,17 @@ void dae::BaseComponent::Stop()
 
 void dae::BaseComponent::Initialize()
 {
-	m_IsInitialized = true;
-	m_IsActive = true;
+	if (m_GameObjectPtr == nullptr)
+	{
+		std::cout << "Error in BaseComponent::Initialize: GameObject pointer is nullptr" << std::endl;
+		return;
+	}
+	else
+	{
+		m_IsInitialized = true;
+		m_IsActive = true;
+	}
+
 }
 
 

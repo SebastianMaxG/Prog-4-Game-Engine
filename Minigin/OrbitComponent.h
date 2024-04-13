@@ -1,5 +1,11 @@
 #pragma once
-class OrbitComponent
+#include "BaseComponent.h"
+namespace dae
 {
-};
+
+	class OrbitComponent : public BaseComponent
+	{
+	};
+
+}
 

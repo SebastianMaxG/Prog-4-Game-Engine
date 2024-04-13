@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "TransformComponent.h"
+#include "GameObject.h"
 
 dae::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, const std::string& filename, Transform transform)
 	: VisualComponent(m_GameObjectPtr, transform)
@@ -12,9 +13,9 @@ dae::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, const std::st
 void dae::SpriteComponent::Render() const
 {
 	auto pos = m_Transform.GetPosition();
-	if (!m_TransformComponent.expired())
+	if (const TransformComponent* transform = GetGameObject()->GetTransform())
 	{
-		pos += m_TransformComponent.lock().get()->GetPosition();
+		pos += transform->GetPosition();
 	}
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 }

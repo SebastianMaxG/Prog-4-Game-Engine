@@ -5,7 +5,9 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "TransformComponent.h"
+#include "GameObject.h"
 
+// TODO: make it so that textcomponent makes use of a spritecomponent
 dae::TextComponent::TextComponent(GameObject* m_GameObjectPtr, const std::string& text, std::shared_ptr<Font> font, Transform transform, SDL_Color color )
 	: VisualComponent(m_GameObjectPtr, transform)
 	, m_needsUpdate(true)
@@ -41,9 +43,9 @@ void dae::TextComponent::Render() const
 	if (m_textTexture != nullptr)
 	{
 		auto pos = m_Transform.GetPosition();
-		if (!m_TransformComponent.expired())
+		if (const TransformComponent* transform = GetGameObject()->GetTransform())
 		{
-			pos += m_TransformComponent.lock()->GetPosition();
+			pos += transform->GetPosition();
 		}
 		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}

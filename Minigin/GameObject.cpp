@@ -6,14 +6,19 @@
 #include "VisualComponent.h"
 #include "TransformComponent.h"
 #include "PhysicsComponent.h"
+#include <iostream>
 
 namespace dae
 {
+	GameObject::GameObject()
+	{
+		m_TransformComponent = std::make_unique<TransformComponent>(this);
+	}
 	GameObject::~GameObject() = default;
 
 	void GameObject::FixedUpdate(double deltaTime)
 	{
-		for (const auto& component : m_PhysicsComponents)
+		for (const auto& component : m_Components)
 		{
 			component->DoFixedUpdate(deltaTime);
 		}
@@ -25,11 +30,11 @@ namespace dae
 		{
 			component->DoUpdate(deltaTime);
 		}
-		for (const auto& component : m_PhysicsComponents)
+		for (const auto& component : m_Components)
 		{
 			component->DoUpdate(deltaTime);
 		}
-		for (const auto& component : m_VisualComponents)
+		for (const auto& component : m_Components)
 		{
 			component->DoUpdate(deltaTime);
 		}
@@ -37,36 +42,29 @@ namespace dae
 
 	void GameObject::Render() const
 	{
-		for (const auto& component : m_VisualComponents)
+		for (const auto& component : m_Components)
 		{
 			component->DoRender();
 		}
 	}
 
-	void GameObject::AddComponent(std::shared_ptr<BaseComponent> componentPtr)
+	void GameObject::AddComponent(std::unique_ptr<BaseComponent> componentPtr)
 	{
-		// check if the component is a visual component
-		if (auto visualComponent = std::dynamic_pointer_cast<VisualComponent>(componentPtr))
+		if (componentPtr->GetGameObject() != this)
 		{
-			m_VisualComponents.insert(visualComponent);
+			return;
 		}
-		else if (auto physicsComponent = std::dynamic_pointer_cast<PhysicsComponent>(componentPtr))
+		if (const TransformComponent* transform = dynamic_cast<TransformComponent*>(componentPtr.get()))
 		{
-			m_PhysicsComponents.insert(physicsComponent);
-		}
-		else if (auto transformComponent = std::dynamic_pointer_cast<TransformComponent>(componentPtr))
-		{
-			m_TransformComponent.swap(transformComponent);
+			m_TransformComponent->SetLocalTransform(transform->GetLocalTransform());
 		}
 		else
 		{
-			m_Components.insert(componentPtr);
+			m_Components.insert(std::move(componentPtr));
 		}
-		if (m_TransformComponent)
-			componentPtr->SetTransformComponent(std::weak_ptr(m_TransformComponent));
 	}
 
-	void GameObject::RemoveComponent(std::shared_ptr<BaseComponent> componentPtr)
+	void GameObject::RemoveComponent(std::unique_ptr<BaseComponent> componentPtr)
 	{
 		m_Components.erase(componentPtr);
 	}
@@ -80,14 +78,14 @@ namespace dae
 				return component.get();
 			}
 		}
-		for (const auto& component : m_PhysicsComponents)
+		for (const auto& component : m_Components)
 		{
 			if (component->GetName() == name)
 			{
 				return component.get();
 			}
 		}
-		for (const auto& component : m_VisualComponents)
+		for (const auto& component : m_Components)
 		{
 			if (component->GetName() == name)
 			{
@@ -107,14 +105,14 @@ namespace dae
 				return component.get();
 			}
 		}
-		for (const auto& component : m_PhysicsComponents)
+		for (const auto& component : m_Components)
 		{
 			if (typeid(*component) == type)
 			{
 				return component.get();
 			}
 		}
-		for (const auto& component : m_VisualComponents)
+		for (const auto& component : m_Components)
 		{
 			if (typeid(*component) == type)
 			{
@@ -157,7 +155,6 @@ namespace dae
 		{
 			m_ParentPtr->AddChild(this);
 		}
-		// update the transform
 	}
 	void GameObject::SetDirty()
 	{

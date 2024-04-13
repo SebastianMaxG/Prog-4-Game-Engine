@@ -2,9 +2,10 @@
 #include <memory>
 #include "Transform.h"
 #include <set>
-
+#include "Signal.h"
 namespace dae
 {
+
 	class Texture2D;
 	class BaseComponent;
 	class VisualComponent;
@@ -15,22 +16,24 @@ namespace dae
 	class GameObject final
 	{
 	public:
+
 		 void FixedUpdate(double deltaTime);
 		 void Update(double deltaTime);
-		 //void LateUpdate(double deltaTime);
+		 void LateUpdate();
 		 void Render() const;
 
-		GameObject() = default;
+		GameObject();
 		 ~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
-		void AddComponent(std::shared_ptr<BaseComponent> componentPtr);
-		void RemoveComponent(std::shared_ptr<BaseComponent> componentPtr);
+		void AddComponent(std::unique_ptr<BaseComponent> componentPtr);
+		void RemoveComponent(std::unique_ptr<BaseComponent> componentPtr);
 		const BaseComponent* GetComponent(const std::string& name);
 		const BaseComponent* GetComponent(const std::type_info& type);
+		TransformComponent* GetTransform() { return m_TransformComponent.get(); }
 		const TransformComponent* GetTransform() const { return m_TransformComponent.get(); }
 
 		void SetParent(GameObject* parentPtr, bool keepWorldPosition);
@@ -38,10 +41,8 @@ namespace dae
 
 		void SetDirty();
 	private:
-		std::set<std::shared_ptr<BaseComponent>> m_Components;
-		std::set<std::shared_ptr<VisualComponent>> m_VisualComponents;
-		std::set<std::shared_ptr<PhysicsComponent>> m_PhysicsComponents;
-		std::shared_ptr<TransformComponent> m_TransformComponent;
+		std::set<std::unique_ptr<BaseComponent>> m_Components;
+		std::unique_ptr<TransformComponent> m_TransformComponent;
 
 		GameObject* m_ParentPtr = nullptr;
 		std::set<GameObject*> m_ChildrenPtrs;
@@ -49,6 +50,7 @@ namespace dae
 
 		void AddChild(GameObject* childPtr);
 		void RemoveChild(GameObject* childPtr);
+
 
 	};
 }

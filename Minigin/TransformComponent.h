@@ -1,16 +1,15 @@
 #pragma once
 #include "Transform.h"
 #include <glm/glm.hpp>
+#include "BaseComponent.h"
 
 namespace dae
 {
-	class BaseComponent;
+	//class BaseComponent;
 
-	class TransformComponent final: public dae::BaseComponent
+	class TransformComponent final: public BaseComponent
 	{
 	public:
-		// make late Update
-		void Update(double deltaTime) override;
 
 		TransformComponent(GameObject* m_GameObjectPtr);
 
@@ -35,7 +34,7 @@ namespace dae
 		float GetRotation() const;
 
 		const Transform& GetLocalTransform() const;
-		const Transform& GetWorldTransform() const;
+		const Transform& GetWorldTransform();
 
 		void SetLocalTransform(const Transform& transform);
 		void SetWorldTransform(const Transform& transform);

@@ -1,28 +1,13 @@
 #include "TransformComponent.h"
-#include "BaseComponent.h"
 #include "Transform.h"
 #include "GameObject.h"
 
 namespace dae
 {
-	void TransformComponent::Update([[maybe_unused]]double deltaTime)
-	{
-		if (m_IsDirty)
-		{
-			if (m_IsRoot)
-			{
-				m_WorldTransform = m_LocalTransform;
-			}
-			else
-			{
-				m_WorldTransform = GetGameObject()->GetParent()->GetTransform()->GetWorldTransform() + m_LocalTransform;
-			}
-			m_IsDirty = false;
-		}
-	}
-	dae::TransformComponent::TransformComponent(GameObject* m_GameObjectPtr)
+	TransformComponent::TransformComponent(GameObject* m_GameObjectPtr)
 		:BaseComponent(m_GameObjectPtr)
 		, m_LocalTransform()
+		, m_WorldTransform()
 	{
 	}
 
@@ -74,17 +59,31 @@ namespace dae
 	{
 		return m_LocalTransform;
 	}
-	const Transform& TransformComponent::GetWorldTransform() const
+	const Transform& TransformComponent::GetWorldTransform()
 	{
+		if (m_IsDirty)
+		{
+			if (m_IsRoot)
+			{
+				m_WorldTransform = m_LocalTransform;
+			}
+			else
+			{
+				m_WorldTransform = GetGameObject()->GetParent()->GetTransform()->GetWorldTransform() + m_LocalTransform;
+			}
+			m_IsDirty = false;
+		}
 		return m_WorldTransform;
 	}
 	void TransformComponent::SetLocalTransform(const Transform& transform)
 	{
 		m_LocalTransform = transform;
+		m_IsDirty = true;
 	}
 	void TransformComponent::SetWorldTransform(const Transform& transform)
 	{
 		m_WorldTransform = transform;
+		m_IsDirty = true;
 	}
 	void TransformComponent::SetIsRoot(bool isRoot)
 	{

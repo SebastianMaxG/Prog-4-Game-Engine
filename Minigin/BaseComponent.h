@@ -36,21 +36,21 @@ namespace dae
 		//virtual void Destroy() = 0;
 		const std::string& GetName() const { return m_Name; }
 		void SetName(const std::string& name) { m_Name = name; }
-		const GameObject* GetGameObject() { return m_GameObjectPtr; };
+		GameObject* GetGameObject() { return m_GameObjectPtr; };
+		const GameObject* GetGameObject() const { return m_GameObjectPtr; }; 
 
 	//	void SetTransformComponent(std::weak_ptr<dae::TransformComponent> transformComponent)
 	//	{
 	//		m_TransformComponent.swap(transformComponent);
 	//	};
 	//protected:
-	//	std::weak_ptr<TransformComponent> m_TransformComponent;
 
 	private:
 		virtual void Initialize();
 		bool m_IsInitialized;
 		bool m_IsActive; //todo: make this a state / only update when active
 
-		const GameObject* m_GameObjectPtr;
+		GameObject* m_GameObjectPtr;
 		std::string m_Name;
 
 	};
