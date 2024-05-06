@@ -18,7 +18,7 @@ namespace dae
 
 		 void FixedUpdate(double deltaTime);
 		 void Update(double deltaTime);
-		 void LateUpdate();
+		 void LateUpdate(double deltaTime);
 		 void Render() const;
 
 		GameObject();

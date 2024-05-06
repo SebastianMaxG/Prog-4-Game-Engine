@@ -412,7 +412,7 @@ namespace dae
             std::atomic_bool m_IsActive = true;
 
             // Bool to see if the signal is threaded
-            const bool m_IsThreaded = true;
+            const bool m_IsThreaded;
         };
     }
 }
