@@ -7,8 +7,8 @@
 
 dae::BaseComponent::BaseComponent(GameObject* gameObjectPtr)
 	:m_GameObjectPtr(gameObjectPtr)
-	, m_IsActive(false)
 	, m_IsInitialized(false)
+	, m_IsActive(false)
 {
 	Initialize();
 }
@@ -37,32 +37,32 @@ void dae::BaseComponent::DoRender() const
 	}
 }
 
-void dae::BaseComponent::Update([[maybe_unused]] double deltaTime)
+void dae::BaseComponent::Update(double)
 {
 
 }
 
-void dae::BaseComponent::FixedUpdate([[maybe_unused]] double deltaTime)
+void dae::BaseComponent::FixedUpdate(double)
 {
 }
 
 void dae::BaseComponent::Render() const
 {
 }
-
-dae::BaseComponent& dae::BaseComponent::operator=(BaseComponent&& other)
-{
-	if (this != &other)
-	{
-		m_GameObjectPtr = other.m_GameObjectPtr;
-		m_IsActive = other.m_IsActive;
-		m_IsInitialized = other.m_IsInitialized;
-		other.m_IsActive = false;
-		other.m_IsInitialized = false;
-		other.m_GameObjectPtr = nullptr;
-	}
-	return *this;
-}
+//
+//dae::BaseComponent& dae::BaseComponent::operator=(BaseComponent&& other) noexcept
+//{
+//	if (this != &other)
+//	{
+//		m_GameObjectPtr = other.m_GameObjectPtr;
+//		m_IsActive = other.m_IsActive;
+//		m_IsInitialized = other.m_IsInitialized;
+//		other.m_IsActive = false;
+//		other.m_IsInitialized = false;
+//		other.m_GameObjectPtr = nullptr;
+//	}
+//	return *this;
+//}
 
 void dae::BaseComponent::Start()
 {

@@ -34,7 +34,7 @@ namespace dae
 		float GetRotation() const;
 
 		const Transform& GetLocalTransform() const;
-		const Transform& GetWorldTransform();
+		const Transform& GetWorldTransform() const;
 
 		void SetLocalTransform(const Transform& transform);
 		void SetWorldTransform(const Transform& transform);
@@ -44,8 +44,8 @@ namespace dae
 	private:
 
 		Transform m_LocalTransform;
-		Transform m_WorldTransform;
-		bool m_IsDirty = true;
+		mutable Transform m_WorldTransform;
+		mutable bool m_IsDirty = true;
 		bool m_IsRoot = true;
 
 	};

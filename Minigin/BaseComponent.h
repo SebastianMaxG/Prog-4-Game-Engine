@@ -28,7 +28,7 @@ namespace dae
 		BaseComponent(const BaseComponent& other) = delete;
 		BaseComponent(BaseComponent&& other) = delete;
 		BaseComponent& operator=(const BaseComponent& other) = delete;
-		BaseComponent& operator=(BaseComponent&& other);
+		BaseComponent& operator=(BaseComponent&& other) = delete;
 
 
 		void Start();
@@ -46,11 +46,11 @@ namespace dae
 	//protected:
 
 	private:
-		virtual void Initialize();
+		void Initialize();
+		GameObject* m_GameObjectPtr;
 		bool m_IsInitialized;
 		bool m_IsActive; //todo: make this a state / only update when active
 
-		GameObject* m_GameObjectPtr;
 		std::string m_Name;
 
 	};

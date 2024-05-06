@@ -3,7 +3,6 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "BaseComponent.h"
-#include "VisualComponent.h"
 #include "TransformComponent.h"
 #include "PhysicsComponent.h"
 #include <iostream>
@@ -26,14 +25,6 @@ namespace dae
 
 	void GameObject::Update(double deltaTime) 
 	{
-		for (const auto& component : m_Components)
-		{
-			component->DoUpdate(deltaTime);
-		}
-		for (const auto& component : m_Components)
-		{
-			component->DoUpdate(deltaTime);
-		}
 		for (const auto& component : m_Components)
 		{
 			component->DoUpdate(deltaTime);

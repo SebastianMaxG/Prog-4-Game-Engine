@@ -1,9 +1,9 @@
 #include "SceneManager.h"
-#include "Scene.h"
+#include "Scene.h" // Include Scene.h
 
 void dae::SceneManager::Update(double deltaTime)
 {
-	for(auto& scene : m_scenes)
+	for (auto& scene : m_scenes)
 	{
 		scene->Update(deltaTime);
 	}

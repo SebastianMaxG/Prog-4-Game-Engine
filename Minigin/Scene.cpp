@@ -1,6 +1,4 @@
 #include "Scene.h"
-#include "GameObject.h"
-
 #include <algorithm>
 
 using namespace dae;
@@ -11,14 +9,18 @@ Scene::Scene(const std::string& name) : m_name(name) {}
 
 Scene::~Scene() = default;
 
-void Scene::Add(std::shared_ptr<GameObject> object)
+void Scene::Add(std::unique_ptr<GameObject> object)
 {
 	m_objects.emplace_back(std::move(object));
 }
 
-void Scene::Remove(std::shared_ptr<GameObject> object)
+void Scene::Remove(GameObject* object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
+	auto it = std::ranges::find_if(m_objects, [object](const std::unique_ptr<GameObject>& obj) { return obj.get() == object; });
+	if (it != m_objects.end())
+	{
+		m_objects.erase(it);
+	}
 }
 
 void Scene::RemoveAll()
@@ -36,7 +38,7 @@ void dae::Scene::FixedUpdate(double deltaTime)
 
 void Scene::Update(double deltaTime)
 {
-	for(auto& object : m_objects)
+	for (auto& object : m_objects)
 	{
 		object->Update(deltaTime);
 	}

@@ -43,7 +43,8 @@ namespace dae
 
 	const glm::vec3& TransformComponent::GetPosition() const
 	{
-		return m_LocalTransform.GetPosition();
+		return GetWorldTransform().GetPosition();
+
 	}
 
 	const glm::vec3& TransformComponent::GetScale() const
@@ -59,7 +60,7 @@ namespace dae
 	{
 		return m_LocalTransform;
 	}
-	const Transform& TransformComponent::GetWorldTransform()
+	const Transform& TransformComponent::GetWorldTransform() const 
 	{
 		if (m_IsDirty)
 		{
