@@ -328,9 +328,9 @@ namespace dae
             // This function is used when the signal is not threaded
             void Update()
             {
-                if (m_IsThreaded)
+                if (m_IsThreaded or m_Que.empty())
                 {
-                    return;
+                    return; 
                 }
 
                 // Get the arguments from the que

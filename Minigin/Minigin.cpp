@@ -46,7 +46,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 {
 	PrintSDLVersion();
 	
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) 
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) 
 	{
 		throw std::runtime_error(std::string("SDL_Init Error: ") + SDL_GetError());
 	}
@@ -98,7 +98,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
-	auto& input = InputManager::GetInstance();
+	auto input = InputManager{};
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
