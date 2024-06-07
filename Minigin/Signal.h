@@ -330,7 +330,7 @@ namespace dae
             {
                 if (m_IsThreaded or m_Que.empty())
                 {
-                    return; 
+                    return; // Do nothing if the signal is threaded or the que is empty
                 }
 
                 // Get the arguments from the que
