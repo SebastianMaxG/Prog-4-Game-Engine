@@ -1,10 +1,11 @@
 #include "ScoreSystem.h"
 
 #include "GameObject.h"
+#include "GlobalSignals.h"
 #include "ResourceManager.h"
 #include "TextComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	void ScoreSystem::AddScore(uint32_t score)
 	{
@@ -38,9 +39,8 @@ namespace dae
 		: BaseComponent(gameObject)
 		, m_Score(0)
 	{
-		//TODO: link function to signal
-		//m_EnemyConnection = OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
-		auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+		m_EnemyConnection = globalSignals::OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
+		auto font = lsmf::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
 		auto textComponent = std::make_unique<TextComponent>(gameObject, "0", font);
 		m_TextComponent = textComponent.get();

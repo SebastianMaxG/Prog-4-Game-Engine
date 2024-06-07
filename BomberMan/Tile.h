@@ -1,12 +1,12 @@
 #pragma once
 #include "BaseComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	class SpriteComponent;
 }
 
-namespace dae
+namespace lsmf
 {
 
 	class Tile final : public BaseComponent

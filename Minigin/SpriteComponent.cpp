@@ -4,19 +4,19 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-dae::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, const std::string& filename)
+lsmf::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, const std::string& filename)
 	: BaseComponent(m_GameObjectPtr)
 {
 	SetTexture(filename);
 }
 
-dae::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Texture2D> newTexture)
+lsmf::SpriteComponent::SpriteComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Texture2D> newTexture)
 	: BaseComponent(m_GameObjectPtr)
 {
 	SetTexture(std::move(newTexture));
 }
 
-void dae::SpriteComponent::Update(double deltaTime)
+void lsmf::SpriteComponent::Update(double deltaTime)
 {
 	if (m_nrFrames == 1)
 	{
@@ -34,7 +34,7 @@ void dae::SpriteComponent::Update(double deltaTime)
 	}
 }
 
-void dae::SpriteComponent::Render() const
+void lsmf::SpriteComponent::Render() const
 {
 	if (m_texture == nullptr)
 	{
@@ -62,12 +62,12 @@ void dae::SpriteComponent::Render() const
 	Renderer::GetInstance().RenderTexture(*m_texture, pos, src);
 }
 
-void dae::SpriteComponent::SetTexture(const std::string& filename)
+void lsmf::SpriteComponent::SetTexture(const std::string& filename)
 {
 	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void dae::SpriteComponent::SetTexture(std::shared_ptr<Texture2D> newTexture)
+void lsmf::SpriteComponent::SetTexture(std::shared_ptr<Texture2D> newTexture)
 {
 	m_texture = std::move(newTexture);
 
@@ -77,7 +77,7 @@ void dae::SpriteComponent::SetTexture(std::shared_ptr<Texture2D> newTexture)
 	m_height /= m_rows;
 }
 
-void dae::SpriteComponent::SetFrames(int rows, int columns, int nrFrames, double frameTime)
+void lsmf::SpriteComponent::SetFrames(int rows, int columns, int nrFrames, double frameTime)
 {
 	m_rows = rows;
 	m_nrFrames = nrFrames;

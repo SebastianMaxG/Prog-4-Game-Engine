@@ -5,7 +5,7 @@
 
 
 
-dae::BaseComponent::BaseComponent(GameObject* gameObjectPtr)
+lsmf::BaseComponent::BaseComponent(GameObject* gameObjectPtr)
 	:m_GameObjectPtr(gameObjectPtr)
 	, m_IsInitialized(false)
 	, m_IsActive(false)
@@ -13,7 +13,7 @@ dae::BaseComponent::BaseComponent(GameObject* gameObjectPtr)
 	Initialize();
 }
 
-void dae::BaseComponent::DoUpdate(double deltaTime)
+void lsmf::BaseComponent::DoUpdate(double deltaTime)
 {
 	if (m_IsActive)
 	{
@@ -21,7 +21,7 @@ void dae::BaseComponent::DoUpdate(double deltaTime)
 	}
 }
 
-void dae::BaseComponent::DoFixedUpdate(double deltaTime)
+void lsmf::BaseComponent::DoFixedUpdate(double deltaTime)
 {
 	if (m_IsActive)
 	{
@@ -29,7 +29,7 @@ void dae::BaseComponent::DoFixedUpdate(double deltaTime)
 	}
 }
 
-void dae::BaseComponent::DoRender() const
+void lsmf::BaseComponent::DoRender() const
 {
 	if (m_IsActive)
 	{
@@ -37,20 +37,20 @@ void dae::BaseComponent::DoRender() const
 	}
 }
 
-void dae::BaseComponent::Update(double)
+void lsmf::BaseComponent::Update(double)
 {
 
 }
 
-void dae::BaseComponent::FixedUpdate(double)
+void lsmf::BaseComponent::FixedUpdate(double)
 {
 }
 
-void dae::BaseComponent::Render() const
+void lsmf::BaseComponent::Render() const
 {
 }
 //
-//dae::BaseComponent& dae::BaseComponent::operator=(BaseComponent&& other) noexcept
+//lsmf::BaseComponent& lsmf::BaseComponent::operator=(BaseComponent&& other) noexcept
 //{
 //	if (this != &other)
 //	{
@@ -64,17 +64,17 @@ void dae::BaseComponent::Render() const
 //	return *this;
 //}
 
-void dae::BaseComponent::Start()
+void lsmf::BaseComponent::Start()
 {
 	m_IsActive = true;
 }
 
-void dae::BaseComponent::Stop()
+void lsmf::BaseComponent::Stop()
 {
 	m_IsActive = false;
 }
 
-void dae::BaseComponent::Initialize()
+void lsmf::BaseComponent::Initialize()
 {
 	if (m_GameObjectPtr == nullptr)
 	{

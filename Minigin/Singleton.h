@@ -1,5 +1,5 @@
 #pragma once
-namespace dae
+namespace lsmf
 {
 	template <typename T>
 	class Singleton

@@ -3,12 +3,12 @@
 #include <memory>
 #include "BaseComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	class Font;
 	class Texture2D;
 	class SpriteComponent;
-	class TextComponent final: public dae::BaseComponent
+	class TextComponent final: public lsmf::BaseComponent
 	{
 	public:
 		void Update(double deltaTime) override;

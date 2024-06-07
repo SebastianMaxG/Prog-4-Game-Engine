@@ -1,9 +1,9 @@
 #pragma once
 #include "BaseComponent.h"
 #include "Transform.h"
-namespace dae
+namespace lsmf
 {
-	class PhysicsComponent : public dae::BaseComponent
+	class PhysicsComponent : public lsmf::BaseComponent
 	{
 	public:
 		PhysicsComponent(GameObject* m_GameObjectPtr);

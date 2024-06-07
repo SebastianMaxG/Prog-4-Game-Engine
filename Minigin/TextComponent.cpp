@@ -8,7 +8,7 @@
 #include "SpriteComponent.h"
 #include "GameObject.h"
 
-dae::TextComponent::TextComponent(GameObject* m_GameObjectPtr, const std::string& text, std::shared_ptr<Font> font, SDL_Color color )
+lsmf::TextComponent::TextComponent(GameObject* m_GameObjectPtr, const std::string& text, std::shared_ptr<Font> font, SDL_Color color )
 	: BaseComponent(m_GameObjectPtr)
 	, m_needsUpdate(true)
 	, m_text(text)
@@ -21,7 +21,7 @@ dae::TextComponent::TextComponent(GameObject* m_GameObjectPtr, const std::string
 	m_GameObjectPtr->AddComponent(std::unique_ptr<SpriteComponent>(m_SpriteComponent));
 }
 
-void dae::TextComponent::UpdateTexture()
+void lsmf::TextComponent::UpdateTexture()
 {
 
 	if (m_needsUpdate)
@@ -47,12 +47,12 @@ void dae::TextComponent::UpdateTexture()
 	}
 }
 
-void dae::TextComponent::Update(double)
+void lsmf::TextComponent::Update(double)
 {
 	UpdateTexture();
 }
 
-void dae::TextComponent::Render() const
+void lsmf::TextComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
@@ -66,7 +66,7 @@ void dae::TextComponent::Render() const
 }
 
 // This implementation uses the "dirty flag" pattern
-void dae::TextComponent::SetText(const std::string& text)
+void lsmf::TextComponent::SetText(const std::string& text)
 {
 	m_text = text;
 	m_needsUpdate = true;

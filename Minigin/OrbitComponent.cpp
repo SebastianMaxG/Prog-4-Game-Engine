@@ -3,7 +3,7 @@
 #include "TransformComponent.h"
 #include <iostream>
 
-dae::OrbitComponent::OrbitComponent(GameObject* m_GameObjectPtr, double radius, double speed, double angleOffset)
+lsmf::OrbitComponent::OrbitComponent(GameObject* m_GameObjectPtr, double radius, double speed, double angleOffset)
 	:BaseComponent(m_GameObjectPtr)
 	, m_Radius(radius)
 	, m_Speed(speed)
@@ -12,7 +12,7 @@ dae::OrbitComponent::OrbitComponent(GameObject* m_GameObjectPtr, double radius, 
 {
 }
 
-void dae::OrbitComponent::FixedUpdate(double deltaTime)
+void lsmf::OrbitComponent::FixedUpdate(double deltaTime)
 {
 	m_Angle += m_Speed * deltaTime;
 	if (m_Angle > 360)
@@ -25,7 +25,7 @@ void dae::OrbitComponent::FixedUpdate(double deltaTime)
 	GetGameObject()->GetTransform()->Translate({x,y,0});
 }
 
-//void dae::OrbitComponent::Update(double)
+//void lsmf::OrbitComponent::Update(double)
 //{
 //
 //	//std::cout << "Update OrbitComponent" << std::endl;

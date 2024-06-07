@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include <algorithm>
 
-using namespace dae;
+using namespace lsmf;
 
 unsigned int Scene::m_idCounter = 0;
 
@@ -28,7 +28,7 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
-void dae::Scene::FixedUpdate(double deltaTime)
+void lsmf::Scene::FixedUpdate(double deltaTime)
 {
 	for (auto& object : m_objects)
 	{
@@ -38,6 +38,13 @@ void dae::Scene::FixedUpdate(double deltaTime)
 
 void Scene::Update(double deltaTime)
 {
+	// remove objects marked for deletion
+	std::erase_if(m_objects,
+		[](const std::unique_ptr<GameObject>& object)
+		{
+			return object->IsMarkedForDestruction();
+		});
+
 	for (auto& object : m_objects)
 	{
 		object->Update(deltaTime);

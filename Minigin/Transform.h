@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-namespace dae
+namespace lsmf
 {
 	class Transform final
 	{
@@ -29,8 +29,8 @@ namespace dae
 	private:
 
 
-		glm::vec3 m_Position;
-		glm::vec3 m_Scale;
-		float m_Rotation;
+		glm::vec3 m_Position{};
+		glm::vec3 m_Scale{1,1,1};
+		float m_Rotation{};
 	};
 }

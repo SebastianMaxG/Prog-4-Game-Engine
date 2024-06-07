@@ -3,7 +3,7 @@
 #include "Enemy.h"
 
 
-namespace dae
+namespace lsmf
 {
 	class TextComponent;
 

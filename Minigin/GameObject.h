@@ -2,7 +2,7 @@
 #include <memory>
 #include <set>
 #include "Signal.h"
-namespace dae
+namespace lsmf
 {
 
 	class Texture2D;
@@ -11,7 +11,7 @@ namespace dae
 	class PhysicsComponent; 
 	class TransformComponent;
 
-	// todo: this should become final.
+
 	class GameObject final
 	{
 	public:
@@ -39,6 +39,8 @@ namespace dae
 		GameObject* GetParent() const { return m_ParentPtr; };
 
 		void SetDirty();
+		void MarkForDestruction();
+		bool IsMarkedForDestruction() const { return m_MarkedForDestruction; }
 	private:
 		std::set<std::unique_ptr<BaseComponent>> m_Components;
 		std::unique_ptr<TransformComponent> m_TransformComponent;
@@ -49,6 +51,8 @@ namespace dae
 
 		void AddChild(GameObject* childPtr);
 		void RemoveChild(GameObject* childPtr);
+
+		bool m_MarkedForDestruction = false;
 
 
 	};

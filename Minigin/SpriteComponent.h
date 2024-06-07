@@ -2,7 +2,7 @@
 #include "BaseComponent.h"
 #include "Texture2D.h"
 
-namespace dae
+namespace lsmf
 {
 	class SpriteComponent final: public BaseComponent
 	{

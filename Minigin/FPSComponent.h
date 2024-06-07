@@ -1,7 +1,7 @@
 #pragma once
 #include "TextComponent.h"
 #include <SDL.h>
-namespace dae
+namespace lsmf
 {
 	class FPSComponent : public BaseComponent
 	{

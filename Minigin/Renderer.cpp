@@ -18,7 +18,7 @@ int GetOpenGLDriverIndex()
 	return openglIndex;
 }
 
-void dae::Renderer::Init(SDL_Window* window)
+void lsmf::Renderer::Init(SDL_Window* window)
 {
 	m_window = window;
 	m_renderer = SDL_CreateRenderer(window, GetOpenGLDriverIndex(), SDL_RENDERER_ACCELERATED);
@@ -28,7 +28,7 @@ void dae::Renderer::Init(SDL_Window* window)
 	}
 }
 
-void dae::Renderer::Render() const
+void lsmf::Renderer::Render() const
 {
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
@@ -53,7 +53,7 @@ void dae::Renderer::Render() const
 	SDL_RenderPresent(m_renderer);
 }
 
-void dae::Renderer::Destroy()
+void lsmf::Renderer::Destroy()
 {
 	if (m_renderer != nullptr)
 	{
@@ -62,7 +62,7 @@ void dae::Renderer::Destroy()
 	}
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float z) const
+void lsmf::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float z) const
 {
 	
 	SDL_Rect dst{};
@@ -82,12 +82,12 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos) const
+void lsmf::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos) const
 {
 	RenderTexture(texture, pos.x, pos.y, pos.z);
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_Rect src) const
+void lsmf::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_Rect src) const
 {
 	float z = pos.z;
 	SDL_Rect dst{};
@@ -98,7 +98,7 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_R
 	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z), std::move(src)));
 }
 
-void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const float z) const
+void lsmf::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const float z) const
 {
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
@@ -119,4 +119,4 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }
+SDL_Renderer* lsmf::Renderer::GetSDLRenderer() const { return m_renderer; }

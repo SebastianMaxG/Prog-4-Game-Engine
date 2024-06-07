@@ -5,7 +5,7 @@
 
 #include "Singleton.h"
 
-namespace dae
+namespace lsmf
 {
 	class Texture2D;
 	/**

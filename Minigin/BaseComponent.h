@@ -3,8 +3,8 @@
 #include <memory>
 #include <functional>
 #include <SDL.h>
-//todo: Send Signal
-namespace dae
+
+namespace lsmf
 {
 	class GameObject;
 	class TransformComponent;
@@ -15,8 +15,6 @@ namespace dae
 		BaseComponent(GameObject* m_GameObjectPtr);
 		virtual ~BaseComponent() = default;
 
-		//make it so that the inherited update function has to call this update function
-		
 		void DoUpdate(double deltaTime);
 		void DoFixedUpdate(double deltaTime);
 		void DoRender() const;
@@ -39,7 +37,7 @@ namespace dae
 		GameObject* GetGameObject() { return m_GameObjectPtr; };
 		const GameObject* GetGameObject() const { return m_GameObjectPtr; }; 
 
-	//	void SetTransformComponent(std::weak_ptr<dae::TransformComponent> transformComponent)
+	//	void SetTransformComponent(std::weak_ptr<lsmf::TransformComponent> transformComponent)
 	//	{
 	//		m_TransformComponent.swap(transformComponent);
 	//	};
@@ -48,21 +46,11 @@ namespace dae
 	private:
 		void Initialize();
 		GameObject* m_GameObjectPtr;
+
 		bool m_IsInitialized;
-		bool m_IsActive; //todo: make this a state / only update when active
+		bool m_IsActive;
 
 		std::string m_Name;
 
 	};
 }
-//public:
-//	BaseComponent() = default;
-//	virtual ~BaseComponent();
-//	template<typename T>
-//	bool ReceiveSignal(std::string signal, T &data = 0);
-//
-//protected:
-//	//make void* function pointer
-//	//std::map<std::string, void*> m_Signals{};
-//	std::map<std::string, std::function<void(void*)>> m_Signals{};
-//	// todo messages and references to Transform component etc

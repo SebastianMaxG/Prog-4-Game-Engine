@@ -40,7 +40,7 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string& dataPath)
+lsmf::Minigin::Minigin(const std::string& dataPath)
 	: ms_per_frame()
 	, fixed_time_step(0.01)
 {
@@ -73,7 +73,7 @@ dae::Minigin::Minigin(const std::string& dataPath)
 
 }
 
-dae::Minigin::~Minigin()
+lsmf::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(m_windowPtr);
@@ -81,7 +81,7 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run(const std::function<void()>& load)
+void lsmf::Minigin::Run(const std::function<void()>& load)
 {
 	load();
 	DEVMODE dm;
@@ -126,7 +126,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	}
 }
 
-SDL_Window* dae::Minigin::GetSDLWindow()
+SDL_Window* lsmf::Minigin::GetSDLWindow()
 {
 	return m_windowPtr;
 }

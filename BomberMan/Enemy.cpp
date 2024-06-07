@@ -1,17 +1,16 @@
 #include "Enemy.h"
 
 #include "GameObject.h"
+#include "GlobalSignals.h"
 #include "SpriteComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	Enemy::Enemy(GameObject* gameObject, EnemyType type)
 		: BaseComponent(gameObject)
 		, m_Type(type)
 
 	{
-		// create sprite component based on type
-		// TODO: set sprite file name
 		auto spriteComponent = std::make_unique<SpriteComponent>(gameObject, "EnemySprite.png");
 		m_SpriteComponent = spriteComponent.get();
 		gameObject->AddComponent(std::move(spriteComponent));
@@ -36,20 +35,34 @@ namespace dae
 			break;
 		}
 	}
-	void Enemy::Update(double)
+	void Enemy::Update(double deltaTime)
 	{
-		if (m_Dead) return;
+		if (m_Dead)
+		{
+			m_KillTime -= deltaTime;
+			if (m_KillTime <= 0)
+			{
+				GetGameObject()->MarkForDestruction();
+			}
+			return;
+		}
+
+		//TODO: move enemy
+
 
 
 	}
-	void Enemy::SetDead(bool dead)
+	void Enemy::Kill()
 	{
-		m_Dead = dead;
+		m_Dead = true;
 		if (m_Dead)
 		{
 			m_SpriteComponent->SetColumn(static_cast<int>(m_Type) * 3 + 1);
 			m_SpriteComponent->SetFrames(4, 12, 4, 0.4);
 			m_SpriteComponent->SetFrame();
+			m_KillTime = 4 * 0.4;
+
+			globalSignals::OnEnemyDeath.Emit(m_Type);
 		}
 	}
 	void Enemy::SetLeft(bool left)

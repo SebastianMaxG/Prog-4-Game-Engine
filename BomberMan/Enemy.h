@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	class SpriteComponent;
 
@@ -21,7 +21,7 @@ namespace dae
 
 		void Update(double deltaTime) override;
 
-		void SetDead(bool dead);
+		void Kill();
 		void SetLeft(bool left);
 
 	private:
@@ -31,6 +31,8 @@ namespace dae
 		TransformComponent* m_TransformComponent;
 
 		double m_Speed = 1.0;
+
+		double m_KillTime{};
 
 		bool m_IsSmart = false;
 		bool m_Left = false;

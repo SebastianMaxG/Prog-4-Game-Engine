@@ -2,7 +2,7 @@
 #include "InputManager.h"
 
 
-void dae::InputManager::OpenControllers()
+void lsmf::InputManager::OpenControllers()
 {
 	int numJoysticks = SDL_NumJoysticks();
 	for (int i = 0; i < numJoysticks; i++) {
@@ -15,7 +15,7 @@ void dae::InputManager::OpenControllers()
 	}
 }
 
-void dae::InputManager::CloseControllers()
+void lsmf::InputManager::CloseControllers()
 {
 	for (SDL_GameController* controller : m_Controllers) {
 		SDL_GameControllerClose(controller);
@@ -23,17 +23,17 @@ void dae::InputManager::CloseControllers()
 	m_Controllers.clear();
 }
 
-dae::InputManager::InputManager()
+lsmf::InputManager::InputManager()
 {
 	OpenControllers();
 }
 
-dae::InputManager::~InputManager() noexcept
+lsmf::InputManager::~InputManager() noexcept
 {
 	CloseControllers();
 }
 
-bool dae::InputManager::ProcessInput()
+bool lsmf::InputManager::ProcessInput()
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) 
@@ -43,7 +43,7 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 
-		OnEvent.Emit(e);
+		input::InputEvent.Emit(e);
 
 		//if (e.type == SDL_KEYDOWN) 
 		//{
@@ -75,6 +75,6 @@ bool dae::InputManager::ProcessInput()
 		//}
 		// etc...
 	}
-	OnEvent.Update();
+	input::InputEvent.Update();
 	return true;
 }

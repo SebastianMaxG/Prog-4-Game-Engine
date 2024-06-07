@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include <format>
 
-dae::FPSComponent::FPSComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Font> font, SDL_Color color)
+lsmf::FPSComponent::FPSComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Font> font, SDL_Color color)
 	: BaseComponent(m_GameObjectPtr)
 	, m_FpsTimer(0)
 	, m_FpsUpdateDelay(0.5)
@@ -13,7 +13,7 @@ dae::FPSComponent::FPSComponent(GameObject* m_GameObjectPtr, std::shared_ptr<Fon
 		m_GameObjectPtr->AddComponent(std::unique_ptr<TextComponent>(m_TextComponent));
 }
 
-void dae::FPSComponent::Update(double deltaTime)
+void lsmf::FPSComponent::Update(double deltaTime)
 {
 	m_FpsTimer += deltaTime;
 	m_FpsCounter++;

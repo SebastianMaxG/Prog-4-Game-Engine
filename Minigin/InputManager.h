@@ -2,17 +2,19 @@
 #include "Singleton.h"
 #include "signal.h"
 
-namespace dae
+namespace lsmf
 {
 	// Add input signals here
+	namespace input
+	{
+		inline signal::Signal<SDL_Event> InputEvent{};
+	}
 
 	class InputManager final
 	{
 	public:
 		InputManager();
 		~InputManager() noexcept;
-
-		signal::Signal<SDL_Event> OnEvent{};
 
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;

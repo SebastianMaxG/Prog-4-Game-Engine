@@ -2,7 +2,7 @@
 #include <glm/vec3.hpp>
 
 #include "BaseComponent.h"
-namespace dae
+namespace lsmf
 {
 
 	class OrbitComponent : public BaseComponent

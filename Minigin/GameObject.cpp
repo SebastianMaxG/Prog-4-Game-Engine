@@ -7,7 +7,7 @@
 #include "PhysicsComponent.h"
 #include <iostream>
 
-namespace dae
+namespace lsmf
 {
 	GameObject::GameObject()
 	{
@@ -157,6 +157,19 @@ namespace dae
 		{
 			m_TransformComponent->SetDirty();
 		}
+	}
+	void GameObject::MarkForDestruction()
+	{
+		m_MarkedForDestruction = true;
+		for (GameObject* child : m_ChildrenPtrs)
+		{
+			child->MarkForDestruction();
+		}
+		if (m_ParentPtr)
+		{
+			m_ParentPtr->RemoveChild(this);
+		}
+		m_ParentPtr = nullptr;
 	}
 	void GameObject::AddChild(GameObject* childPtr)
 	{

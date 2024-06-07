@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "BaseComponent.h"
 
-namespace dae
+namespace lsmf
 {
 	//class BaseComponent;
 

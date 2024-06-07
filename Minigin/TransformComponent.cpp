@@ -2,7 +2,7 @@
 #include "Transform.h"
 #include "GameObject.h"
 
-namespace dae
+namespace lsmf
 {
 	TransformComponent::TransformComponent(GameObject* m_GameObjectPtr)
 		:BaseComponent(m_GameObjectPtr)
