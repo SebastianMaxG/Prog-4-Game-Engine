@@ -11,15 +11,18 @@ namespace dae
 	public:
 		enum class EnemyType
 		{
-			Balloom,
-			Oneal,
-			Doll,
-			Minvo
+			Balloom = 0,
+			Oneal = 1,
+			Doll = 2,
+			Minvo = 3
 		};
 
 		Enemy(GameObject* gameObject, EnemyType type = EnemyType::Balloom);
 
 		void Update(double deltaTime) override;
+
+		void SetDead(bool dead);
+		void SetLeft(bool left);
 
 	private:
 		EnemyType m_Type = EnemyType::Balloom;
@@ -30,6 +33,8 @@ namespace dae
 		double m_Speed = 1.0;
 
 		bool m_IsSmart = false;
+		bool m_Left = false;
+		bool m_Dead = false;
 		// TODO: collision component
 	};
 
