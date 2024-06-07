@@ -45,8 +45,8 @@ void dae::Renderer::Render() const
 	//Render the render queue
 	for (const auto& renderable : m_RenderQueue)
 	{
-		const auto& [texture, dst, z] = renderable;
-		SDL_RenderCopy(m_renderer, texture, nullptr, &dst);
+		const auto& [texture, dst, z, src] = renderable;
+		SDL_RenderCopy(m_renderer, texture, &src, &dst);
 	}
 	m_RenderQueue.clear();
 
@@ -64,12 +64,20 @@ void dae::Renderer::Destroy()
 
 void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float z) const
 {
+	
 	SDL_Rect dst{};
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 	SDL_Texture* tex = texture.GetSDLTexture();
-	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float >(std::move(tex), std::move(dst), std::move(z)));
+	SDL_Rect src
+	{
+		0,
+		0,
+		dst.w,
+		dst.h
+	};
+	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z),std::move(src)));
 
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
@@ -77,6 +85,17 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 void dae::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos) const
 {
 	RenderTexture(texture, pos.x, pos.y, pos.z);
+}
+
+void dae::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_Rect src) const
+{
+	float z = pos.z;
+	SDL_Rect dst{};
+	dst.x = static_cast<int>(pos.x);
+	dst.y = static_cast<int>(pos.y);
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
+	SDL_Texture* tex = texture.GetSDLTexture();
+	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z), std::move(src)));
 }
 
 void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height, const float z) const
@@ -87,7 +106,16 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
 	SDL_Texture* tex = texture.GetSDLTexture();
-	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect,const float >(std::move(tex), std::move(dst), std::move(z)));
+	SDL_Rect src
+	{
+		0,
+		0,
+		0,
+		0
+	};
+	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &src.w, &src.h);
+
+	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect,const float, SDL_Rect >(std::move(tex), std::move(dst), std::move(z), std::move(src)));
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 

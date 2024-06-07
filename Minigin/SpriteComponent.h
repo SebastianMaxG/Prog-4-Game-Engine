@@ -17,16 +17,27 @@ namespace dae
 
 		~SpriteComponent() override = default;
 
-
+		void Update(double deltaTime) override;
 
 		void Render() const override;
 
 		void SetTexture(const std::string& filename);
 		void SetTexture(std::shared_ptr<Texture2D> newTexture);
 
+		void SetFrames(int rows, int nrFrames, double frameTime);
+
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
 
+		int m_rows = 1;
+		int m_columns = 1;
+		int m_currentFrame = 0;
+		int m_nrFrames = 1;
+		double m_frameTime = 0;
+		double m_currentTime = 0;
+
+		int m_width = 0;
+		int m_height = 0;
 	};
 
 }
