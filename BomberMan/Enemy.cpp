@@ -33,4 +33,7 @@ namespace dae
 			break;
 		}
 	}
+	void Enemy::Update(double)
+	{
+	}
 }

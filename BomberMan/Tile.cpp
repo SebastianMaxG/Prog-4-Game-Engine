@@ -17,4 +17,7 @@ namespace dae
 		gameObject->AddComponent(std::move(spriteComponent));
 
 	}
+	void Tile::Update(double)
+	{
+	}
 }

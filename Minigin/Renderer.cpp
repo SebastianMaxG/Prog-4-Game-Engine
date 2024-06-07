@@ -37,7 +37,7 @@ void dae::Renderer::Render() const
 	SceneManager::GetInstance().Render();
 
 	//Sort the render queue based on the z value
-	std::sort(m_RenderQueue.begin(), m_RenderQueue.end(), [](const std::tuple<SDL_Texture*, SDL_Rect, float>& lhs, const std::tuple<SDL_Texture*, SDL_Rect, float>& rhs)
+	std::sort(m_RenderQueue.begin(), m_RenderQueue.end(), [](const std::tuple<SDL_Texture*, SDL_Rect, float, SDL_Rect>& lhs, const std::tuple<SDL_Texture*, SDL_Rect, float, SDL_Rect>& rhs)
 		{
 			return std::get<2>(lhs) < std::get<2>(rhs);
 		});

@@ -24,7 +24,10 @@ namespace dae
 		void SetTexture(const std::string& filename);
 		void SetTexture(std::shared_ptr<Texture2D> newTexture);
 
-		void SetFrames(int rows, int nrFrames, double frameTime);
+		void SetFrames(int rows, int columns, int nrFrames, double frameTime);
+
+		void SetColumn(int column) { m_currentColumn = column; }
+		void SetFrame(int frame = 0) { m_currentFrame = frame; }
 
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
@@ -32,12 +35,15 @@ namespace dae
 		int m_rows = 1;
 		int m_columns = 1;
 		int m_currentFrame = 0;
-		int m_nrFrames = 1;
-		double m_frameTime = 0;
-		double m_currentTime = 0;
 
 		int m_width = 0;
 		int m_height = 0;
+
+		int m_currentColumn = 0;
+
+		int m_nrFrames = 1;
+		double m_frameTime = 0;
+		double m_currentTime = 0;
 	};
 
 }

@@ -45,7 +45,7 @@ void dae::SpriteComponent::Render() const
 	{
 		pos += transform->GetPosition();
 	}
-	if (m_nrFrames == 1)
+	if (m_columns == 1 and m_rows == 1)
 	{
 		Renderer::GetInstance().RenderTexture(*m_texture, pos);
 		return;
@@ -77,11 +77,11 @@ void dae::SpriteComponent::SetTexture(std::shared_ptr<Texture2D> newTexture)
 	m_height /= m_rows;
 }
 
-void dae::SpriteComponent::SetFrames(int rows, int nrFrames, double frameTime)
+void dae::SpriteComponent::SetFrames(int rows, int columns, int nrFrames, double frameTime)
 {
 	m_rows = rows;
 	m_nrFrames = nrFrames;
-	m_columns = rows / nrFrames + 1;
+	m_columns = columns;
 	m_frameTime = frameTime;
 
 	//calculate width and height of a single frame

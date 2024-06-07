@@ -10,11 +10,11 @@ namespace dae
 	class ScoreSystem final : public BaseComponent
 	{
 		// signal thread
-		static std::jthread g_OnEnemyDeath;
+		//static std::jthread g_OnEnemyDeath;
 
 	public:
 		// signals
-		static signal::Signal<Enemy::EnemyType> OnEnemyDeath{g_OnEnemyDeath};
+		//static signal::Signal<Enemy::EnemyType> OnEnemyDeath{g_OnEnemyDeath};
 
 		ScoreSystem(GameObject* gameObject);
 		~ScoreSystem() noexcept;

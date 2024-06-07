@@ -39,7 +39,7 @@ namespace dae
 		, m_Score(0)
 	{
 		//TODO: link function to signal
-		m_EnemyConnection = OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
+		//m_EnemyConnection = OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
 		auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 
 		auto textComponent = std::make_unique<TextComponent>(gameObject, "0", font);
