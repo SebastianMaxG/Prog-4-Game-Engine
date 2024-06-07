@@ -27,9 +27,9 @@ void dae::SpriteComponent::Update(double deltaTime)
 	{
 		m_currentTime -= m_frameTime;
 		++m_currentFrame;
-		if (m_currentFrame >= m_nrFrames)
+		if (m_currentFrame >= m_rows)
 		{
-			m_currentFrame %= m_nrFrames;
+			m_currentFrame %= m_rows;
 		}
 	}
 }
@@ -53,8 +53,8 @@ void dae::SpriteComponent::Render() const
 
 	SDL_Rect src
 	{
-		m_currentFrame % m_columns * m_width,
-		m_currentFrame / m_columns * m_height,
+		m_currentColumn * m_width,
+		m_currentFrame * m_height,
 		m_width,
 		m_height
 	};
