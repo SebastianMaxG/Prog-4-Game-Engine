@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="HighscoreSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GlobalSignals.h" />
+    <ClInclude Include="HighscoreSystem.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Tile.h" />

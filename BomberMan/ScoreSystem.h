@@ -1,7 +1,13 @@
 #pragma once
 #include "signal.h"
 #include "Enemy.h"
+#include "HighscoreSystem.h"
 
+
+namespace lsmf
+{
+	class HighScoreSystem;
+}
 
 namespace lsmf
 {
@@ -34,6 +40,8 @@ namespace lsmf
 		TextComponent* m_TextComponent;
 
 		signal::Connection<Enemy::EnemyType>* m_EnemyConnection;
+
+		HighScoreSystem m_HighScoreSystem{};
 	};
 
 }
