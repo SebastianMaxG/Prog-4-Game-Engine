@@ -34,5 +34,15 @@ namespace lsmf
         std::unordered_map<std::string, std::shared_ptr<AudioClip>> audioClipCache;
 
     };
+
+    class DebugSoundSystem : public SoundSystem
+    {
+    public:
+		void PlaySound(const std::string& file, float volume) override;
+		void StopAllSounds() override;
+		void UnloadAll() override;
+		void Unload(const std::string& file) override;
+		void Load(const std::string& file) override;
+    };
 }
 
