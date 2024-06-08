@@ -154,6 +154,7 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyController.cpp" />
     <ClCompile Include="HighscoreSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyController.h" />
     <ClInclude Include="GlobalSignals.h" />
     <ClInclude Include="HighscoreSystem.h" />
     <ClInclude Include="Player.h" />
