@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseComponent.h"
+#include "Signal.h"
 
 namespace lsmf
 {
@@ -36,9 +37,10 @@ namespace lsmf
 
 		void BombDetonated(Tile* tile);
 
-	private:
+		void CollisionEvent(GameObject* collider, GameObject* other);
 		void PlaceBomb();
 		void Detonate();
+	private:
 
 		Tile* m_CurrentTile = nullptr;
 		std::vector<Tile*> m_Bombs;
@@ -55,9 +57,9 @@ namespace lsmf
 		bool m_BombPass = false;
 
 		int m_Speed = 2;
-		int m_NrOfBombs = 1;
+		int m_NrOfBombs = 0;
 		int m_BombRange = 1;
-		int m_BombCount = 0;
+		int m_BombCount = 1;
 
 		double m_InvincibleTime = 0;
 		const double INVINCIBLE_DURATION = 2.0;
@@ -69,6 +71,8 @@ namespace lsmf
 
 		CollisionComponent* m_CollisionComponent;
 
+
+		signal::Connection<GameObject*, GameObject*>* m_CollisionConnection{};
 	};
 
 }

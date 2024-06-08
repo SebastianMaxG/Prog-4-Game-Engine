@@ -8,16 +8,43 @@ namespace lsmf
 
     PlayerController::PlayerController(GameObject* gameObject, Player* player, int joystickId)
         : ControllerComponent(gameObject)
-		, joystickId(joystickId)
+		, m_ControllerID(joystickId)
 		, m_Player(player)
 	{}
 
-    void PlayerController::HandleInput(SDL_Event)
+    void PlayerController::HandleInput(SDL_Event event)
 	{
+
+        if (event.type == SDL_KEYDOWN && m_ControllerID == -1)
+        {
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_SPACE:
+                m_Player->PlaceBomb();
+                break;
+            case SDLK_LSHIFT:
+                m_Player->Detonate();
+				break;
+            }
+            return;
+        }
+        if (event.type == SDL_CONTROLLERBUTTONDOWN && event.cbutton.which == m_ControllerID)
+        {
+            switch (event.cbutton.button)
+            {
+            case SDL_CONTROLLER_BUTTON_A:
+                m_Player->PlaceBomb();
+                break;
+            case SDL_CONTROLLER_BUTTON_B:
+                m_Player->Detonate();
+                break;
+            }
+        }
+
      //   auto pos = m_MoveTransform.GetPosition();
-    	//if (joystickId >= 0) 
+    	//if (m_ControllerID >= 0) 
      //   {
-     //       if (event.type == SDL_CONTROLLERAXISMOTION && event.caxis.which == joystickId)
+     //       if (event.type == SDL_CONTROLLERAXISMOTION && event.caxis.which == m_ControllerID)
      //       {
 	    //        if (event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX)
      //           {
@@ -88,7 +115,7 @@ namespace lsmf
     void PlayerController::Update(double)
     {
 
-        SDL_GameController* controller = SDL_GameControllerOpen(joystickId);
+        SDL_GameController* controller = SDL_GameControllerOpen(m_ControllerID);
         if (controller)
         {
             int16_t x_move = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);

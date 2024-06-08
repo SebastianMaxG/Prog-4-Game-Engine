@@ -11,7 +11,7 @@ namespace lsmf {
         void Update(double deltaTime) override;
         bool IsMoving();
     private:
-        int joystickId;
+        int m_ControllerID;
         Player* m_Player;
         SDL_KeyCode m_LastKey{};
         const int JOYSTICK_DEADZONE = 8000;

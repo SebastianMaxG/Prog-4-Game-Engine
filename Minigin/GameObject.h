@@ -31,7 +31,7 @@ namespace lsmf
 		void AddComponent(std::unique_ptr<BaseComponent> componentPtr);
 		void RemoveComponent(std::unique_ptr<BaseComponent> componentPtr);
 		BaseComponent* GetComponent(const std::string& name);
-		BaseComponent* GetComponent(const std::type_info& type);
+		BaseComponent* GetComponent(const std::type_info& type) const;
 		TransformComponent* GetTransform() { return m_TransformComponent.get(); }
 		const TransformComponent* GetTransform() const { return m_TransformComponent.get(); }
 

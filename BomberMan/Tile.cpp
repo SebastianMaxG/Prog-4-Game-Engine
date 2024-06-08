@@ -40,35 +40,26 @@ namespace lsmf
 		m_CollisionComponent = collisionComponent.get();
 		gameObject->AddComponent(std::move(collisionComponent));
 
-		m_CollisionConnection = collision::OnCollide.Connect(this, &CollisionEvent);
+		m_CollisionConnection = collision::OnCollide.Connect(this, &Tile::CollisionEvent);
 
 		//set the collision component to the size of the sprite
 		const glm::vec2 size = m_SpriteComponent->GetTextureSize();
 		const glm::vec3 pos = GetGameObject()->GetTransform()->GetWorldTransform().GetPosition();
 		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x),static_cast<int>(size.y) });
 
-		switch (m_State)
+		switch (m_Type)
 		{
-			case TileState::Exit:
+		case TileType::Exit:
 			EnterExit();
 			break;
-		case TileState::Crate:
+		case TileType::Crate:
 			EnterCrate();
 			break;
-		case TileState::Wall:
+		case TileType::Wall:
 			EnterWall();
 			break;
-		case TileState::Empty:
+		case TileType::Empty:
 			EnterEmpty();
-			break;
-		case TileState::Bomb:
-			EnterBomb();
-			break;
-		case TileState::PowerUp:
-			EnterPowerUp();
-			break;
-		case TileState::Explosion:
-			EnterExplosion(0);
 			break;
 		}
 	}
@@ -117,7 +108,7 @@ namespace lsmf
 	{
 		if (other == GetGameObject())
 		{
-			if (Player* player = dynamic_cast<Player*>(collider->GetComponent(typeid(player))))
+			if (Player* player = dynamic_cast<Player*>(collider->GetComponent(typeid(Player))))
 			{
 				m_PlayerOnTile = player;
 			}
@@ -174,6 +165,7 @@ namespace lsmf
 		if (m_ExplosionTime <= 0)
 		{
 			EnterExplosion(m_BombRange);
+
 		}
 	}
 
@@ -258,7 +250,7 @@ namespace lsmf
 		m_State = TileState::Crate;
 
 		m_CollisionComponent->ClearChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
+		m_CollisionComponent->SetChannel(CollisionChannel::Crate, CollisionType::Physical);
 		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Physical);
 		m_CollisionComponent->Start();
 
@@ -288,13 +280,17 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Empty;
 
-		m_CollisionComponent->Stop();
+		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
+		m_CollisionComponent->Start();
+
 		m_CollisionConnection->Pause();
 
 	}
 	void Tile::EnterBomb(int bombRange)
 	{
 		m_BombRange = bombRange;
+		m_BombType = BombType::Bomb;
 		m_BombSpriteComponent->Start();
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_PowerUpSpriteComponent->Stop();
@@ -308,6 +304,7 @@ namespace lsmf
 	}
 	void Tile::EnterPowerUp()
 	{
+		m_Type = TileType::Empty;
 		m_PowerUpSpriteComponent->Start();
 		m_PowerUpSpriteComponent->SetColumn(static_cast<int>(m_PowerUpType));
 		m_BombSpriteComponent->Stop();
@@ -336,6 +333,7 @@ namespace lsmf
 		if (m_State == TileState::Bomb)
 		{
 			m_BombDir = BombDir::center;
+			m_BombType = BombType::Explosion;
 		}
 		m_Type = TileType::Empty;
 		m_State = TileState::Explosion;
@@ -344,7 +342,6 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		if (m_BombRange > 0)
 		{
-			m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 			if (m_Grid)
 			{
 				switch (m_BombDir)
@@ -405,7 +402,7 @@ namespace lsmf
 
 
 		m_CollisionComponent->ClearChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
+		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Resume();

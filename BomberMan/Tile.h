@@ -75,6 +75,7 @@ namespace lsmf
 		void BreakCrate();
 
 		void CollisionEvent(GameObject* collider, GameObject* other);
+		TileState GetState() const { return m_State; }
 
 		// 
 	private:

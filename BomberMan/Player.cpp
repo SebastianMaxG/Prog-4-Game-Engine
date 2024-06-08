@@ -8,6 +8,8 @@
 #include "Tile.h"
 #include <algorithm>
 
+#include "CollisionHandeler.h"
+
 namespace lsmf
 {
 
@@ -39,10 +41,11 @@ namespace lsmf
 		m_CollisionComponent->SetChannel(CollisionChannel::Enemy, CollisionType::Event);
 
 
+		m_CollisionConnection = collision::OnCollide.Connect(this, &Player::CollisionEvent);
 		//set the collision component to the size of the sprite
 		const glm::vec2 size = m_SpriteComponent->GetTextureSize();
 		const glm::vec3 pos = GetGameObject()->GetTransform()->GetWorldTransform().GetPosition();
-		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x),static_cast<int>(size.y) });
+		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x)-5,static_cast<int>(size.y)-5 });
 	}
 
 	void Player::Update(double deltaTime)
@@ -60,6 +63,15 @@ namespace lsmf
 		{
 			m_InvincibleTime -= deltaTime;
 		}
+
+		for (Tile* tile : m_Bombs)
+		{
+			if (tile->GetState() != Tile::TileState::Bomb)
+			{
+				BombDetonated(tile);
+				return;
+			}
+		}
 	}
 	void Player::SetState(PlayerState state)
 	{
@@ -73,10 +85,12 @@ namespace lsmf
 			return;
 		}
 		m_Lives--;
-		if (m_Lives == 0)
+		if (m_Lives <= 0)
 		{
 			m_IsDead = true;
 			SetState(PlayerState::Dead);
+			m_SpriteComponent->SetFrame();
+
 		}
 		m_InvincibleTime = INVINCIBLE_DURATION;
 
@@ -126,8 +140,27 @@ namespace lsmf
 		m_Bombs.erase(std::ranges::remove(m_Bombs, tile).begin(), m_Bombs.end());
 	}
 
+	void Player::CollisionEvent(GameObject* collider, GameObject* other)
+	{
+		if (collider == GetGameObject())
+		{
+			if (Tile* tile = dynamic_cast<Tile*>(other->GetComponent(typeid(Tile))))
+			{
+				m_CurrentTile = tile;
+			}
+		}
+	}
+
 	void Player::PlaceBomb()
 	{
+		if (!m_CurrentTile)
+		{
+			return;
+		}
+		if (m_CurrentTile->GetState() != Tile::TileState::Empty)
+		{
+			return;
+		}
 		if (m_NrOfBombs >= m_BombCount)
 		{
 			return;

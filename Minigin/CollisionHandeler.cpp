@@ -54,6 +54,7 @@ void lsmf::CollisionHandler::FixedUpdate()
         }
     }
     m_CollisionQueue.clear();
+    collision::OnCollide.Update();
 }
 
 void lsmf::CollisionHandler::CalculateCollision(SDL_Rect rect, GameObject* gameObject, bool isStatic, std::map<CollisionChannel, CollisionType> channels)

@@ -87,25 +87,11 @@ namespace lsmf
 	}
 
 	// returns the first component of the given type
-	BaseComponent* GameObject::GetComponent(const std::type_info& type)
+	BaseComponent* GameObject::GetComponent(const std::type_info& type) const
 	{
 		for (const auto& component : m_Components)
 		{
-			if (typeid(*component) == type)
-			{
-				return component.get();
-			}
-		}
-		for (const auto& component : m_Components)
-		{
-			if (typeid(*component) == type)
-			{
-				return component.get();
-			}
-		}
-		for (const auto& component : m_Components)
-		{
-			if (typeid(*component) == type)
+			if (typeid(*component.get()) == type)
 			{
 				return component.get();
 			}
