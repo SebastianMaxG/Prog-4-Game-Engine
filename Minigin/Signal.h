@@ -301,8 +301,10 @@ namespace lsmf
             Signal(std::jthread& signalThread)
                 : m_IsThreaded(true)
             {
+                //TODO: replace the signalThread with a constructor tag
                 std::jthread t(&Signal::Run, this);
                 signalThread = std::move(t);
+                signalThread.detach();
             }
 
             // Destructor
@@ -367,6 +369,8 @@ namespace lsmf
             void End()
             {
                 m_ShouldEnd = true;
+                m_Que.clear();
+                DisconnectAll();
                 m_Condition.notify_one();
             }
 
@@ -459,6 +463,12 @@ namespace lsmf
 
             // Bool to see if the signal is threaded
             const bool m_IsThreaded = true;
+        };
+
+        class GlobalSignal
+        {
+        public:
+	        
         };
     }
 }

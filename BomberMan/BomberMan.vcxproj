@@ -151,18 +151,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="HighscoreSystem.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bomb.h" />
+    <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GlobalSignals.h" />
     <ClInclude Include="HighscoreSystem.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerController.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>

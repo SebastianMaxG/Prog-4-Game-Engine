@@ -26,6 +26,9 @@ namespace lsmf
 		Transform operator-(const Transform& other) const;
 		Transform operator+(const Transform& other) const;
 
+		//make a multiply operator for transform
+		Transform operator*(const float& other) const;
+
 	private:
 
 
