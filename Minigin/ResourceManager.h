@@ -2,7 +2,6 @@
 #include <string>
 #include <memory>
 #include "Singleton.h"
-#include <SDL_mixer.h>
 namespace lsmf
 {
 	class Texture2D;
