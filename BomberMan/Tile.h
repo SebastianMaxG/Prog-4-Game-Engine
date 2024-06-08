@@ -76,6 +76,7 @@ namespace lsmf
 
 		void CollisionEvent(GameObject* collider, GameObject* other);
 
+		// 
 	private:
 		// behaviour functions
 		void OnExit();
@@ -86,14 +87,18 @@ namespace lsmf
 		void OnPowerUp();
 		void OnExplosion(double deltaTime);
 
+
 		// enter functions
 		void EnterExit();
 		void EnterCrate();
 		void EnterWall();
 		void EnterEmpty();
-		void EnterBomb();
 		void EnterPowerUp();
+	public:
+		void EnterBomb(int bombRange);
 		void EnterExplosion(int range);
+
+	private:
 		int m_BombRange = 0;
 		BombDir m_BombDir{BombDir::center};
 		const double EXPLOSION_TIME = 2.0;

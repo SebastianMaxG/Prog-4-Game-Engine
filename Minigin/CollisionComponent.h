@@ -11,7 +11,8 @@ namespace lsmf
 		Enemy,
 		Wall,
 		Bomb,
-		
+		Explosion,
+		Crate
 	};
 
 	enum class CollisionType {

@@ -98,6 +98,7 @@ namespace lsmf
 			OnExplosion(deltaTime);
 			break;
 		}
+		m_PlayerOnTile = nullptr;
 	}
 
 	void Tile::BreakCrate()
@@ -125,10 +126,12 @@ namespace lsmf
 
 	void Tile::OnExit()
 	{
-		// TODO: check remaining enemies
-		// if enemies == 0
-		// enter exit (next level)
-		// do this on overlap event
+		if (m_PlayerOnTile)
+		{
+			// TODO: check remaining enemies
+			// if enemies == 0
+			// enter exit (next level)
+		}
 	}
 
 	void Tile::OnCrate(double deltaTime)
@@ -181,30 +184,30 @@ namespace lsmf
 			switch (m_PowerUpType)
 			{
 			case PowerUpType::Bomb:
-				//m_PlayerOnTile->IncreaseBombCount();
+				m_PlayerOnTile->IncreaseBombCount();
 				break;
 			case PowerUpType::Range:
-				//m_PlayerOnTile->IncreaseBombRange();
+				m_PlayerOnTile->IncreaseBombRange();
 				break;
 			case PowerUpType::Speed:
-				//m_PlayerOnTile->IncreaseSpeed();
+				m_PlayerOnTile->IncreaseSpeed();
 				break;
 			case PowerUpType::None:
 				break;
 			case PowerUpType::Remote:
-				//m_PlayerOnTile->ActivateRemote();
+				m_PlayerOnTile->ActivateRemote();
 				break;
 			case PowerUpType::WallPass:
-				//m_PlayerOnTile->ActivateWallPass();
+				m_PlayerOnTile->ActivateWallPass();
 				break;
 			case PowerUpType::FlamePass:
-				//m_PlayerOnTile->ActivateFlamePass();
+				m_PlayerOnTile->ActivateFlamePass();
 				break;
 			case PowerUpType::BombPass:
-				//m_PlayerOnTile->ActivateBombPass();
+				m_PlayerOnTile->ActivateBombPass();
 				break;
 			case PowerUpType::Invincible:
-				//m_PlayerOnTile->ActivateInvincible();
+				m_PlayerOnTile->ActivateInvincible();
 				break;
 			}
 			if (m_ContainsExit)
@@ -226,8 +229,11 @@ namespace lsmf
 		{
 			EnterEmpty();
 		}
-		// on overlap with player
-		// damage player
+		if (m_PlayerOnTile)
+		{
+			m_PlayerOnTile->Kill();
+		}
+
 	}
 
 
@@ -286,8 +292,9 @@ namespace lsmf
 		m_CollisionConnection->Pause();
 
 	}
-	void Tile::EnterBomb()
+	void Tile::EnterBomb(int bombRange)
 	{
+		m_BombRange = bombRange;
 		m_BombSpriteComponent->Start();
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_PowerUpSpriteComponent->Stop();
@@ -323,7 +330,9 @@ namespace lsmf
 		{
 			return;
 		}
-		m_BombRange = range;
+		if (range >= 0)
+			m_BombRange = range;
+
 		if (m_State == TileState::Bomb)
 		{
 			m_BombDir = BombDir::center;
