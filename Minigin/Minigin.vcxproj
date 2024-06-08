@@ -202,6 +202,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AudioClip.h" />
+    <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="CollisionHandeler.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -225,6 +227,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioClip.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="CollisionHandeler.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />

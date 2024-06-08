@@ -43,8 +43,19 @@ namespace lsmf
 			{
 				return false;
 			}
-
-			input::InputEvent.Emit(e);
+			if
+				(
+				e.type == SDL_KEYDOWN || 
+				e.type == SDL_KEYUP || 
+				e.type == SDL_MOUSEBUTTONDOWN || 
+				e.type == SDL_MOUSEBUTTONUP || 
+				e.type == SDL_CONTROLLERBUTTONDOWN || 
+				e.type == SDL_CONTROLLERBUTTONUP || 
+				e.type == SDL_CONTROLLERAXISMOTION
+				)
+				{
+					input::InputEvent.Emit(e);
+				}
 
 			//if (e.type == SDL_KEYDOWN) 
 			//{
@@ -77,6 +88,20 @@ namespace lsmf
 			// etc...
 		}
 		input::InputEvent.Update();
+
+		// get the state of controllers and keyboard
+		 /*const Uint8* state = SDL_GetKeyboardState(NULL);
+		 for (int i = 0; i < m_Controllers.size(); i++)
+		 {
+			 for (int j = 0; j < SDL_CONTROLLER_BUTTON_MAX; j++)
+			 {
+				 if (SDL_GameControllerGetButton(m_Controllers[i], (SDL_GameControllerButton)j))
+				 {
+					 input::InputEvent.Emit(j, i);
+				 }
+			 }
+		 }*/
+
 		return true;
 	}
 }

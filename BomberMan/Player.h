@@ -3,12 +3,9 @@
 
 namespace lsmf
 {
+
 	class SpriteComponent;
-}
-
-namespace lsmf
-{
-
+	class PlayerController;
 
 	class Player : public BaseComponent
 	{
@@ -24,6 +21,7 @@ namespace lsmf
 		Player(GameObject* gameObject);
 
 		void Update(double deltaTime) override;
+		void SetState(PlayerState state);
 	private:
 
 		uint8_t m_Lives = 3;
@@ -39,6 +37,8 @@ namespace lsmf
 		int m_BombCount = 0;
 
 		SpriteComponent* m_SpriteComponent;
+
+		PlayerController* m_ControllerComponent;
 
 	};
 
