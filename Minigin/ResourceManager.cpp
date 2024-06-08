@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Texture2D.h"
 #include "Font.h"
+#include "AudioClip.h"
 
 void lsmf::ResourceManager::Init(const std::string& dataPath)
 {
@@ -30,4 +31,10 @@ std::shared_ptr<lsmf::Texture2D> lsmf::ResourceManager::LoadTexture(const std::s
 std::shared_ptr<lsmf::Font> lsmf::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
 {
 	return std::make_shared<Font>(m_dataPath + file, size);
+}
+
+std::shared_ptr<lsmf::AudioClip> lsmf::ResourceManager::LoadAudioClip(const std::string& file) const
+{
+	const auto fullPath = m_dataPath + file;
+	return std::make_shared<AudioClip>(fullPath);
 }
