@@ -60,7 +60,7 @@ namespace lsmf
 		m_Components.erase(componentPtr);
 	}
 
-	const BaseComponent* GameObject::GetComponent(const std::string& name)
+	BaseComponent* GameObject::GetComponent(const std::string& name)
 	{
 		for (const auto& component : m_Components)
 		{
@@ -87,7 +87,7 @@ namespace lsmf
 	}
 
 	// returns the first component of the given type
-	const BaseComponent* GameObject::GetComponent(const std::type_info& type)
+	BaseComponent* GameObject::GetComponent(const std::type_info& type)
 	{
 		for (const auto& component : m_Components)
 		{

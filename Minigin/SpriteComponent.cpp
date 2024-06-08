@@ -58,8 +58,15 @@ void lsmf::SpriteComponent::Render() const
 		m_width,
 		m_height
 	};
+	SDL_Rect dst
+	{
+		static_cast<int>(pos.x),
+		static_cast<int>(pos.y),
+		m_width,
+		m_height
+	};
 
-	Renderer::GetInstance().RenderTexture(*m_texture, pos, src);
+	Renderer::GetInstance().RenderTexture(*m_texture, dst, src, pos.z);
 }
 
 void lsmf::SpriteComponent::SetTexture(const std::string& filename)

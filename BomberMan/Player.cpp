@@ -1,8 +1,10 @@
 #include "Player.h"
 
+#include "CollisionComponent.h"
 #include "GameObject.h"
 #include "PlayerController.h"
 #include "SpriteComponent.h"
+#include "TransformComponent.h"
 
 namespace lsmf
 {
@@ -21,6 +23,17 @@ namespace lsmf
 		m_ControllerComponent = controllerComponent.get();
 		gameObject->AddComponent(std::move(controllerComponent));
 		m_ControllerComponent->SetSpeed(100);
+
+		auto collisionComponent = std::make_unique<CollisionComponent>(gameObject, SDL_Rect{ 0,0,0,0 }, false);
+		m_CollisionComponent = collisionComponent.get();
+		gameObject->AddComponent(std::move(collisionComponent));
+
+		m_CollisionComponent->AddChannel(CollisionChannel::Default, CollisionType::Physical);
+
+		//set the collision component to the size of the sprite
+		const glm::vec2 size = m_SpriteComponent->GetTextureSize();
+		const glm::vec3 pos = GetGameObject()->GetTransform()->GetWorldTransform().GetPosition();
+		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x),static_cast<int>(size.y) });
 	}
 
 	void Player::Update(double)

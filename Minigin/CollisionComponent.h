@@ -9,12 +9,15 @@ namespace lsmf
 		Default,
 		Player,
 		Enemy,
-		// Add more channels as needed
+		Wall,
+		Bomb,
+		
 	};
 
 	enum class CollisionType {
 		Physical,
-		Event
+		Event,
+		NoCollision
 	};
 	class CollisionComponent : public BaseComponent
 	{
@@ -27,7 +30,9 @@ namespace lsmf
 		void SetHitbox(SDL_Rect hitBox) { m_HitBox = hitBox; }
 		void SetStatic(bool isStatic) { m_IsStatic = isStatic; }
 		const std::map<CollisionChannel, CollisionType>& GetChannels() const { return m_Channels; }
-		void AddChannel(CollisionChannel channel, CollisionType type) { m_Channels[channel] = type; }
+		void SetChannel(CollisionChannel channel, CollisionType type) { m_Channels[channel] = type; }
+		void RemoveChannel(CollisionChannel channel) { m_Channels.erase(channel); }
+		void ClearChannels() { m_Channels.clear(); }
 	private:
 		SDL_Rect m_HitBox;
 		bool m_IsStatic = true;

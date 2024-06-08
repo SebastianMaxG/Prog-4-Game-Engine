@@ -24,7 +24,7 @@ namespace lsmf
 
 		void RenderTexture(const Texture2D& texture, float x, float y, float z = 0) const;
 		void RenderTexture(const Texture2D& texture, glm::vec3 pos) const;
-		void RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_Rect src) const;
+		void RenderTexture(const Texture2D& texture, SDL_Rect dst, SDL_Rect src, float z) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height, float z = 0) const;
 
 		SDL_Renderer* GetSDLRenderer() const;

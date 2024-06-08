@@ -3,6 +3,7 @@
 
 namespace lsmf
 {
+	class CollisionComponent;
 
 	class SpriteComponent;
 	class PlayerController;
@@ -39,6 +40,8 @@ namespace lsmf
 		SpriteComponent* m_SpriteComponent;
 
 		PlayerController* m_ControllerComponent;
+
+		CollisionComponent* m_CollisionComponent;
 
 	};
 

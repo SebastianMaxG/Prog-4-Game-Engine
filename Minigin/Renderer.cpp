@@ -26,6 +26,10 @@ void lsmf::Renderer::Init(SDL_Window* window)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+	float scale = 4.0f;  // The scale factor
+
+	// Scale the renderer
+	SDL_RenderSetScale(m_renderer, scale, scale);
 }
 
 void lsmf::Renderer::Render() const
@@ -87,13 +91,8 @@ void lsmf::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos) cons
 	RenderTexture(texture, pos.x, pos.y, pos.z);
 }
 
-void lsmf::Renderer::RenderTexture(const Texture2D& texture, glm::vec3 pos, SDL_Rect src) const
+void lsmf::Renderer::RenderTexture(const Texture2D& texture, SDL_Rect dst, SDL_Rect src, float z) const
 {
-	float z = pos.z;
-	SDL_Rect dst{};
-	dst.x = static_cast<int>(pos.x);
-	dst.y = static_cast<int>(pos.y);
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
 	SDL_Texture* tex = texture.GetSDLTexture();
 	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z), std::move(src)));
 }

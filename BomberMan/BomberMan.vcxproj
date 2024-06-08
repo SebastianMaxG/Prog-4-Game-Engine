@@ -161,6 +161,7 @@
     <ClCompile Include="PowerupComponent.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
     <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="TileGrid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="PowerupComponent.h" />
     <ClInclude Include="ScoreSystem.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TileGrid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

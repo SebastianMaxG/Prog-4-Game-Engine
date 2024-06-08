@@ -29,6 +29,8 @@ namespace lsmf
 		void SetColumn(int column) { m_currentColumn = column; }
 		void SetFrame(int frame = 0) { m_currentFrame = frame; }
 
+		glm::vec2 GetTextureSize() const { return { m_width, m_height }; }
+
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
 
