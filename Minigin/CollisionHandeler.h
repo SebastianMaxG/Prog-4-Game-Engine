@@ -5,7 +5,7 @@
 
 #include "GameObject.h"
 #include "Singleton.h"
-#include "CollisionComponent.h"  // Include the CollisionComponent header
+#include "CollisionComponent.h"
 
 namespace lsmf
 {

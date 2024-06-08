@@ -14,43 +14,43 @@ void lsmf::CollisionHandler::FixedUpdate()
         for (auto& otherObject : m_CollisionQueue)
         {
             const auto& [otherRect, otherGameObject, otherIsStatic, otherChannels] = otherObject;
-            if (!CanCollide(channels,otherChannels))
+            if (!CanCollide(channels, otherChannels))
                 continue;
-            if (gameObject != otherGameObject)
+            if (gameObject == otherGameObject)
+                continue;
+            if (!CheckCollision(rect, otherRect))
+                continue;;
+            for (const auto& [channel, type] : channels)
             {
-                if (CheckCollision(rect, otherRect))
+                if (!otherChannels.contains(channel))
+                    continue;
+                // Handle collision based on type
+                if (type == CollisionType::Physical)
                 {
-                    for (const auto& [channel, type] : channels)
-                    {
-                        if (otherChannels.contains(channel))
-                        {
-                            // Handle collision based on type
-                            if (type == CollisionType::Physical)
-                            {
-								// Calculate the penetration depth in both directions
-								const float xPenetration = static_cast<float>((rect.w / 2 + otherRect.w / 2) - std::abs(rect.x - otherRect.x));
-								const float yPenetration = static_cast<float>((rect.h / 2 + otherRect.h / 2) - std::abs(rect.y - otherRect.y));
+                    // Calculate the penetration depth in both directions
+                    const float xPenetration = static_cast<float>((rect.w / 2 + otherRect.w / 2) - std::abs(rect.x - otherRect.x));
+                    const float yPenetration = static_cast<float>((rect.h / 2 + otherRect.h / 2) - std::abs(rect.y - otherRect.y));
 
-								// Move the object by the smallest penetration depth
-								if (xPenetration < yPenetration)
-								{
-									const float x = (rect.x < otherRect.x) ? -xPenetration : xPenetration;
-									gameObject->GetTransform()->Translate(glm::vec3(x, 0, 0));
-								}
-								else
-								{
-									const float y = (rect.y < otherRect.y) ? -yPenetration : yPenetration;
-									gameObject->GetTransform()->Translate(glm::vec3(0, y, 0));
-								}
-                            }
-                            else if (type == CollisionType::Event)
-                            {
-                                collision::OnCollide.Emit(gameObject, otherGameObject);
-                            }
-                        }
+                    // Move the object by the smallest penetration depth
+                    if (xPenetration < yPenetration)
+                    {
+                        const float x = (rect.x < otherRect.x) ? -xPenetration : xPenetration;
+                        gameObject->GetTransform()->Translate(glm::vec3(x, 0, 0));
+                    }
+                    else
+                    {
+                        const float y = (rect.y < otherRect.y) ? -yPenetration : yPenetration;
+                        gameObject->GetTransform()->Translate(glm::vec3(0, y, 0));
                     }
                 }
+                else if (type == CollisionType::Event)
+                {
+                    collision::OnCollide.Emit(gameObject, otherGameObject);
+                }
+
             }
+            
+
         }
     }
     m_CollisionQueue.clear();
