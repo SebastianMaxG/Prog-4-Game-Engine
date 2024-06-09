@@ -66,7 +66,7 @@ void lsmf::SpriteComponent::Render() const
 		m_height
 	};
 
-	Renderer::GetInstance().RenderTexture(*m_texture, dst, src, pos.z);
+	Renderer::GetInstance().RenderTexture(*m_texture, dst, src, pos.z + m_Z);
 }
 
 void lsmf::SpriteComponent::SetTexture(const std::string& filename)

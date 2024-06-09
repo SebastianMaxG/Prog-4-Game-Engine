@@ -27,10 +27,15 @@ namespace lsmf
 		void SetFrames(int rows, int columns, int nrFrames, double frameTime);
 
 		void SetColumn(int column) { m_currentColumn = column; }
-		void SetFrame(int frame = 0) { m_currentFrame = frame; }
+		void SetFrame(int frame = 0)
+		{
+			m_currentFrame = frame;
+			m_currentTime = 0;
+		}
 
 		glm::vec2 GetTextureSize() const { return { m_width, m_height }; }
 
+		void SetZ(float z) { m_Z = z; }
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
 
@@ -44,8 +49,10 @@ namespace lsmf
 		int m_currentColumn = 0;
 
 		int m_nrFrames = 1;
+		float m_Z = 0;
 		double m_frameTime = 0;
 		double m_currentTime = 0;
+
 	};
 
 }

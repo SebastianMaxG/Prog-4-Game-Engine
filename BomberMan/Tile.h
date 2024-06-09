@@ -37,9 +37,9 @@ namespace lsmf
 			ExplosionHLeftEnd = 2,
 			ExplosionHCenter = 3,
 			ExplosionHRightEnd = 4,
-			ExplosionVTopEnd = 5,
+			ExplosionVTopEnd = 7,
 			ExplosionVCenter = 6,
-			ExplosionVBotEnd = 7
+			ExplosionVBotEnd = 5
 		};
 		enum class PowerUpType
 		{
@@ -62,7 +62,7 @@ namespace lsmf
 			center,
 		};
 
-		Tile(GameObject* gameObject, TileType type = TileType::Empty);
+		Tile(GameObject* gameObject, TileType type = TileType::Empty, bool isExit = false, PowerUpType power = PowerUpType::None);
 
 		void Update(double deltaTime) override;
 		void SetGridPos(int x, int y, TileGrid* grid)
@@ -97,12 +97,12 @@ namespace lsmf
 		void EnterPowerUp();
 	public:
 		void EnterBomb(int bombRange);
-		void EnterExplosion(int range);
+		void EnterExplosion(int range, BombDir dir = BombDir::center);
 
 	private:
 		int m_BombRange = 0;
 		BombDir m_BombDir{BombDir::center};
-		const double EXPLOSION_TIME = 2.0;
+		const double EXPLOSION_TIME = 1.6;
 		double m_ExplosionTime = 0.0;
 		
 

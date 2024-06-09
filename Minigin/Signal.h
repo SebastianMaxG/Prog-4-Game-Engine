@@ -382,24 +382,26 @@ namespace lsmf
                 {
                     return;
                 }
+                while (!m_Que.empty())
+	            {
+		            // Get the arguments from the que
+                	std::unique_lock<std::mutex> lock(m_QueMutex);
 
-                // Get the arguments from the que
-                std::unique_lock<std::mutex> lock(m_QueMutex);
+                	std::tuple<Args...> argsTuple = m_Que.front();
+                	m_Que.pop_front();
 
-                std::tuple<Args...> argsTuple = m_Que.front();
-                m_Que.pop_front();
+                	lock.unlock();
 
-                lock.unlock();
-
-                // Invoke the listeners
-                std::lock_guard<std::mutex> lock2(m_ConnectionMutex);
-                std::ranges::for_each
-                (
-                    m_ListenerFunctions, [&argsTuple](auto& function)
-                    {
-                        std::apply([&](auto&&... args) { function->Invoke(std::forward<Args>(args)...); }, argsTuple);
-                    }
-                );
+                	// Invoke the listeners
+                	std::lock_guard<std::mutex> lock2(m_ConnectionMutex);
+                	std::ranges::for_each
+					(
+						m_ListenerFunctions, [&argsTuple](auto& function)
+						{
+							std::apply([&](auto&&... args) { function->Invoke(std::forward<Args>(args)...); }, argsTuple);
+						}
+					);
+	            }
             }
 
 

@@ -27,25 +27,13 @@ void lsmf::CollisionHandler::FixedUpdate()
                 // Handle collision based on type
                 if (type == CollisionType::Physical)
                 {
-                    // Calculate the penetration depth in both directions
-                    const float xPenetration = static_cast<float>((rect.w / 2 + otherRect.w / 2) - std::abs(rect.x - otherRect.x));
-                    const float yPenetration = static_cast<float>((rect.h / 2 + otherRect.h / 2) - std::abs(rect.y - otherRect.y));
-
-                    // Move the object by the smallest penetration depth
-                    if (xPenetration < yPenetration)
-                    {
-                        const float x = (rect.x < otherRect.x) ? -xPenetration : xPenetration;
-                        gameObject->GetTransform()->Translate(glm::vec3(x, 0, 0));
-                    }
-                    else
-                    {
-                        const float y = (rect.y < otherRect.y) ? -yPenetration : yPenetration;
-                        gameObject->GetTransform()->Translate(glm::vec3(0, y, 0));
-                    }
+                    ResolveCollision(rect, otherRect, gameObject);
                 }
                 else if (type == CollisionType::Event)
                 {
                     collision::OnCollide.Emit(gameObject, otherGameObject);
+
+                    collision::OnCollide.Update();
                 }
 
             }
@@ -54,7 +42,6 @@ void lsmf::CollisionHandler::FixedUpdate()
         }
     }
     m_CollisionQueue.clear();
-    collision::OnCollide.Update();
 }
 
 void lsmf::CollisionHandler::CalculateCollision(SDL_Rect rect, GameObject* gameObject, bool isStatic, std::map<CollisionChannel, CollisionType> channels)
@@ -81,4 +68,41 @@ bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, Collisi
     }
 
     return false;
+}
+void  lsmf::CollisionHandler::ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject) {
+    int dx1 = staticRect.x + staticRect.w - movingRect.x;  // penetration depth from left
+    int dx2 = movingRect.x + movingRect.w - staticRect.x;  // penetration depth from right
+    int dy1 = staticRect.y + staticRect.h - movingRect.y;  // penetration depth from top
+    int dy2 = movingRect.y + movingRect.h - staticRect.y;  // penetration depth from bottom
+
+    int xCorrection = std::min(dx1, dx2);
+    int yCorrection = std::min(dy1, dy2);
+
+    // Translate the object along the axis with the smaller penetration depth
+    if (xCorrection < yCorrection) {
+        // Correct along the x axis
+        if (dx1 < dx2) {
+            // Move left
+            gameObject->GetTransform()->Translate(glm::vec3(dx1, 0, 0));
+            //movingRect.x -= dx1;
+        }
+        else {
+            // Move right
+            gameObject->GetTransform()->Translate(glm::vec3(-dx2, 0, 0));
+            //movingRect.x += dx2;
+        }
+    }
+    else {
+        // Correct along the y axis
+        if (dy1 < dy2) {
+            // Move up
+            gameObject->GetTransform()->Translate(glm::vec3(0, dy1, 0));
+            //movingRect.y -= dy1;
+        }
+        else {
+            // Move down
+            gameObject->GetTransform()->Translate(glm::vec3(0, -dy2, 0));
+            //movingRect.y += dy2;
+        }
+    }
 }

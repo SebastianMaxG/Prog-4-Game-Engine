@@ -23,6 +23,7 @@ namespace lsmf
     private:
         bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) const;
         bool CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2) const;  // Update the method
+        void ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject);
     };
 }
 
