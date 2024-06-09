@@ -11,7 +11,7 @@ namespace lsmf
 	{
 		m_Score += score;
 		// set score text
-		m_TextComponent->SetText(std::to_string(m_Score));
+		m_TextComponent->SetText("Score: " + std::to_string(m_Score));
 	}
 	void ScoreSystem::OnEnemyDeathScore(Enemy::EnemyType type)
 	{
@@ -40,9 +40,9 @@ namespace lsmf
 		, m_Score(0)
 	{
 		m_EnemyConnection = globalSignals::OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
-		auto font = lsmf::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
+		auto font = lsmf::ResourceManager::GetInstance().LoadFont("Lingua.otf", 16);
 
-		auto textComponent = std::make_unique<TextComponent>(gameObject, "0", font);
+		auto textComponent = std::make_unique<TextComponent>(gameObject, "Score: 0", font);
 		m_TextComponent = textComponent.get();
 		gameObject->AddComponent(std::move(textComponent));
 	}

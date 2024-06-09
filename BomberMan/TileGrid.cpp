@@ -8,8 +8,9 @@
 namespace lsmf
 {
 
-	TileGrid::TileGrid(GameObject* gameObject)
+	TileGrid::TileGrid(GameObject* gameObject, glm::vec2 startPos)
 		:BaseComponent(gameObject)
+		, m_StartPos(startPos)
 	{
 	}
 
@@ -24,8 +25,8 @@ namespace lsmf
 
 	Tile* TileGrid::GetTile(const glm::vec2& pos, int& x, int& y)
 	{
-		x = static_cast<int>(pos.x - m_StartPos.x) / TILE_SIZE;
-		y = static_cast<int>(pos.y - m_StartPos.y) / TILE_SIZE;
+		x = static_cast<int>(pos.x + static_cast<float>(TILE_SIZE) / 2.f - m_StartPos.x) / TILE_SIZE;
+		y = static_cast<int>(pos.y + static_cast<float>(TILE_SIZE) / 2.f - m_StartPos.y) / TILE_SIZE;
 		if (x < 0 || x >= static_cast<int>(m_Tiles.size()) || y < 0 || y >= static_cast<int>(m_Tiles[0].size()))
 		{
 			return nullptr;

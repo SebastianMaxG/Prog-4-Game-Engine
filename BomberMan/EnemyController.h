@@ -20,6 +20,7 @@ namespace lsmf
 
         bool GetLeft() const { return m_Left; }
         void SetUpdateSpeed (float speed) { updateInterval = 1.f/speed; }
+        void LockVerticalMovement() { m_CanMoveVertical = false; }
     private:
 
         TileGrid* m_TileGrid;
@@ -27,5 +28,6 @@ namespace lsmf
         glm::vec2 targetPosition;
         float updateInterval = 1.0f; // update target position every 1 second
         float timeSinceLastUpdate = 0.0f;
+        float m_CanMoveVertical = true;
     };
 }

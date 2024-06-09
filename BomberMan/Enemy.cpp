@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Enemy.h"
 
 #include "CollisionComponent.h"
 #include "CollisionHandeler.h"
@@ -27,7 +28,6 @@ namespace lsmf
 		auto controllerComponent = std::make_unique<EnemyController>(gameObject, grid);
 		m_ControllerComponent = controllerComponent.get();
 		gameObject->AddComponent(std::move(controllerComponent));
-		m_ControllerComponent->SetSpeed(m_Speed * SPEED_MULTIPLIER);
 
 		auto collisionComponent = std::make_unique<CollisionComponent>(gameObject, SDL_Rect{ 0,0,0,0 }, false);
 		m_CollisionComponent = collisionComponent.get();
@@ -60,11 +60,15 @@ namespace lsmf
 			m_IsSmart = true;
 			break;
 		}
-		m_ControllerComponent->SetSpeed(m_Speed);
+		m_ControllerComponent->SetSpeed(m_Speed * SPEED_MULTIPLIER);
 
 		if (EnemyController* controller = dynamic_cast<EnemyController*>(m_ControllerComponent))
 		{
 			controller->SetUpdateSpeed(static_cast<float>(m_Speed));
+			if (m_Type == EnemyType::Doll)
+			{
+				controller->LockVerticalMovement();
+			}
 		}
 	}
 	void Enemy::Update(double deltaTime)
@@ -89,8 +93,7 @@ namespace lsmf
 	}
 	void Enemy::Kill()
 	{
-		m_Dead = true;
-		if (m_Dead)
+		if (!m_Dead)
 		{
 			m_SpriteComponent->SetColumn(static_cast<int>(m_Type) * 3 + 2);
 			m_SpriteComponent->SetFrames(4, 12, 4, 0.4);
@@ -98,6 +101,7 @@ namespace lsmf
 			m_KillTime = 4 * 0.4;
 			m_ControllerComponent->Stop();
 			globalSignals::OnEnemyDeath.Emit(m_Type);
+			m_Dead = true;
 		}
 	}
 	void Enemy::SetLeft(bool left)

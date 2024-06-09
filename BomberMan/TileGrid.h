@@ -11,7 +11,7 @@ namespace lsmf
     class TileGrid : public BaseComponent
 	{
     public:
-        TileGrid(GameObject* gameObject);
+        TileGrid(GameObject* gameObject, glm::vec2 startPos = {});
 
         Tile* GetTile(int x, int y);  // Returns the tile at the given coordinates
         Tile* GetTile(const glm::vec2& pos, int& x, int& y);  // Returns the tile at the given position

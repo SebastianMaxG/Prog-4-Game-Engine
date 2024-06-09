@@ -72,6 +72,12 @@ namespace lsmf
 				return;
 			}
 		}
+
+		if (m_IsDead)
+		{
+			Stop();
+			m_ControllerComponent->Stop();
+		}
 	}
 	void Player::SetState(PlayerState state)
 	{
