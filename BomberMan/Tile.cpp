@@ -2,6 +2,7 @@
 
 #include "CollisionComponent.h"
 #include "CollisionHandeler.h"
+#include "Enemy.h"
 #include "GameObject.h"
 #include "Player.h"
 #include "SpriteComponent.h"
@@ -95,6 +96,7 @@ namespace lsmf
 			break;
 		}
 		m_PlayerOnTile = nullptr;
+		m_EnemyOnTile = nullptr;
 	}
 
 	void Tile::BreakCrate()
@@ -116,6 +118,10 @@ namespace lsmf
 			if (Player* player = dynamic_cast<Player*>(collider->GetComponent(typeid(Player))))
 			{
 				m_PlayerOnTile = player;
+			}
+			if (Enemy* enemy = dynamic_cast<Enemy*>(collider->GetComponent(typeid(Enemy))))
+			{
+				m_EnemyOnTile = enemy;
 			}
 		}
 	}
@@ -231,6 +237,10 @@ namespace lsmf
 		if (m_PlayerOnTile)
 		{
 			m_PlayerOnTile->Kill();
+		}
+		if (m_EnemyOnTile)
+		{
+			m_EnemyOnTile->Kill();
 		}
 
 	}

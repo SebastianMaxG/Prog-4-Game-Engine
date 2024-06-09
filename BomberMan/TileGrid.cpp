@@ -43,7 +43,8 @@ namespace lsmf
 
 		int width, height;
 		file >> width >> height;
-
+		m_Width = width;
+		m_Height = height;
 		m_Tiles.resize(width);
 		for (int x = 0; x < width; ++x)
 		{

@@ -4,6 +4,7 @@
 
 namespace lsmf
 {
+	class Enemy;
 	class Player;
 	class TileGrid;
 	class CollisionComponent;
@@ -119,6 +120,7 @@ namespace lsmf
 		bool m_IsCrateBroken = false;
 		bool m_ContainsExit = false;
 		Player* m_PlayerOnTile {};
+		Enemy* m_EnemyOnTile {};
 
 		TileGrid* m_Grid{};
 		int m_GridX{};

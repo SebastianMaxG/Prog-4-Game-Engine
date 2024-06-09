@@ -45,7 +45,7 @@ namespace lsmf
 		//set the collision component to the size of the sprite
 		const glm::vec2 size = m_SpriteComponent->GetTextureSize();
 		const glm::vec3 pos = GetGameObject()->GetTransform()->GetWorldTransform().GetPosition();
-		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x)-5,static_cast<int>(size.y)-5 });
+		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x)-2,static_cast<int>(size.y)-2 });
 	}
 
 	void Player::Update(double deltaTime)

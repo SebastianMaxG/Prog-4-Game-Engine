@@ -27,9 +27,9 @@ void lsmf::SpriteComponent::Update(double deltaTime)
 	{
 		m_currentTime -= m_frameTime;
 		++m_currentFrame;
-		if (m_currentFrame >= m_rows)
+		if (m_currentFrame >= m_nrFrames)
 		{
-			m_currentFrame %= m_rows;
+			m_currentFrame %= m_nrFrames;
 		}
 	}
 }
