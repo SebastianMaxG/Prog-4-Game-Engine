@@ -48,7 +48,6 @@ namespace lsmf
 	}
 	ScoreSystem::~ScoreSystem() noexcept
 	{
-		m_EnemyConnection->Disconnect();
 	}
 }
 

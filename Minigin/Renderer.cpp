@@ -81,7 +81,7 @@ void lsmf::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 		dst.w,
 		dst.h
 	};
-	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z),std::move(src)));
+	m_RenderQueue.push_back(std::make_tuple<SDL_Texture*, SDL_Rect, const float , SDL_Rect>(std::move(tex), std::move(dst), std::move(z),std::move(src)));
 
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }

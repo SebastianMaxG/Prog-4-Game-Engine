@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "Enemy.h"
 
 #include "CollisionComponent.h"
 #include "CollisionHandeler.h"
@@ -23,6 +22,7 @@ namespace lsmf
 		gameObject->AddComponent(std::move(spriteComponent));
 		m_SpriteComponent->SetFrames(4, 12, 3, 0.4);
 		m_SpriteComponent->SetColumn(static_cast<int>(m_Type) * 3);
+		m_SpriteComponent->SetZ(1);
 
 
 		auto controllerComponent = std::make_unique<EnemyController>(gameObject, grid);

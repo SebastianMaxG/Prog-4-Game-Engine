@@ -11,8 +11,10 @@ namespace lsmf
         : ControllerComponent(gameObject), m_TileGrid(tileGrid)
     {
         Tile* tile{};
-		while (!tile || tile->GetState() == Tile::TileState::Wall || tile->GetState() == Tile::TileState::Crate || tile->GetState() == Tile::TileState::Bomb)
+		while (!tile || tile->GetState() != Tile::TileState::Empty)
 		{
+
+            rand();
 			// Initialize the enemy's position to a random tile
 			const int x = rand() % m_TileGrid->GetWidth();
 			const int y = rand() % m_TileGrid->GetHeight();

@@ -1,16 +1,12 @@
 #pragma once
-#include "signal.h"
+#include "BaseComponent.h"
 #include "Enemy.h"
+#include "signal.h"
 #include "HighscoreSystem.h"
-
 
 namespace lsmf
 {
 	class HighScoreSystem;
-}
-
-namespace lsmf
-{
 	class TextComponent;
 
 	class ScoreSystem final : public BaseComponent
