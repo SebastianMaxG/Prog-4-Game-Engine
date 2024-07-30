@@ -2,6 +2,9 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "ResourceManager.h"
+
+#include <iostream>
+
 #include "Renderer.h"
 #include "Texture2D.h"
 #include "Font.h"
@@ -36,5 +39,13 @@ std::shared_ptr<lsmf::Font> lsmf::ResourceManager::LoadFont(const std::string& f
 std::shared_ptr<lsmf::AudioClip> lsmf::ResourceManager::LoadAudioClip(const std::string& file) const
 {
 	const auto fullPath = m_dataPath + file;
-	return std::make_shared<AudioClip>(fullPath);
+	try
+	{
+		return std::make_shared<AudioClip>(fullPath);
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	return  nullptr;
 }

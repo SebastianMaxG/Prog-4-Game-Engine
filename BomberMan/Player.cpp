@@ -9,10 +9,12 @@
 #include <algorithm>
 
 #include "CollisionHandeler.h"
+#include "SoundSystem.h"
+#include "Signal.h"
 
 namespace lsmf
 {
-
+   
 
 	Player::Player(GameObject* gameObject)
 		: BaseComponent(gameObject)
@@ -91,6 +93,7 @@ namespace lsmf
 			return;
 		}
 		m_Lives--;
+		sound::PlaySoundSignal.Emit("Whistle.mp3", 5);
 		if (m_Lives <= 0)
 		{
 			m_IsDead = true;

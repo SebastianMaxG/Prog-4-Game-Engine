@@ -9,14 +9,27 @@
 
 namespace lsmf
 {
+	
     //--------------------------------------------------------------------------
     //SDL sound system
     //--------------------------------------------------------------------------
-    void SDLSoundSystem::PlaySound(const std::string& filename, float volume)
+    SDLSoundSystem::SDLSoundSystem()
+    {
+        if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+        {
+            throw std::runtime_error(std::string("Failed to initialize SDL_mixer: ") + Mix_GetError());
+        }
+    }
+
+    SDLSoundSystem::~SDLSoundSystem()
+    {
+        Mix_CloseAudio();
+    }
+    void SDLSoundSystem::PlaySound(const std::string filename, float volume)
     {
         std::shared_ptr<AudioClip> audioClip;
 
-        auto it = audioClipCache.find(filename);
+        const auto it = audioClipCache.find(filename);
         if (it != audioClipCache.end()) {
             audioClip = it->second;
         }
@@ -62,7 +75,7 @@ namespace lsmf
     //--------------------------------------------------------------------------
     //Debug sound system
     //--------------------------------------------------------------------------
-    void DebugSoundSystem::PlaySound(const std::string& file, float volume)
+    void DebugSoundSystem::PlaySound(const std::string file, float volume)
     {
 		std::cout << "Playing sound: " << file << " with volume: " << volume << '\n';
     }
