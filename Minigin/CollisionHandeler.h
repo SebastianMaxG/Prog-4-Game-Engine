@@ -21,9 +21,9 @@ namespace lsmf
         void FixedUpdate();
         void CalculateCollision(SDL_Rect rect, GameObject* gameObject, bool isStatic, std::map<CollisionChannel, CollisionType> channels);  // Update the method
     private:
-        bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) const;
-        bool CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2) const;  // Update the method
-        void ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject);
+        static bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
+        static bool CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2);  // Update the method
+        static void ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject);
     };
 }
 

@@ -161,6 +161,7 @@
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="PowerupComponent.cpp" />
     <ClCompile Include="ScoreSystem.cpp" />
+    <ClCompile Include="SelectComponent.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileGrid.cpp" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="PlayerController.h" />
     <ClInclude Include="PowerupComponent.h" />
     <ClInclude Include="ScoreSystem.h" />
+    <ClInclude Include="SelectComponent.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileGrid.h" />
   </ItemGroup>

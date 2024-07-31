@@ -49,7 +49,7 @@ void lsmf::CollisionHandler::CalculateCollision(SDL_Rect rect, GameObject* gameO
     m_CollisionQueue.emplace_back(rect, gameObject, isStatic, channels);
 }
 
-bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2) const
+bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2)
 {
     return (rect1.x < rect2.x + rect2.w &&
         rect1.x + rect1.w > rect2.x &&
@@ -57,7 +57,7 @@ bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rec
         rect1.y + rect1.h > rect2.y);
 }
 
-bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2) const
+bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2)
 {
     for (const auto& channel1 : channels1 | std::views::keys)
     {

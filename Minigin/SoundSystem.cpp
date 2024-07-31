@@ -95,4 +95,8 @@ namespace lsmf
     {
         std::cout << "Loading sound: " << file << '\n';
     }
+    SoundSystem::~SoundSystem()
+    {
+        m_PlaySoundConnection->Disconnect();
+    }
 }

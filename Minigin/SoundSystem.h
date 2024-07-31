@@ -22,7 +22,7 @@ namespace lsmf
         {
         	m_PlaySoundConnection = sound::PlaySoundSignal.Connect(this, &SoundSystem::PlaySound);
 		}
-        virtual ~SoundSystem() = default;
+        virtual ~SoundSystem();
 
         SoundSystem(const SoundSystem& other) = delete;
         SoundSystem(SoundSystem&& other) = delete;
