@@ -36,6 +36,7 @@ namespace lsmf
 		glm::vec2 GetTextureSize() const { return { m_width, m_height }; }
 
 		void SetZ(float z) { m_Z = z; }
+
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
 

@@ -1,4 +1,7 @@
 #include "SpriteComponent.h"
+
+#include <iostream>
+
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "TransformComponent.h"
@@ -36,19 +39,30 @@ void lsmf::SpriteComponent::Update(double deltaTime)
 
 void lsmf::SpriteComponent::Render() const
 {
+	constexpr float epsilon = 1e-6f;
+
 	if (m_texture == nullptr)
 	{
 		return;
 	}
 	glm::vec3 pos{};
+	glm::vec3 scale{ 1 , 1,1 };
 	if (const TransformComponent* transform = GetGameObject()->GetTransform())
 	{
 		pos += transform->GetPosition();
+		scale = transform->GetScale();
+		if (std::abs(scale.x) < epsilon or std::abs(scale.y) < epsilon)
+		{
+			return;
+		}
 	}
 	if (m_columns == 1 and m_rows == 1)
 	{
-		Renderer::GetInstance().RenderTexture(*m_texture, pos);
-		return;
+		if (std::abs(scale.x - 1.f) < epsilon && std::abs(scale.y - 1.f) < epsilon)
+		{
+			Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y, pos.z + m_Z);
+			return;
+		}
 	}
 
 	SDL_Rect src
@@ -62,16 +76,16 @@ void lsmf::SpriteComponent::Render() const
 	{
 		static_cast<int>(pos.x),
 		static_cast<int>(pos.y),
-		m_width,
-		m_height
+		static_cast<int>(static_cast<float>(m_width)  * scale.x),
+		static_cast<int>(static_cast<float>(m_height) * scale.y)
 	};
-
 	Renderer::GetInstance().RenderTexture(*m_texture, dst, src, pos.z + m_Z);
 }
 
 void lsmf::SpriteComponent::SetTexture(const std::string& filename)
 {
 	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
+	SDL_QueryTexture(m_texture->GetSDLTexture(), nullptr, nullptr, &m_width, &m_height);
 }
 
 void lsmf::SpriteComponent::SetTexture(std::shared_ptr<Texture2D> newTexture)
@@ -96,3 +110,4 @@ void lsmf::SpriteComponent::SetFrames(int rows, int columns, int nrFrames, doubl
 	m_width /= m_columns;
 	m_height /= m_rows;
 }
+

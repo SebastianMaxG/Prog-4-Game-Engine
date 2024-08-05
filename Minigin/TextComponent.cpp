@@ -72,4 +72,9 @@ void lsmf::TextComponent::SetText(const std::string& text)
 	m_needsUpdate = true;
 }
 
+std::string lsmf::TextComponent::GetText() const
+{
+	return m_text;
+}
+
 

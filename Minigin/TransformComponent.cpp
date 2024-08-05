@@ -49,12 +49,12 @@ namespace lsmf
 
 	const glm::vec3& TransformComponent::GetScale() const
 	{
-		return m_LocalTransform.GetScale();
+		return GetWorldTransform().GetScale();
 	}
 
 	float TransformComponent::GetRotation() const
 	{
-		return m_LocalTransform.GetRotation();
+		return GetWorldTransform().GetRotation();
 	}
 	const Transform& TransformComponent::GetLocalTransform() const
 	{

@@ -59,7 +59,7 @@ namespace lsmf
 		Transform result{};
 		result.m_Position = m_Position + other.m_Position;
 		result.m_Rotation = m_Rotation + other.m_Rotation;
-		result.m_Scale = m_Scale * other.m_Scale;
+		result.m_Scale = other.m_Scale;
 		return result;
 	}
 

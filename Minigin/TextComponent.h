@@ -15,6 +15,7 @@ namespace lsmf
 		void Render() const override;
 
 		void SetText(const std::string& text);
+		std::string GetText() const;
 
 		TextComponent(GameObject* m_GameObjectPtr, const std::string& text, std::shared_ptr<Font> font, SDL_Color color = { 255,255,255,255 });
 		~TextComponent() override = default;

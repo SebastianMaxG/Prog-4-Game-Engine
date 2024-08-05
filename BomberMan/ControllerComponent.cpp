@@ -26,7 +26,8 @@ namespace lsmf
 	void ControllerComponent::Move(double deltaTime)
 	{
 		const auto transform = GetGameObject()->GetTransform();
-		const auto moveTransform = m_MoveTransform * static_cast<float>(deltaTime * m_Speed);
+		Transform moveTransform{};
+		moveTransform.SetPosition(m_MoveTransform.GetPosition() * static_cast<float>(deltaTime * m_Speed));
 		transform->SetLocalTransform(transform->GetLocalTransform() + moveTransform);
 	}
 }
