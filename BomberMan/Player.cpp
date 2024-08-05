@@ -48,6 +48,8 @@ namespace lsmf
 		const glm::vec2 size = m_SpriteComponent->GetTextureSize();
 		const glm::vec3 pos = GetGameObject()->GetTransform()->GetWorldTransform().GetPosition();
 		m_CollisionComponent->SetHitbox({ static_cast<int>(pos.x), static_cast<int>(pos.y), static_cast<int>(size.x)-2,static_cast<int>(size.y)-2 });
+		m_StartPos.x = pos.x;
+		m_StartPos.y = pos.y;
 	}
 
 	void Player::Update(double deltaTime)
@@ -94,6 +96,8 @@ namespace lsmf
 		}
 		m_Lives--;
 		sound::PlaySoundSignal.Emit("Whistle.mp3", 5);
+		const glm::vec3 pos = GetGameObject()->GetTransform()->GetPosition();
+		GetGameObject()->GetTransform()->SetPosition({m_StartPos.x, m_StartPos.y, pos.z});
 		if (m_Lives <= 0)
 		{
 			m_IsDead = true;

@@ -38,7 +38,7 @@ namespace lsmf
 		m_PowerUpSpriteComponent->SetFrames(1, 8, 1, 0);
 		m_PowerUpSpriteComponent->SetColumn(static_cast<int>(m_PowerUpType));
 		m_PowerUpSpriteComponent->Stop();
-		m_BombSpriteComponent->SetZ(1);
+		m_BombSpriteComponent->SetZ(3);
 
 
 

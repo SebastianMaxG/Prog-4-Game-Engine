@@ -1,4 +1,6 @@
 #pragma once
+#include <glm/vec2.hpp>
+
 #include "BaseComponent.h"
 #include "Signal.h"
 
@@ -45,7 +47,7 @@ namespace lsmf
 		Tile* m_CurrentTile = nullptr;
 		std::vector<Tile*> m_Bombs;
 
-		uint8_t m_Lives = 3;
+		uint8_t m_Lives = 4;
 		PlayerState m_State = PlayerState::Down;
 
 		bool m_IsDead = false;
@@ -60,6 +62,8 @@ namespace lsmf
 		int m_NrOfBombs = 0;
 		int m_BombRange = 1;
 		int m_BombCount = 1;
+
+		glm::vec2 m_StartPos = { 0,0 };
 
 		double m_InvincibleTime = 0;
 		const double INVINCIBLE_DURATION = 2.0;

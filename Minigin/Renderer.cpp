@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Texture2D.h"
 #include <algorithm>
+#include <iostream>
 
 int GetOpenGLDriverIndex()
 {
@@ -50,6 +51,10 @@ void lsmf::Renderer::Render() const
 	for (const auto& renderable : m_RenderQueue)
 	{
 		const auto& [texture, dst, z, src] = renderable;
+		if (texture == nullptr)
+		{
+			continue;
+		}
 		SDL_RenderCopy(m_renderer, texture, &src, &dst);
 	}
 	m_RenderQueue.clear();
@@ -112,7 +117,7 @@ void lsmf::Renderer::RenderTexture(const Texture2D& texture, const float x, cons
 		0,
 		0
 	};
-	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &src.w, &src.h);
+	SDL_QueryTexture(tex, nullptr, nullptr, &src.w, &src.h);
 
 	m_RenderQueue.emplace_back(std::make_tuple<SDL_Texture*, SDL_Rect,const float, SDL_Rect >(std::move(tex), std::move(dst), std::move(z), std::move(src)));
 	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
