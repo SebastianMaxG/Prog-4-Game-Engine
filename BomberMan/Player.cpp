@@ -16,7 +16,7 @@ namespace lsmf
 {
    
 
-	Player::Player(GameObject* gameObject)
+	Player::Player(GameObject* gameObject, int controllerId)
 		: BaseComponent(gameObject)
 	{
 		auto spriteComponent = std::make_unique<SpriteComponent>(gameObject, "PlayerSprite.png");
@@ -25,7 +25,7 @@ namespace lsmf
 		m_SpriteComponent->SetFrames(3, 5, 3, 0.2);
 		m_SpriteComponent->SetColumn(static_cast<int>(m_State));
 
-		auto controllerComponent = std::make_unique<PlayerController>(gameObject, this, -1);
+		auto controllerComponent = std::make_unique<PlayerController>(gameObject, this, controllerId);
 		m_ControllerComponent = controllerComponent.get();
 		gameObject->AddComponent(std::move(controllerComponent));
 		m_ControllerComponent->SetSpeed(m_Speed * SPEED_MULTIPLIER);

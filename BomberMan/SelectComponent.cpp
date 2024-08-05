@@ -20,22 +20,22 @@ namespace lsmf
         UpdateText();
     }
 
-    void SelectComponent::Update(double deltaTime)
+    void SelectComponent::Update(double )
     {
-        // Handle input for switching modes, next, and previous
-        // This is just a placeholder, replace with actual input handling
-        if (/* condition to switch mode */)
-        {
-            SwitchMode();
-        }
-        if (/* condition to go to next item */)
-        {
-            Next();
-        }
-        if (/* condition to go to previous item */)
-        {
-            Previous();
-        }
+    //    // Handle input for switching modes, next, and previous
+    //    // This is just a placeholder, replace with actual input handling
+    //    if (/* condition to switch mode */)
+    //    {
+    //        SwitchMode();
+    //    }
+    //    if (/* condition to go to next item */)
+    //    {
+    //        Next();
+    //    }
+    //    if (/* condition to go to previous item */)
+    //    {
+    //        Previous();
+    //    }
     }
 
     void SelectComponent::Render() const

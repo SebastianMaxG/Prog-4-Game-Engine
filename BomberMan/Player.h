@@ -21,7 +21,7 @@ namespace lsmf
 			Left = 3,
 			Dead = 4
 		};
-		Player(GameObject* gameObject);
+		Player(GameObject* gameObject, int controllerId = -1);
 
 		void Update(double deltaTime) override;
 		void SetState(PlayerState state);
