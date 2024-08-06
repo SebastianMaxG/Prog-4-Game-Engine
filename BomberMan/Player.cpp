@@ -37,6 +37,7 @@ namespace lsmf
 		gameObject->AddComponent(std::move(collisionComponent));
 
 		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
+		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
 		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
 		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
 		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
@@ -207,7 +208,6 @@ namespace lsmf
 				if (tile->GetState() == Tile::TileState::Bomb)
 				{
 					m_BombOverlap = true;
-					return;
 				}
 			}
 		}
