@@ -3,6 +3,7 @@
 
 #include "BaseComponent.h"
 #include "Signal.h"
+#include "TileGrid.h"
 
 namespace lsmf
 {
@@ -23,9 +24,10 @@ namespace lsmf
 			Left = 3,
 			Dead = 4
 		};
-		Player(GameObject* gameObject, int controllerId = -1);
+		Player(GameObject* gameObject, TileGrid* grid, int controllerId = -1);
 
 		void Update(double deltaTime) override;
+		void FixedUpdate(double deltaTime) override;
 		void SetState(PlayerState state);
 		void Kill();
 		void IncreaseBombCount();
@@ -44,6 +46,7 @@ namespace lsmf
 		void Detonate();
 	private:
 
+		TileGrid* m_Grid;
 		Tile* m_CurrentTile = nullptr;
 		std::vector<Tile*> m_Bombs;
 
@@ -52,22 +55,30 @@ namespace lsmf
 
 		bool m_IsDead = false;
 		bool m_IsMoving = false;
-		bool m_CanPlaceBomb = true;
 		bool m_Remote = false;
 		bool m_WallPass = false;
 		bool m_FlamePass = false;
 		bool m_BombPass = false;
+		bool m_BombOverlap = false;
+		bool m_BombCollisionDirty = false;
 
-		int m_Speed = 2;
+
+		int m_Speed = 3;
 		int m_NrOfBombs = 0;
 		int m_BombRange = 1;
 		int m_BombCount = 1;
 
+
 		glm::vec2 m_StartPos = { 0,0 };
 
+		const double m_FrameTime{ 0.2f };
 		double m_InvincibleTime = 0;
 		const double INVINCIBLE_DURATION = 2.0;
 		const double SPEED_MULTIPLIER = 16.0;
+
+		const double m_DeathAnimationTime = 0.6; // Duration of the death animation in seconds
+		const double m_DeathFrameTime{ 0.2f };
+		double m_DeathAnimationTimer = 0.0; // Timer to track the death animation
 
 		SpriteComponent* m_SpriteComponent;
 

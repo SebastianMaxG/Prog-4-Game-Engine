@@ -16,14 +16,16 @@ namespace lsmf
 {
    
 
-	Player::Player(GameObject* gameObject, int controllerId)
+	Player::Player(GameObject* gameObject, TileGrid* grid, int controllerId)
 		: BaseComponent(gameObject)
+		, m_Grid(grid)
 	{
 		auto spriteComponent = std::make_unique<SpriteComponent>(gameObject, "PlayerSprite.png");
 		m_SpriteComponent = spriteComponent.get();
 		gameObject->AddComponent(std::move(spriteComponent));
-		m_SpriteComponent->SetFrames(3, 5, 3, 0.2);
+		m_SpriteComponent->SetFrames(3, 5, 3, m_FrameTime);
 		m_SpriteComponent->SetColumn(static_cast<int>(m_State));
+		m_SpriteComponent->SetPingPong(true);
 
 		auto controllerComponent = std::make_unique<PlayerController>(gameObject, this, controllerId);
 		m_ControllerComponent = controllerComponent.get();
@@ -34,9 +36,8 @@ namespace lsmf
 		m_CollisionComponent = collisionComponent.get();
 		gameObject->AddComponent(std::move(collisionComponent));
 
-		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::Event);
+		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
 		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
 		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
 		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
 		m_CollisionComponent->SetChannel(CollisionChannel::Crate, CollisionType::Physical);
@@ -54,14 +55,43 @@ namespace lsmf
 
 	void Player::Update(double deltaTime)
 	{
-		m_IsMoving = m_ControllerComponent->IsMoving();
-		if (!m_IsMoving and !m_IsDead)
+		if (m_IsDead)
 		{
-			m_SpriteComponent->SetFrames(3, 5, 1, 0.2);
+			m_DeathAnimationTimer -= deltaTime;
+			if (m_DeathAnimationTimer <= 0.0)
+			{
+				m_SpriteComponent->SetFrames(3, 5, 3, m_FrameTime);
+
+				// Respawn the player after the death animation
+				const glm::vec3 pos = GetGameObject()->GetTransform()->GetPosition();
+				GetGameObject()->GetTransform()->SetPosition({ m_StartPos.x, m_StartPos.y, pos.z });
+				m_IsDead = false;
+				SetState(PlayerState::Down);
+				m_SpriteComponent->SetFrame();
+				m_InvincibleTime = INVINCIBLE_DURATION;
+				m_ControllerComponent->Start();
+			}
+			return;
+		}
+
+		m_IsMoving = m_ControllerComponent->IsMoving();
+		if (!m_IsMoving)
+		{
+			m_SpriteComponent->SetFrames(3, 5, 1, m_FrameTime);
 		}
 		else
 		{
-			m_SpriteComponent->SetFrames(3, 5, 3, 0.2);
+			m_SpriteComponent->SetFrames(3, 5, 3, m_FrameTime);
+			// find the tile the player is on
+			const glm::vec3 posRaw = GetGameObject()->GetTransform()->GetPosition();
+			const glm::vec2 pos = { posRaw.x, posRaw.y };
+			int x, y;
+			Tile* tile = m_Grid->GetTile(pos, x, y);
+			if (m_CurrentTile != tile)
+			{
+				m_CurrentTile = tile;
+				sound::PlaySoundSignal.Emit("Bomberman SFX (1).wav", 5);
+			}
 		}
 		if (m_InvincibleTime > 0)
 		{
@@ -77,33 +107,44 @@ namespace lsmf
 			}
 		}
 
-		if (m_IsDead)
+		if (!m_BombOverlap and m_BombCollisionDirty)
 		{
-			Stop();
-			m_ControllerComponent->Stop();
+			m_BombCollisionDirty = false;
+			m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Physical);
 		}
+		
 	}
+
+	void Player::FixedUpdate(double)
+	{
+		if (m_BombOverlap)
+			m_BombOverlap = false;
+	}
+
 	void Player::SetState(PlayerState state)
 	{
 		m_State = state;
 		m_SpriteComponent->SetColumn(static_cast<int>(m_State));
 	}
+
 	void Player::Kill()
 	{
-		if (m_InvincibleTime > 0)
+		if (m_InvincibleTime > 0 || m_IsDead)
 		{
 			return;
 		}
 		m_Lives--;
-		sound::PlaySoundSignal.Emit("Whistle.mp3", 5);
-		const glm::vec3 pos = GetGameObject()->GetTransform()->GetPosition();
-		GetGameObject()->GetTransform()->SetPosition({m_StartPos.x, m_StartPos.y, pos.z});
+		sound::PlaySoundSignal.Emit("Bomberman SFX (5).wav", 5);
+		m_IsDead = true;
+		SetState(PlayerState::Dead);
+		m_SpriteComponent->SetFrame();
+		m_ControllerComponent->Stop();
+		m_DeathAnimationTimer = m_DeathAnimationTime;
+		m_SpriteComponent->SetFrames(3, 5, 3, m_DeathFrameTime);
+
 		if (m_Lives <= 0)
 		{
-			m_IsDead = true;
-			SetState(PlayerState::Dead);
-			m_SpriteComponent->SetFrame();
-
+			Stop();
 		}
 		m_InvincibleTime = INVINCIBLE_DURATION;
 
@@ -155,11 +196,19 @@ namespace lsmf
 
 	void Player::CollisionEvent(GameObject* collider, GameObject* other)
 	{
+		if (m_IsDead || m_BombOverlap)
+		{
+			return;
+		}
 		if (collider == GetGameObject())
 		{
 			if (Tile* tile = dynamic_cast<Tile*>(other->GetComponent(typeid(Tile))))
 			{
-				m_CurrentTile = tile;
+				if (tile->GetState() == Tile::TileState::Bomb)
+				{
+					m_BombOverlap = true;
+					return;
+				}
 			}
 		}
 	}
@@ -178,9 +227,13 @@ namespace lsmf
 		{
 			return;
 		}
+		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
+		m_BombOverlap = true;
+		m_BombCollisionDirty = true;
 		m_CurrentTile->EnterBomb(m_BombRange);
 		m_Bombs.push_back(m_CurrentTile);
 		m_NrOfBombs++;
+		sound::PlaySoundSignal.Emit("Bomberman SFX (3).wav", 5);
 	}
 	void Player::Detonate()
 	{

@@ -30,12 +30,15 @@ namespace lsmf
 		void SetFrame(int frame = 0)
 		{
 			m_currentFrame = frame;
+			m_forward = true;
 			m_currentTime = 0;
 		}
 
 		glm::vec2 GetTextureSize() const { return { m_width, m_height }; }
 
 		void SetZ(float z) { m_Z = z; }
+		void SetPingPong(bool pingPong); 
+
 
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
@@ -53,6 +56,10 @@ namespace lsmf
 		float m_Z = 0;
 		double m_frameTime = 0;
 		double m_currentTime = 0;
+
+
+		bool m_pingPong = false; 
+		bool m_forward = true; 
 
 	};
 

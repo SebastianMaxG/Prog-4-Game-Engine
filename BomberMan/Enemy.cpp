@@ -23,6 +23,7 @@ namespace lsmf
 		m_SpriteComponent->SetFrames(4, 12, 3, 0.4);
 		m_SpriteComponent->SetColumn(static_cast<int>(m_Type) * 3);
 		m_SpriteComponent->SetZ(1);
+		m_SpriteComponent->SetPingPong(true);
 
 
 		auto controllerComponent = std::make_unique<EnemyController>(gameObject, grid);
@@ -98,7 +99,7 @@ namespace lsmf
 			m_SpriteComponent->SetColumn(static_cast<int>(m_Type) * 3 + 2);
 			m_SpriteComponent->SetFrames(4, 12, 4, 0.4);
 			m_SpriteComponent->SetFrame();
-			m_KillTime = 4 * 0.4;
+			m_KillTime = 1.55;
 			m_ControllerComponent->Stop();
 			globalSignals::OnEnemyDeath.Emit(m_Type);
 			m_Dead = true;

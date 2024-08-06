@@ -1,4 +1,6 @@
 #include "AudioClip.h"
+
+#include <iostream>
 #include <stdexcept>
 
 lsmf::AudioClip::AudioClip(const std::string& fullPath)
@@ -24,7 +26,8 @@ void lsmf::AudioClip::Play() const
 {
     if (Mix_PlayChannel(-1, m_chunk, 0) == -1)
     {
-        throw std::runtime_error(std::string("Failed to play audio clip: ") + Mix_GetError());
+        //throw std::runtime_error(std::string("Failed to play audio clip: ") + Mix_GetError());
+        std::cout << "Failed to play audio clip: " << Mix_GetError() << std::endl;
     }
 }
 

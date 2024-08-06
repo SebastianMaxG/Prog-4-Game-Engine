@@ -103,7 +103,9 @@ namespace lsmf
 	private:
 		int m_BombRange = 0;
 		BombDir m_BombDir{BombDir::center};
-		const double EXPLOSION_TIME = 1.6;
+		const double EXPLOSION_DELAY = 3.0;
+		const double BOMB_FRAMETIME = 0.5;
+		const double EXPLOSION_TIME = 1.0;
 		double m_ExplosionTime = 0.0;
 		
 

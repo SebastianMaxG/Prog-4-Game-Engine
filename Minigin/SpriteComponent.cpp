@@ -29,10 +29,32 @@ void lsmf::SpriteComponent::Update(double deltaTime)
 	if (m_currentTime >= m_frameTime)
 	{
 		m_currentTime -= m_frameTime;
-		++m_currentFrame;
-		if (m_currentFrame >= m_nrFrames)
+		if (m_pingPong)
 		{
-			m_currentFrame %= m_nrFrames;
+			if (m_forward)
+			{
+				++m_currentFrame;
+				if (m_currentFrame >= m_nrFrames - 1)
+				{
+					m_forward = false;
+				}
+			}
+			else
+			{
+				--m_currentFrame;
+				if (m_currentFrame <= 0)
+				{
+					m_forward = true;
+				}
+			}
+		}
+		else
+		{
+			++m_currentFrame;
+			if (m_currentFrame >= m_nrFrames)
+			{
+				m_currentFrame %= m_nrFrames;
+			}
 		}
 	}
 }
@@ -109,5 +131,11 @@ void lsmf::SpriteComponent::SetFrames(int rows, int columns, int nrFrames, doubl
 	SDL_QueryTexture(m_texture->GetSDLTexture(), nullptr, nullptr, &m_width, &m_height);
 	m_width /= m_columns;
 	m_height /= m_rows;
+}
+
+void lsmf::SpriteComponent::SetPingPong(bool pingPong)
+{
+	m_pingPong = pingPong;
+	m_forward = true;
 }
 

@@ -30,7 +30,6 @@ namespace lsmf
 		void OpenControllers();
 		void CloseControllers();
 		std::vector<SDL_GameController*> m_Controllers {};
-		std::set 
 	};
 
 }

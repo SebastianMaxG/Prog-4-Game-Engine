@@ -5,6 +5,7 @@
 #include "Enemy.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "SoundSystem.h"
 #include "SpriteComponent.h"
 #include "TileGrid.h"
 #include "TransformComponent.h"
@@ -31,6 +32,7 @@ namespace lsmf
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_BombSpriteComponent->Stop();
 		m_BombSpriteComponent->SetZ(3);
+		m_BombSpriteComponent->SetPingPong(true);
 
 		spriteComponent = std::make_unique<SpriteComponent>(gameObject, "PowerUpSprite.png");
 		m_PowerUpSpriteComponent = spriteComponent.get();
@@ -130,6 +132,8 @@ namespace lsmf
 	{
 		if (m_PlayerOnTile)
 		{
+			sound::PlaySoundSignal.Emit("Bomberman SFX (6).wav", 5);
+
 			// TODO: check remaining enemies
 			// if enemies == 0
 			// enter exit (next level)
@@ -215,6 +219,8 @@ namespace lsmf
 				m_PlayerOnTile->ActivateInvincible();
 				break;
 			}
+			sound::PlaySoundSignal.Emit("Bomberman SFX (4).wav", 5);
+
 			if (m_ContainsExit)
 			{
 				EnterExit();
@@ -316,7 +322,7 @@ namespace lsmf
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Bomb;
-		m_ExplosionTime = EXPLOSION_TIME;
+		m_ExplosionTime = EXPLOSION_DELAY;
 
 		m_CollisionComponent->ClearChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
