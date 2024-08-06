@@ -209,6 +209,7 @@
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="OrbitComponent.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="OrbitComponent.cpp" />

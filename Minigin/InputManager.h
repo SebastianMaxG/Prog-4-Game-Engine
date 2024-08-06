@@ -1,4 +1,6 @@
 #pragma once
+#include <set>
+
 #include "Singleton.h"
 #include "signal.h"
 
@@ -28,6 +30,7 @@ namespace lsmf
 		void OpenControllers();
 		void CloseControllers();
 		std::vector<SDL_GameController*> m_Controllers {};
+		std::set 
 	};
 
 }

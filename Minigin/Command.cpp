@@ -15,3 +15,15 @@ lsmf::MoveCommand::MoveCommand(GameObject* pGameObject, const glm::vec2& directi
 	, m_Direction(direction)
 {
 }
+
+void lsmf::Command::Execute(SDL_Event event) const
+{
+	if (!m_InputKeys.contains(event.key.keysym.sym))
+	{
+		return;
+	}
+	for (const auto& function : m_BoundFunctions)
+	{
+		function->Invoke(event);
+	}
+}
