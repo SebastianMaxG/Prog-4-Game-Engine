@@ -65,7 +65,6 @@ namespace lsmf
 
 		if (EnemyController* controller = dynamic_cast<EnemyController*>(m_ControllerComponent))
 		{
-			controller->SetUpdateSpeed(static_cast<float>(m_Speed));
 			if (m_Type == EnemyType::Doll)
 			{
 				controller->LockVerticalMovement();

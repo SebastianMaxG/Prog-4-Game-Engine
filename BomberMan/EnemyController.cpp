@@ -1,5 +1,6 @@
 #include "EnemyController.h"
 
+#include "CollisionHandeler.h"
 #include "GameObject.h"
 #include "Tile.h"
 #include "TileGrid.h"
@@ -21,94 +22,92 @@ namespace lsmf
 			tile = m_TileGrid->GetTile(x, y);
 		}
         gameObject->GetTransform()->SetLocalTransform(tile->GetGameObject()->GetTransform()->GetWorldTransform());
-		targetPosition = gameObject->GetTransform()->GetPosition();
-    }
-    void EnemyController::Update(double deltaTime)
-    {
-        // Interpolate the enemy's position towards the target position
-        glm::vec2 currentPosition = GetGameObject()->GetTransform()->GetPosition();
-        glm::vec2 newPosition = currentPosition;
+        m_MoveDirection = {1,0};
+        m_MoveTransform.SetPosition(m_MoveDirection.x, m_MoveDirection.y, 0);
 
-        // Only change x or y direction at a time
-        if (std::abs(targetPosition.x - currentPosition.x) > std::abs(targetPosition.y - currentPosition.y))
-        {
-            newPosition.x = glm::mix(currentPosition.x, targetPosition.x, static_cast<float>(deltaTime));
-        }
-        else
-        {
-            newPosition.y = glm::mix(currentPosition.y, targetPosition.y, static_cast<float>(deltaTime));
-        }
+        m_CollisionConnection = collision::OnCollide.Connect(this, &EnemyController::CollisionEvent);
 
-        GetGameObject()->GetTransform()->SetPosition({ newPosition.x,newPosition.y,GetGameObject()->GetTransform()->GetPosition().z });
-
-        // Check if the enemy has reached the target position
-        currentPosition = GetGameObject()->GetTransform()->GetPosition();
-        if (glm::length(currentPosition - targetPosition) < 0.1f) // adjust this value as needed
-        {
-            timeSinceLastUpdate += static_cast<float>(deltaTime);
-            if (timeSinceLastUpdate >= updateInterval)
-            {
-                int counter{};
-                Tile* newTile{};
-                while (!newTile || newTile->GetState() == Tile::TileState::Wall || newTile->GetState() == Tile::TileState::Crate || newTile->GetState() == Tile::TileState::Bomb)
-                {
-                    glm::vec2 offset{};
-                    // Randomly choose a direction to move in
-                    if (m_CanMoveVertical)
-	                {
-		                const int direction = rand() % 4;
-                    	switch (direction)
-                    	{
-                    	case 0: // up
-                    		offset = glm::vec2(0, -1);
-                    		break;
-                    	case 1: // down
-                    		offset = glm::vec2(0, 1);
-                    		break;
-                    	case 2: // left
-                    		offset = glm::vec2(-1, 0);
-                    		m_Left = true;
-                    		break;
-                    	case 3: // right
-                    		offset = glm::vec2(1, 0);
-                    		m_Left = false;
-                    		break;
-                    	}
-	                }
-                    else
-                    {
-	                    m_Left = rand() % 2 == 0;
-                        offset.x = m_Left ? -1.f : 1.f;
-                    }
-
-                    // Get the current tile
-                    glm::vec2 pos = GetGameObject()->GetTransform()->GetPosition();
-                    int x, y;
-                    m_TileGrid->GetTile(pos, x, y);
-
-                    // Calculate the new tile coordinates
-                    const int newX = x + static_cast<int>(offset.x);
-                    const int newY = y + static_cast<int>(offset.y);
-
-                    // Check if the new tile is valid and not a wall
-                    newTile = m_TileGrid->GetTile(newX, newY);
-                    if (counter++ > 5)
-                    {
-                        break;
-                    }
-                }
-                if (newTile && newTile->GetState() != Tile::TileState::Wall && newTile->GetState() != Tile::TileState::Crate && newTile->GetState() != Tile::TileState::Bomb)
-                {
-                    // Update the target position
-                    targetPosition = newTile->GetGameObject()->GetTransform()->GetPosition();
-                }
-
-                timeSinceLastUpdate = 0.0f;
-            }
-        }
     }
 	void EnemyController::HandleInput(SDL_Event)
 	{
 	}
+    void EnemyController::CollisionEvent(GameObject* collider, GameObject* other)
+    {
+        if (GetGameObject() == collider)
+        {
+            if (Tile* collisionTile = dynamic_cast<Tile*>(other->GetComponent(typeid(Tile))))
+            {
+	            switch (collisionTile->GetState())
+	            {
+	            case Tile::TileState::Wall:
+	            case Tile::TileState::Crate:
+                case Tile::TileState::Bomb:
+                {
+                    glm::vec2 pos = GetGameObject()->GetTransform()->GetPosition();
+                    int x, y;
+                    m_TileGrid->GetTile(pos, x, y);
+
+                    // get the tiles around the enemy that are not solid objects
+                    std::vector<Tile*> validTiles;
+                    if (Tile* tile = m_TileGrid->GetTile(x - 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
+                    {
+                        validTiles.push_back(tile);
+                    }
+                    if (Tile* tile = m_TileGrid->GetTile(x + 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
+                    {
+                        validTiles.push_back(tile);
+                    }
+                    if (m_CanMoveVertical)
+                    {
+                        if (Tile* tile = m_TileGrid->GetTile(x, y - 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
+                        {
+                            validTiles.push_back(tile);
+                        }
+                        if (Tile* tile = m_TileGrid->GetTile(x, y + 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
+                        {
+                            validTiles.push_back(tile);
+                        }
+                    }
+                    if (!validTiles.empty())
+                    {
+                        Tile* newTile = validTiles[GetRandomNumber(0, validTiles.size() - 1)];
+                        m_MoveDirection = glm::vec2{ newTile->GetGameObject()->GetTransform()->GetPosition() } - pos;
+                        // normalize the direction into a cardinal unit vector
+                        if (abs(m_MoveDirection.x) > abs(m_MoveDirection.y))
+                        {
+	                        m_MoveDirection = { m_MoveDirection.x, 0 };
+                        }
+						else
+						{
+							m_MoveDirection = { 0, m_MoveDirection.y };
+						}
+                        m_MoveDirection = glm::normalize(m_MoveDirection);
+                        m_MoveTransform.SetPosition(m_MoveDirection.x, m_MoveDirection.y, 0);
+                    }
+                    else
+                    {
+                        // if there are no valid tiles , just move in the opposite direction
+                        m_MoveDirection = -m_MoveDirection;
+                    }
+                    break;
+                }
+	            default:
+                    break;
+	            }
+            }
+		}
+    }
+    size_t EnemyController::GetRandomNumber(size_t min, size_t max)
+    {
+        if (min == max)
+        {
+            return min;
+        }
+        thread_local std::random_device rd;
+        thread_local std::default_random_engine eng(rd());
+        thread_local std::uniform_int_distribution<size_t> distr(min, max);
+        
+        return distr(eng);
+    }
 }
 
