@@ -260,7 +260,7 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Exit;
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
 		m_CollisionComponent->Start();
 
@@ -274,7 +274,7 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Crate;
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Crate, CollisionType::Physical);
 		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Physical);
 		m_CollisionComponent->Start();
@@ -291,7 +291,7 @@ namespace lsmf
 		m_State = TileState::Wall;
 
 		// set the collision to be active for walls
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
 		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Physical);
 		m_CollisionComponent->Start();
@@ -307,7 +307,7 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Empty;
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
 		m_CollisionComponent->Start();
 
@@ -324,7 +324,7 @@ namespace lsmf
 		m_State = TileState::Bomb;
 		m_ExplosionTime = EXPLOSION_DELAY;
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
 		m_CollisionComponent->Start();
 		m_CollisionConnection->Pause();
@@ -339,7 +339,7 @@ namespace lsmf
 		m_BombSpriteComponent->Stop();
 		m_State = TileState::PowerUp;
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
 		m_CollisionComponent->Start();
 
@@ -434,7 +434,7 @@ namespace lsmf
 		m_ExplosionTime = EXPLOSION_TIME;
 
 
-		m_CollisionComponent->ClearChannels();
+		m_CollisionComponent->ClearResponseChannels();
 		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
 		m_CollisionComponent->Start();
 

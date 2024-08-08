@@ -8,45 +8,37 @@ void lsmf::CollisionHandler::FixedUpdate()
 {
     for (auto& object : m_CollisionQueue)
     {
-        const auto& [rect, gameObject, isStatic, channels] = object;
-        if (isStatic)
+        if (object.isStatic)
             continue;
         for (auto& otherObject : m_CollisionQueue)
         {
-            const auto& [otherRect, otherGameObject, otherIsStatic, otherChannels] = otherObject;
-            if (!CanCollide(channels, otherChannels))
+            if (!CanCollide(object.responseChannels, otherObject.channels))
                 continue;
-            if (gameObject == otherGameObject)
+            if (object.pGameObject == otherObject.pGameObject)
                 continue;
-            if (!CheckCollision(rect, otherRect))
-                continue;;
-            for (const auto& [channel, type] : channels)
+            if (!CheckCollision(object.rect, otherObject.rect))
+                continue;
+            for (const auto& [channel, type] : object.responseChannels)
             {
-                if (!otherChannels.contains(channel))
+                if (!otherObject.channels.contains(channel))
                     continue;
                 // Handle collision based on type
                 if (type == CollisionType::Physical)
                 {
-                    ResolveCollision(rect, otherRect, gameObject);
+                    ResolveCollision(object.rect, otherObject.rect, object.pGameObject);
                 }
-                else if (type == CollisionType::NoCollision)
+                else if (type == CollisionType::Event)
                 {
-                    // Do nothing
-                    continue;
+                    collision::OnCollide.Emit(object.pGameObject, otherObject.pGameObject);
+                    collision::OnCollide.Update();
                 }
-                collision::OnCollide.Emit(gameObject, otherGameObject);
-
-                collision::OnCollide.Update();
-
             }
-            
-
         }
     }
     m_CollisionQueue.clear();
 }
 
-void lsmf::CollisionHandler::CalculateCollision(collision::CollisionData data)
+void lsmf::CollisionHandler::CalculateCollision(const collision::CollisionData& data)
 {
     m_CollisionQueue.emplace_back(data);
 }
@@ -59,26 +51,21 @@ bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rec
         rect1.y + rect1.h > rect2.y);
 }
 
-bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels)
+bool lsmf::CollisionHandler::CanCollide(const std::multimap<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels)
 {
-    for (const auto& channel : responseChannels | std::views::keys)
-    {
-        if (channels.contains(channel))
+    return std::ranges::any_of(responseChannels | std::views::keys, [&channels](const auto& channel)
         {
-            return true;
-        }
-    }
-
-    return false;
+            return channels.contains(channel);
+        });
 }
 void  lsmf::CollisionHandler::ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject) {
-    int dx1 = staticRect.x + staticRect.w - movingRect.x;  // penetration depth from left
-    int dx2 = movingRect.x + movingRect.w - staticRect.x;  // penetration depth from right
-    int dy1 = staticRect.y + staticRect.h - movingRect.y;  // penetration depth from top
-    int dy2 = movingRect.y + movingRect.h - staticRect.y;  // penetration depth from bottom
+    const int dx1 = staticRect.x + staticRect.w - movingRect.x;  // penetration depth from left
+    const int dx2 = movingRect.x + movingRect.w - staticRect.x;  // penetration depth from right
+    const int dy1 = staticRect.y + staticRect.h - movingRect.y;  // penetration depth from top
+    const int dy2 = movingRect.y + movingRect.h - staticRect.y;  // penetration depth from bottom
 
-    int xCorrection = std::min(dx1, dx2);
-    int yCorrection = std::min(dy1, dy2);
+    const int xCorrection = std::min(dx1, dx2);
+    const int yCorrection = std::min(dy1, dy2);
 
     // Translate the object along the axis with the smaller penetration depth
     if (xCorrection < yCorrection) {

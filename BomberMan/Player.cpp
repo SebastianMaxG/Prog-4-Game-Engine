@@ -172,17 +172,17 @@ namespace lsmf
 	void Player::ActivateWallPass()
 	{
 		m_WallPass = true;
-		m_CollisionComponent->RemoveChannel(CollisionChannel::Crate);
+		m_CollisionComponent->RemoveResponseChannel(CollisionChannel::Crate);
 	}
 	void Player::ActivateFlamePass()
 	{
 		m_FlamePass = true;
-		m_CollisionComponent->RemoveChannel(CollisionChannel::Explosion);
+		m_CollisionComponent->RemoveResponseChannel(CollisionChannel::Explosion);
 	}
 	void Player::ActivateBombPass()
 	{
 		m_BombPass = true;
-		m_CollisionComponent->RemoveChannel(CollisionChannel::Bomb);
+		m_CollisionComponent->RemoveResponseChannel(CollisionChannel::Bomb);
 	}
 	void Player::ActivateInvincible()
 	{

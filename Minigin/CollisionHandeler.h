@@ -19,7 +19,7 @@ namespace lsmf
 			SDL_Rect rect;
 			bool isStatic;
 			std::set<CollisionChannel> channels;
-			std::map<CollisionChannel, CollisionType> responseChannels;
+			std::multimap<CollisionChannel, CollisionType> responseChannels;
 		};
 	}
     class Texture2D;
@@ -28,10 +28,10 @@ namespace lsmf
         std::vector<collision::CollisionData> m_CollisionQueue;
     public:
         void FixedUpdate();
-        void CalculateCollision(collision::CollisionData data);
+        void CalculateCollision(const collision::CollisionData& data);
     private:
         static bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
-        static bool CanCollide(const std::map<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels);
+        static bool CanCollide(const std::multimap<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels);
         static void ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject);
     };
 }
