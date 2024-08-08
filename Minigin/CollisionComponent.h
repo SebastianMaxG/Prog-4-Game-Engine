@@ -40,6 +40,7 @@ namespace lsmf
 
         void ClearResponseChannels() { m_ResponseChannels.clear(); }
         void ClearCollidingChannels() { m_CollidingChannels.clear(); }
+        void ClearAllChannels() { m_ResponseChannels.clear(); m_CollidingChannels.clear(); }
 
     private:
         SDL_Rect m_HitBox;

@@ -28,8 +28,16 @@ void lsmf::CollisionComponent::FixedUpdate(double)
 
 void lsmf::CollisionComponent::RemoveResponseChannel(CollisionChannel channel, CollisionType type)
 {
-	m_ResponseChannels.erase(std::remove_if(m_ResponseChannels.begin(), m_ResponseChannels.end(), [channel, type](const auto& c)
+	const auto range = m_ResponseChannels.equal_range(channel);
+	for (auto it = range.first; it != range.second; )
 	{
-					return c.first == channel && c.second == type;
-		}), m_ResponseChannels.end());
+		if (it->second == type)
+		{
+			it = m_ResponseChannels.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }

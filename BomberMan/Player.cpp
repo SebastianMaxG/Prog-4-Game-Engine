@@ -36,13 +36,15 @@ namespace lsmf
 		m_CollisionComponent = collisionComponent.get();
 		gameObject->AddComponent(std::move(collisionComponent));
 
-		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
-		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
-		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
-		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
-		m_CollisionComponent->SetChannel(CollisionChannel::Crate, CollisionType::Physical);
-		m_CollisionComponent->SetChannel(CollisionChannel::Enemy, CollisionType::Event);
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Player);
+
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Explosion, CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Default, CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Wall, CollisionType::Physical);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Crate, CollisionType::Physical);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Enemy, CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Bomb, CollisionType::Event);
+
 
 
 		m_CollisionConnection = collision::OnCollide.Connect(this, &Player::CollisionEvent);
@@ -111,7 +113,7 @@ namespace lsmf
 		if (!m_BombOverlap and m_BombCollisionDirty)
 		{
 			m_BombCollisionDirty = false;
-			m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Physical);
+			m_CollisionComponent->AddResponseChannel(CollisionChannel::Bomb, CollisionType::Physical);
 		}
 		
 	}
@@ -227,7 +229,7 @@ namespace lsmf
 		{
 			return;
 		}
-		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
+		m_CollisionComponent->RemoveResponseChannel(CollisionChannel::Bomb, CollisionType::Physical);
 		m_BombOverlap = true;
 		m_BombCollisionDirty = true;
 		m_CurrentTile->EnterBomb(m_BombRange);

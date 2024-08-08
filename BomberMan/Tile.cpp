@@ -260,8 +260,8 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Exit;
 
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Player, CollisionType::Event);
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Resume();
@@ -274,9 +274,8 @@ namespace lsmf
 		m_PowerUpSpriteComponent->Stop();
 		m_State = TileState::Crate;
 
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Crate, CollisionType::Physical);
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Physical);
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Crate);
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Pause();
@@ -291,9 +290,10 @@ namespace lsmf
 		m_State = TileState::Wall;
 
 		// set the collision to be active for walls
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Wall, CollisionType::Physical);
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Physical);
+		m_CollisionComponent->ClearAllChannels();
+
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Wall);
+
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Pause();
@@ -305,11 +305,11 @@ namespace lsmf
 		m_SpriteComponent->SetColumn(static_cast<int>(m_Type));
 		m_BombSpriteComponent->Stop();
 		m_PowerUpSpriteComponent->Stop();
-		m_State = TileState::Empty;
 
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Default, CollisionType::NoCollision);
-		m_CollisionComponent->Start();
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->Stop();
+
+		m_State = TileState::Empty;
 
 		m_CollisionConnection->Pause();
 
@@ -324,8 +324,8 @@ namespace lsmf
 		m_State = TileState::Bomb;
 		m_ExplosionTime = EXPLOSION_DELAY;
 
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Bomb, CollisionType::Event);
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Bomb);
 		m_CollisionComponent->Start();
 		m_CollisionConnection->Pause();
 	}
@@ -339,8 +339,8 @@ namespace lsmf
 		m_BombSpriteComponent->Stop();
 		m_State = TileState::PowerUp;
 
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Default);
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Resume();
@@ -433,10 +433,10 @@ namespace lsmf
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_ExplosionTime = EXPLOSION_TIME;
 
-
-		m_CollisionComponent->ClearResponseChannels();
-		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
 		m_CollisionComponent->Start();
+
+		m_CollisionComponent->ClearAllChannels();
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Explosion);
 
 		m_CollisionConnection->Resume();
 

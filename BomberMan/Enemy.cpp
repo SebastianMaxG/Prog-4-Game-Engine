@@ -34,8 +34,17 @@ namespace lsmf
 		m_CollisionComponent = collisionComponent.get();
 		gameObject->AddComponent(std::move(collisionComponent));
 
-		m_CollisionComponent->SetChannel(CollisionChannel::Player, CollisionType::Event);
-		m_CollisionComponent->SetChannel(CollisionChannel::Explosion, CollisionType::Event);
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Enemy);
+
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Player,	CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Explosion, CollisionType::Event);
+
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Crate,	CollisionType::Physical);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Wall,	CollisionType::Physical);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Bomb,	CollisionType::Physical);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Crate,	CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Wall,	CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Bomb,	CollisionType::Event);
 
 
 		m_CollisionConnection = collision::OnCollide.Connect(this, &Enemy::CollisionEvent);
