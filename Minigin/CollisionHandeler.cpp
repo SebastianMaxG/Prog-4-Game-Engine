@@ -29,12 +29,14 @@ void lsmf::CollisionHandler::FixedUpdate()
                 {
                     ResolveCollision(rect, otherRect, gameObject);
                 }
-                else if (type == CollisionType::Event)
+                else if (type == CollisionType::NoCollision)
                 {
-                    collision::OnCollide.Emit(gameObject, otherGameObject);
-
-                    collision::OnCollide.Update();
+                    // Do nothing
+                    continue;
                 }
+                collision::OnCollide.Emit(gameObject, otherGameObject);
+
+                collision::OnCollide.Update();
 
             }
             
@@ -44,9 +46,9 @@ void lsmf::CollisionHandler::FixedUpdate()
     m_CollisionQueue.clear();
 }
 
-void lsmf::CollisionHandler::CalculateCollision(SDL_Rect rect, GameObject* gameObject, bool isStatic, std::map<CollisionChannel, CollisionType> channels)
+void lsmf::CollisionHandler::CalculateCollision(collision::CollisionData data)
 {
-    m_CollisionQueue.emplace_back(rect, gameObject, isStatic, channels);
+    m_CollisionQueue.emplace_back(data);
 }
 
 bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2)
@@ -57,11 +59,11 @@ bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rec
         rect1.y + rect1.h > rect2.y);
 }
 
-bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2)
+bool lsmf::CollisionHandler::CanCollide(const std::map<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels)
 {
-    for (const auto& channel1 : channels1 | std::views::keys)
+    for (const auto& channel : responseChannels | std::views::keys)
     {
-        if (channels2.contains(channel1))
+        if (channels.contains(channel))
         {
             return true;
         }

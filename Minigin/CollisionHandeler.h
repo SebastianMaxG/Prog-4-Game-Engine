@@ -12,17 +12,26 @@ namespace lsmf
 	namespace collision
 	{
 		inline signal::Signal<GameObject*, GameObject*> OnCollide;
+
+		struct CollisionData
+		{
+			GameObject* pGameObject;
+			SDL_Rect rect;
+			bool isStatic;
+			std::set<CollisionChannel> channels;
+			std::map<CollisionChannel, CollisionType> responseChannels;
+		};
 	}
     class Texture2D;
     class CollisionHandler final : public Singleton<CollisionHandler>
     {
-        std::vector<std::tuple<SDL_Rect, GameObject*, bool, std::map<CollisionChannel, CollisionType>>> m_CollisionQueue;  // Update the tuple
+        std::vector<collision::CollisionData> m_CollisionQueue;
     public:
         void FixedUpdate();
-        void CalculateCollision(SDL_Rect rect, GameObject* gameObject, bool isStatic, std::map<CollisionChannel, CollisionType> channels);  // Update the method
+        void CalculateCollision(collision::CollisionData data);
     private:
         static bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
-        static bool CanCollide(const std::map<CollisionChannel, CollisionType>& channels1, const std::map<CollisionChannel, CollisionType>& channels2);  // Update the method
+        static bool CanCollide(const std::map<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels);
         static void ResolveCollision(const SDL_Rect& movingRect, const SDL_Rect& staticRect, lsmf::GameObject* gameObject);
     };
 }
