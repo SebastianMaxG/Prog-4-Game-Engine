@@ -15,8 +15,8 @@ namespace lsmf
 	Tile::Tile(GameObject* gameObject, TileType type, bool isExit, PowerUpType power)
 		: BaseComponent(gameObject)
 		, m_Type(type)
-		, m_ContainsExit(isExit)
 		, m_PowerUpType(power)
+		, m_ContainsExit(isExit)
 
 	{
 		auto spriteComponent = std::make_unique<SpriteComponent>(gameObject, "TileSprite.png");

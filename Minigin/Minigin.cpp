@@ -54,7 +54,7 @@ lsmf::Minigin::Minigin(const std::string& dataPath)
 	}
 
 	m_windowPtr = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"Bomber Man - Leander Flossie",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		1280,

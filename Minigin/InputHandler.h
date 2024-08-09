@@ -2,16 +2,20 @@
 #include <unordered_map>
 #include <string>
 #include "Command.h"
+#include "Singleton.h"
 
 namespace lsmf
 {
-    class InputHandler
+    class InputHandler : public Singleton<InputHandler>
     {
     public:
         void BindCommand(const std::string& action, CommandPtr command);
         void HandleInput(const std::string& action);
 
     private:
-        std::unordered_map<std::string, CommandPtr> m_CommandMap;
+        friend class Singleton<InputHandler>;
+        InputHandler() = default;
+
+        std::unordered_map<std::string, std::unique_ptr<Command>> m_CommandMap;
     };
 }

@@ -1,18 +1,63 @@
 #include "InputHandler.h"
 
+#include <ranges>
+
 namespace lsmf
 {
-    void InputHandler::BindCommand(const std::string& action, CommandPtr command)
+    void InputHandler::BindCommand(const std::string& action, std::unique_ptr<Command> command)
     {
         m_CommandMap[action] = std::move(command);
     }
 
-    void InputHandler::HandleInput(const std::string& action)
+    bool InputHandler::HandleInput()
     {
-        auto it = m_CommandMap.find(action);
-        if (it != m_CommandMap.end())
+		SDL_Event e;
+        while (SDL_PollEvent(&e))
         {
-            it->second->Execute();
+            if (e.type == SDL_QUIT)
+            {
+                return false;
+            }
+            for (const auto& command : m_CommandMap | std::views::values)
+            {
+	            command->Execute(e);
+            }
         }
+		return true;
+    }
+
+    InputHandler::~InputHandler()
+    {
+        m_CommandMap.clear();
+        CloseControllers();
+    }
+
+    InputHandler::InputHandler()
+    {
+        OpenControllers();
+    }
+
+    void InputHandler::OpenControllers()
+    {
+	    const int numJoysticks = SDL_NumJoysticks();
+        for (int i = 0; i < numJoysticks; i++) 
+        {
+            if (SDL_IsGameController(i)) 
+            {
+	            if (SDL_GameController* controller = SDL_GameControllerOpen(i)) 
+                {
+                    m_Controllers.push_back(controller);
+                }
+            }
+        }
+    }
+
+    void InputHandler::CloseControllers()
+    {
+        for (SDL_GameController* controller : m_Controllers) 
+        {
+            SDL_GameControllerClose(controller);
+        }
+        m_Controllers.clear();
     }
 }
