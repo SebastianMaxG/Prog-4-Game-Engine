@@ -17,6 +17,10 @@ namespace lsmf
 
 	void GameObject::FixedUpdate(double deltaTime)
 	{
+		if (m_MarkedForDestruction)
+		{
+			return;
+		}
 		for (const auto& component : m_Components)
 		{
 			component->DoFixedUpdate(deltaTime);
@@ -25,6 +29,11 @@ namespace lsmf
 
 	void GameObject::Update(double deltaTime) 
 	{
+
+		if (m_MarkedForDestruction)
+		{
+			return;
+		}
 		for (const auto& component : m_Components)
 		{
 			component->DoUpdate(deltaTime);
@@ -33,6 +42,11 @@ namespace lsmf
 
 	void GameObject::Render() const
 	{
+
+		if (m_MarkedForDestruction)
+		{
+			return;
+		}
 		for (const auto& component : m_Components)
 		{
 			component->DoRender();

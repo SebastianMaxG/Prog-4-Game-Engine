@@ -25,6 +25,7 @@ namespace lsmf
 			Dead = 4
 		};
 		Player(GameObject* gameObject, TileGrid* grid, int controllerId = -1, bool keyboardInput = false);
+		~Player() override;
 
 		void Update(double deltaTime) override;
 		void FixedUpdate(double deltaTime) override;

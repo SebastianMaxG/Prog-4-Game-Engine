@@ -80,6 +80,12 @@ namespace lsmf
 			}
 		}
 	}
+
+	Enemy::~Enemy()
+	{
+		m_CollisionConnection->Disconnect();
+	}
+
 	void Enemy::Update(double deltaTime)
 	{
 		if (m_Dead)

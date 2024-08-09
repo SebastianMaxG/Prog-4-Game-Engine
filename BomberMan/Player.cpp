@@ -58,6 +58,11 @@ namespace lsmf
 		m_StartPos.y = pos.y;
 	}
 
+	Player::~Player()
+	{
+		m_CollisionConnection->Disconnect();
+	}
+
 	void Player::Update(double deltaTime)
 	{
 		if (m_IsDead)

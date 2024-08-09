@@ -7,6 +7,8 @@ namespace lsmf {
 	class PlayerController : public ControllerComponent {
     public:
         PlayerController(GameObject* gameObject, Player* player, int joystickId = -1, bool keyboardInput = false);
+        ~PlayerController() override;
+
         void HandleInput(SDL_Event event) override;
         void PlayerMove(SDL_Event event);
         void Action1(SDL_Event event);

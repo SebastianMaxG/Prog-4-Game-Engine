@@ -34,6 +34,7 @@ namespace lsmf
 		};
 
 		Enemy(GameObject* gameObject, EnemyType type = EnemyType::Balloom, TileGrid* grid = nullptr);
+		~Enemy() override;
 
 		void Update(double deltaTime) override;
 

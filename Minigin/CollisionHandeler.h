@@ -29,6 +29,7 @@ namespace lsmf
     public:
         void FixedUpdate();
         void CalculateCollision(const collision::CollisionData& data);
+		void ClearQueue();
     private:
         static bool CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2);
         static bool CanCollide(const std::multimap<CollisionChannel, CollisionType>& responseChannels, const std::set<CollisionChannel>& channels);

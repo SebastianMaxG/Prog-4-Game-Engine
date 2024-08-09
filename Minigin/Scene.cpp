@@ -27,7 +27,12 @@ std::unique_ptr<GameObject> Scene::Remove(GameObject* object)
 
 void Scene::RemoveAll()
 {
-	m_objects.clear();
+	//mark all objects for deletion
+	for (auto& object : m_objects)
+	{
+		object->MarkForDestruction();
+	}
+
 }
 
 GameObject* Scene::Get(const std::string& name) const

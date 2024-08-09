@@ -27,7 +27,13 @@ namespace lsmf
         m_CollisionConnection = collision::OnCollide.Connect(this, &EnemyController::CollisionEvent);
 
     }
-	void EnemyController::HandleInput(SDL_Event)
+
+    EnemyController::~EnemyController()
+    {
+		m_CollisionConnection->Disconnect();
+    }
+
+    void EnemyController::HandleInput(SDL_Event)
 	{
 	}
     void EnemyController::CollisionEvent(GameObject* collider, GameObject* other)

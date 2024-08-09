@@ -19,7 +19,7 @@ namespace lsmf
 
 
         EnemyController(GameObject* m_GameObjectPtr, TileGrid* tileGrid);
-        ~EnemyController() override = default;
+        ~EnemyController() override;
 
         EnemyController(const EnemyController& other) = delete;
         EnemyController(EnemyController&& other) = delete;

@@ -11,7 +11,10 @@ namespace lsmf
 
     void InputHandler::UnBindCommand(const std::string& action)
     {
-        m_CommandMap.erase(action);
+        if (m_CommandMap.contains(action))
+        {
+            m_CommandMap.erase(action);
+        }
     }
 
     Command* InputHandler::GetCommand(const std::string& action) const

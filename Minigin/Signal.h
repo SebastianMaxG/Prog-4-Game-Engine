@@ -374,6 +374,13 @@ namespace lsmf
                 m_Condition.notify_one();
             }
 
+            //Clear ongoing que
+            void ClearQueue()
+            {
+                std::lock_guard<std::mutex> lock(m_QueMutex);
+                m_Que.clear();
+            }
+
             // Function for updating the signal in the main thread
             // This function is used when the signal is not threaded
             void Update()

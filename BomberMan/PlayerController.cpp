@@ -1,4 +1,6 @@
 #include "PlayerController.h"
+
+#include <encdec.h>
 #include <SDL.h>
 
 #include "GlobalEngineSignals.h"
@@ -76,6 +78,15 @@ namespace lsmf
 	    	}
             NextLevelCommand->BindFunction(this, &PlayerController::NextLevel);
 	    }
+    }
+
+    PlayerController::~PlayerController()
+    {
+        InputHandler::GetInstance().UnBindCommand("PlayerMove");
+        InputHandler::GetInstance().UnBindCommand("Action1");
+        InputHandler::GetInstance().UnBindCommand("Action2");
+        InputHandler::GetInstance().UnBindCommand("NextLevel");
+
     }
 
     void PlayerController::HandleInput(SDL_Event )
@@ -307,7 +318,7 @@ namespace lsmf
 
     void PlayerController::NextLevel(SDL_Event event)
     {
-        if (event.type == SDL_KEYDOWN)
+        if (event.type == SDL_KEYDOWN or !m_UseKeyboard)
         {
             return;
         }

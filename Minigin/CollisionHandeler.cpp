@@ -29,18 +29,25 @@ void lsmf::CollisionHandler::FixedUpdate()
                 }
                 else if (type == CollisionType::Event)
                 {
+                    if (object.pGameObject!=nullptr && otherObject.pGameObject!=nullptr)
                     collision::OnCollide.Emit(object.pGameObject, otherObject.pGameObject);
-                    collision::OnCollide.Update();
                 }
             }
         }
     }
+    collision::OnCollide.Update();
     m_CollisionQueue.clear();
 }
 
 void lsmf::CollisionHandler::CalculateCollision(const collision::CollisionData& data)
 {
     m_CollisionQueue.emplace_back(data);
+}
+
+void lsmf::CollisionHandler::ClearQueue()
+{
+	m_CollisionQueue.clear();
+    collision::OnCollide.ClearQueue();
 }
 
 bool lsmf::CollisionHandler::CheckCollision(const SDL_Rect& rect1, const SDL_Rect& rect2)
