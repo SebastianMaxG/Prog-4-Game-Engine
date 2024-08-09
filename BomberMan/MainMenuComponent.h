@@ -14,10 +14,12 @@ namespace lsmf
 
         void Update(double deltaTime) override;
 
-        void AddButton(std::shared_ptr<ButtonComponent> button);
+        void AddButton(ButtonComponent* button);
+
+        void MenuMove(SDL_Event e);
 
     private:
-        std::vector<std::shared_ptr<ButtonComponent>> m_Buttons;
+        std::vector<ButtonComponent*> m_Buttons;
         size_t m_CurrentIndex;
 
         void UpdateSelection() const;

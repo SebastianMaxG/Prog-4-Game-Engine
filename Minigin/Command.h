@@ -11,6 +11,7 @@ namespace lsmf
     class Command final
     {
     public:
+		Command() = default;
 		~Command() = default;
 		void Execute(SDL_Event event) const;
 

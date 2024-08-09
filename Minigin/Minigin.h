@@ -16,7 +16,7 @@ namespace lsmf
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
 
-		SDL_Window* GetSDLWindow();
+		SDL_Window* GetSDLWindow() const;
 	private:
 		SDL_Window* m_windowPtr{};
 

@@ -1,4 +1,6 @@
 #include "MainMenuComponent.h"
+
+#include "InputHandler.h"
 #include "InputManager.h"
 
 namespace lsmf
@@ -7,27 +9,43 @@ namespace lsmf
         : BaseComponent(gameObject)
         , m_CurrentIndex(0)
     {
+        auto menuMoveCommand = std::make_unique<Command>();
+        menuMoveCommand->BindFunction(this, &MainMenuComponent::MenuMove);
+        menuMoveCommand->BindKey(SDLK_DOWN);
+        menuMoveCommand->BindKey(SDLK_UP);
+        //menuMoveCommand->BindKey(SDL_MOUSEMOTION);
+        InputHandler::GetInstance().BindCommand("MenuMove", std::move(menuMoveCommand));
+
     }
 
-    void MainMenuComponent::Update(double)
+    void MainMenuComponent::Update(double )
     {
-        // Handle controller input for navigation
-        //todo: Implement input
-        //if (/* condition to check if the down button is pressed */)
-        //{
-        //    m_CurrentIndex = (m_CurrentIndex + 1) % m_Buttons.size();
-        //    UpdateSelection();
-        //}
-        //else if (/* condition to check if the up button is pressed */)
-        //{
-        //    m_CurrentIndex = (m_CurrentIndex == 0) ? m_Buttons.size() - 1 : m_CurrentIndex - 1;
-        //    UpdateSelection();
-        //}
     }
 
-    void MainMenuComponent::AddButton(std::shared_ptr<ButtonComponent> button)
+    void MainMenuComponent::AddButton(ButtonComponent* button)
     {
-        m_Buttons.push_back(std::move(button));
+        m_Buttons.push_back(button);
+        UpdateSelection();
+    }
+
+    void MainMenuComponent::MenuMove(SDL_Event e)
+    {
+        if (e.type != SDL_KEYUP)
+        {
+            return;
+        }
+        if (e.key.keysym.sym == SDLK_DOWN)
+        {
+            m_CurrentIndex = (m_CurrentIndex + 1) % m_Buttons.size();
+        }
+        else if (e.key.keysym.sym == SDLK_UP)
+        {
+            m_CurrentIndex = (m_CurrentIndex == 0) ? m_Buttons.size() - 1 : m_CurrentIndex - 1;
+        }
+        else
+        {
+            return;
+		}
         UpdateSelection();
     }
 

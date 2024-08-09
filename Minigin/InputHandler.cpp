@@ -9,6 +9,16 @@ namespace lsmf
         m_CommandMap[action] = std::move(command);
     }
 
+    void InputHandler::UnBindCommand(const std::string& action)
+    {
+        m_CommandMap.erase(action);
+    }
+
+    Command* InputHandler::GetCommand(const std::string& action) const
+    {
+        return m_CommandMap.at(action).get();
+    }
+
     bool InputHandler::HandleInput()
     {
 		SDL_Event e;

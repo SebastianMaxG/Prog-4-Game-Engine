@@ -71,7 +71,7 @@ void lsmf::SpriteComponent::Render() const
 	glm::vec3 scale{ 1 , 1,1 };
 	if (const TransformComponent* transform = GetGameObject()->GetTransform())
 	{
-		pos += transform->GetPosition();
+		pos = transform->GetPosition();
 		scale = transform->GetScale();
 		if (std::abs(scale.x) < epsilon or std::abs(scale.y) < epsilon)
 		{

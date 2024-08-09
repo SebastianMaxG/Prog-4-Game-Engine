@@ -10,6 +10,9 @@ namespace lsmf
     {
     public:
         void BindCommand(const std::string& action, std::unique_ptr<Command> command);
+        void UnBindCommand(const std::string& action);
+        Command* GetCommand(const std::string& action) const;
+
         bool HandleInput();
 
         ~InputHandler() override;

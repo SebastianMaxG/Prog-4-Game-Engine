@@ -13,6 +13,7 @@
 #include <thread>
 
 #include "CollisionHandeler.h"
+#include "InputHandler.h"
 
 void PrintSDLVersion()
 {
@@ -43,8 +44,8 @@ void PrintSDLVersion()
 }
 
 lsmf::Minigin::Minigin(const std::string& dataPath)
-	: ms_per_frame()
-	, fixed_time_step(0.01)
+	: fixed_time_step(0.01)
+	, ms_per_frame()
 {
 	PrintSDLVersion();
 	
@@ -98,10 +99,11 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 		ms_per_frame = 1000 / max_framerate;
 	}
 
-	auto& renderer = Renderer::GetInstance();
+	const auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
-	auto& collisionHandeler = CollisionHandler::GetInstance();
+	auto& collisionHandler = CollisionHandler::GetInstance();
 	auto input = InputManager{};
+	auto& inputHandler = InputHandler::GetInstance();
 
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
@@ -117,12 +119,14 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 		lastTime = current;
 		lag += deltaTime;
 
-		doContinue = input.ProcessInput();
+		doContinue = inputHandler.HandleInput();
+		input.ProcessInput();
+
 
 		while (lag >= fixed_time_step)
 		{
 			sceneManager.FixedUpdate(fixed_time_step);
-			collisionHandeler.FixedUpdate();
+			collisionHandler.FixedUpdate();
 			lag -= fixed_time_step;
 		}
 		sceneManager.Update(deltaTime);
@@ -133,7 +137,7 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 	}
 }
 
-SDL_Window* lsmf::Minigin::GetSDLWindow()
+SDL_Window* lsmf::Minigin::GetSDLWindow() const
 {
 	return m_windowPtr;
 }

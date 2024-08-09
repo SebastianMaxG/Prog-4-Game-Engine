@@ -16,6 +16,10 @@ lsmf::MoveCommand::MoveCommand(GameObject* pGameObject, const glm::vec2& directi
 {
 }
 
+void lsmf::MoveCommand::Execute()
+{
+}
+
 void lsmf::Command::Execute(SDL_Event event) const
 {
 	if (!m_InputKeys.contains(event.key.keysym.sym))
