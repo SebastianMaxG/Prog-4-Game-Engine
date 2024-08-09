@@ -260,7 +260,7 @@ namespace lsmf
 	}
 
 	// make player ready for the next level
-	void Player::Reset()
+	void Player::Reset(TileGrid* grid)
 	{
 		m_Lives = 4;
 		Start();
@@ -270,5 +270,8 @@ namespace lsmf
 		m_IsDead = false;
 		SetState(PlayerState::Down);
 		m_SpriteComponent->SetFrame();
+
+		m_Grid = grid;
+		m_CurrentTile = nullptr;
 	}
 }

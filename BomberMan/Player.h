@@ -39,7 +39,7 @@ namespace lsmf
 		void ActivateBombPass();
 		void ActivateInvincible();
 
-		void Reset();
+		void Reset(TileGrid* grid);
 
 		void BombDetonated(Tile* tile);
 

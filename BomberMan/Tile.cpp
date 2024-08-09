@@ -4,6 +4,7 @@
 #include "CollisionHandeler.h"
 #include "Enemy.h"
 #include "GameObject.h"
+#include "GlobalEngineSignals.h"
 #include "GlobalSignals.h"
 #include "Player.h"
 #include "SoundSystem.h"
@@ -72,6 +73,12 @@ namespace lsmf
 			break;
 		}
 	}
+
+	Tile::~Tile()
+	{
+		m_CollisionConnection->Disconnect();
+	}
+
 	void Tile::Update(double deltaTime)
 	{
 		switch (m_State)
@@ -146,6 +153,8 @@ namespace lsmf
 			}
 			sound::PlaySoundSignal.Emit("Bomberman SFX (6).wav", 5);
 			globalSignals::OnPlayerWin.Emit();
+			globalSignals::OnPlayerWin.Emit();
+
 
 		}
 	}
@@ -364,7 +373,7 @@ namespace lsmf
 			BreakCrate();
 			return;
 		}
-		if (m_State == TileState::PowerUp or m_State == TileState::Wall)
+		if (m_State == TileState::PowerUp or m_State == TileState::Wall or m_State == TileState::Exit)
 		{
 			return;
 		}

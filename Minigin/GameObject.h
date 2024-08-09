@@ -8,21 +8,23 @@ namespace lsmf
 	class Texture2D;
 	class BaseComponent;
 	class VisualComponent;
-	class PhysicsComponent; 
+	class PhysicsComponent;
 	class TransformComponent;
 
 
 	class GameObject final
 	{
 	public:
+		void SetName(const std::string& name) { m_Name = name; }
+		std::string GetName() const { return m_Name; }
 
-		 void FixedUpdate(double deltaTime);
-		 void Update(double deltaTime);
-		 void LateUpdate(double deltaTime);
-		 void Render() const;
+		void FixedUpdate(double deltaTime);
+		void Update(double deltaTime);
+		void LateUpdate(double deltaTime);
+		void Render() const;
 
 		GameObject();
-		 ~GameObject();
+		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -53,6 +55,8 @@ namespace lsmf
 		void RemoveChild(GameObject* childPtr);
 
 		bool m_MarkedForDestruction = false;
+
+		std::string m_Name;
 
 
 	};

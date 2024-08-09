@@ -14,7 +14,5 @@ namespace lsmf
 		inline signal::Signal<> OnPlayerDeath{};
 
 		inline signal::Signal<> OnPlayerWin{};
-
-
 	}
 }

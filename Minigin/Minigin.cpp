@@ -119,7 +119,7 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 		lastTime = current;
 		lag += deltaTime;
 
-		input.ProcessInput();
+		//input.ProcessInput();
 		doContinue = inputHandler.HandleInput();
 
 

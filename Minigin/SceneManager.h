@@ -21,8 +21,11 @@ namespace lsmf
 		void FixedUpdate(double deltaTime);
 		void Render();
 	private:
+		void RemoveDeletedScenes();
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::unique_ptr<Scene>> m_scenes;
+
+		std::vector<Scene*> m_ScenesToBeDeleted;
 	};
 }

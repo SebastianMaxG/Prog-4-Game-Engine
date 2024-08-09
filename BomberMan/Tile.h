@@ -64,6 +64,7 @@ namespace lsmf
 		};
 
 		Tile(GameObject* gameObject, TileType type = TileType::Empty, bool isExit = false, PowerUpType power = PowerUpType::None);
+		~Tile() override;
 
 		void Update(double deltaTime) override;
 		void SetGridPos(int x, int y, TileGrid* grid)

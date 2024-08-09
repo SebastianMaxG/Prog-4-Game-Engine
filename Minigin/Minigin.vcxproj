@@ -209,6 +209,7 @@
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="BaseComponent.h" />
+    <ClInclude Include="GlobalEngineSignals.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />

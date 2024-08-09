@@ -30,6 +30,16 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+GameObject* Scene::Get(const std::string& name) const
+{
+	auto it = std::ranges::find_if(m_objects, [name](const std::unique_ptr<GameObject>& obj) { return obj->GetName() == name; });
+	if (it != m_objects.end())
+	{
+		return it->get();
+	}
+	return nullptr;
+}
+
 void lsmf::Scene::FixedUpdate(double deltaTime)
 {
 	if (!m_Active)

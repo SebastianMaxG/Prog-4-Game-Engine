@@ -13,6 +13,8 @@ namespace lsmf
 		void Add(std::unique_ptr<GameObject> object);
 		std::unique_ptr<GameObject> Remove(GameObject* object);
 		void RemoveAll();
+		//get game object by name
+		 GameObject* Get(const std::string& name) const;
 
 		void FixedUpdate(double deltaTime);
 		void Update(double deltaTime);
