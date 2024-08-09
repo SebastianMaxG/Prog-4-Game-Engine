@@ -103,7 +103,6 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 	auto& collisionHandeler = CollisionHandler::GetInstance();
 	auto input = InputManager{};
 
-	// todo: this update loop could use some work.
 	bool doContinue = true;
 	auto lastTime = std::chrono::high_resolution_clock::now();
 	double lag{};
@@ -111,6 +110,10 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 	{
 		const auto current = std::chrono::high_resolution_clock::now();
 		double deltaTime = std::chrono::duration<double>(current - lastTime).count();
+		if (deltaTime > 0.5)
+		{
+			deltaTime = 0.5;
+		}
 		lastTime = current;
 		lag += deltaTime;
 

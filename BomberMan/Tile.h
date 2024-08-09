@@ -77,6 +77,7 @@ namespace lsmf
 
 		void CollisionEvent(GameObject* collider, GameObject* other);
 		TileState GetState() const { return m_State; }
+		void SetCrate(PowerUpType powerUp = PowerUpType::None, bool isExit = false);
 
 		// 
 	private:

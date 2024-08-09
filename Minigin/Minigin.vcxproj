@@ -214,6 +214,7 @@
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="OrbitComponent.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="RandomNumber.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="OrbitComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="RandomNumber.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />

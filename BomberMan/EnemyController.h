@@ -34,7 +34,6 @@ namespace lsmf
 
         void CollisionEvent(GameObject* collider, GameObject* other);
 
-        static size_t GetRandomNumber(size_t min, size_t max);
     private:
 
         TileGrid* m_TileGrid;

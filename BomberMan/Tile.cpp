@@ -128,6 +128,13 @@ namespace lsmf
 		}
 	}
 
+	void Tile::SetCrate(PowerUpType powerUp, bool isExit)
+	{
+		m_ContainsExit = isExit;
+		m_PowerUpType = powerUp;
+		EnterCrate();
+	}
+
 	void Tile::OnExit()
 	{
 		if (m_PlayerOnTile)
@@ -354,18 +361,27 @@ namespace lsmf
 			BreakCrate();
 			return;
 		}
-		if (m_State == TileState::PowerUp or m_State == TileState::Explosion or m_State == TileState::Wall)
+		if (m_State == TileState::PowerUp or m_State == TileState::Wall)
 		{
 			return;
 		}
-		if (range >= 0)
-			m_BombRange = range;
-
 		if (m_State == TileState::Bomb)
 		{
 			m_BombDir = BombDir::center;
 			m_BombType = BombType::Explosion;
 		}
+		else if (range >= 0)
+			m_BombRange = range;
+
+
+		if (m_State == TileState::Explosion)
+		{
+			m_BombDir = BombDir::center;
+		}
+
+
+		
+
 		m_Type = TileType::Empty;
 		m_State = TileState::Explosion;
 

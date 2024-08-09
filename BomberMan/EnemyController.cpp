@@ -5,23 +5,22 @@
 #include "Tile.h"
 #include "TileGrid.h"
 #include "TransformComponent.h"
+#include <RandomNumber.h>
 
 namespace lsmf
 {
     EnemyController::EnemyController(GameObject* gameObject, TileGrid* tileGrid)
         : ControllerComponent(gameObject), m_TileGrid(tileGrid)
     {
-        Tile* tile{};
-		while (!tile || tile->GetState() != Tile::TileState::Empty)
-		{
-
-            rand();
-			// Initialize the enemy's position to a random tile
-			const int x = rand() % m_TileGrid->GetWidth();
-			const int y = rand() % m_TileGrid->GetHeight();
-			tile = m_TileGrid->GetTile(x, y);
-		}
-        gameObject->GetTransform()->SetLocalTransform(tile->GetGameObject()->GetTransform()->GetWorldTransform());
+  //      Tile* tile{};
+		//while (!tile || tile->GetState() != Tile::TileState::Empty)
+		//{
+		//	// Initialize the enemy's position to a random tile
+		//	const int x = rand() % m_TileGrid->GetWidth();
+		//	const int y = rand() % m_TileGrid->GetHeight();
+		//	tile = m_TileGrid->GetTile(x, y);
+		//}
+  //      gameObject->GetTransform()->SetLocalTransform(tile->GetGameObject()->GetTransform()->GetWorldTransform());
         m_MoveDirection = {1,0};
         m_MoveTransform.SetPosition(m_MoveDirection.x, m_MoveDirection.y, 0);
 
@@ -70,7 +69,7 @@ namespace lsmf
                     }
                     if (!validTiles.empty())
                     {
-                        Tile* newTile = validTiles[GetRandomNumber(0, validTiles.size() - 1)];
+                        Tile* newTile = validTiles[random::GetRandomNumber(0, validTiles.size() - 1)];
                         m_MoveDirection = glm::vec2{ newTile->GetGameObject()->GetTransform()->GetPosition() } - pos;
                         // normalize the direction into a cardinal unit vector
                         if (abs(m_MoveDirection.x) > abs(m_MoveDirection.y))
@@ -97,17 +96,6 @@ namespace lsmf
             }
 		}
     }
-    size_t EnemyController::GetRandomNumber(size_t min, size_t max)
-    {
-        if (min == max)
-        {
-            return min;
-        }
-        thread_local std::random_device rd;
-        thread_local std::default_random_engine eng(rd());
-        thread_local std::uniform_int_distribution<size_t> distr(min, max);
-        
-        return distr(eng);
-    }
+    
 }
 
