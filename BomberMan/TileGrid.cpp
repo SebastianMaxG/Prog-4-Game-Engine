@@ -4,8 +4,8 @@
 #include <fstream>
 #include <RandomNumber.h>
 
-#include "Enemy.h"
 #include "TransformComponent.h"
+#include "GlobalSignals.h"
 
 namespace lsmf
 {
@@ -14,6 +14,7 @@ namespace lsmf
 		:BaseComponent(gameObject)
 		, m_StartPos(startPos)
 	{
+		m_EnemyDeathConnection = globalSignals::OnEnemyDeath.Connect(this, &TileGrid::EnemyDeath);
 	}
 
 	Tile* TileGrid::GetTile(int x, int y)
@@ -178,16 +179,15 @@ namespace lsmf
 
 
 		// Depending on the level spawn a different amount of enemies and crates , always 1 crate with an exit and chances for powerups
-		int nrEnemies = 0;
 
-		bool bonusLevel = false;
+		//bool bonusLevel = false;
 		std::vector<Enemy::EnemyType> enemies;
 		std::vector<Tile::PowerUpType> powerUps;
 
 		switch (level)
 		{
 		case 1:
-			nrEnemies = 6;
+			m_NrEnemies = 6;
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
@@ -198,7 +198,7 @@ namespace lsmf
 			powerUps.emplace_back(Tile::PowerUpType::Range);
 			break;
 		case 2:
-			nrEnemies = 6;
+			m_NrEnemies = 6;
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
@@ -211,7 +211,7 @@ namespace lsmf
 
 			break;
 		case 3:
-			nrEnemies = 6;
+			m_NrEnemies = 6;
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 
@@ -225,7 +225,7 @@ namespace lsmf
 
 			break;
 		case 4:
-			nrEnemies = 6;
+			m_NrEnemies = 6;
 			enemies.emplace_back(Enemy::EnemyType::Balloom);
 
 			enemies.emplace_back(Enemy::EnemyType::Oneal);
@@ -240,7 +240,7 @@ namespace lsmf
 
 			break;
 		case 5:
-			nrEnemies = 7;
+			m_NrEnemies = 7;
 			enemies.emplace_back(Enemy::EnemyType::Oneal);
 			enemies.emplace_back(Enemy::EnemyType::Oneal);
 			enemies.emplace_back(Enemy::EnemyType::Oneal);
@@ -264,32 +264,36 @@ namespace lsmf
 		int nrCrates = static_cast<int>(static_cast<float>(emptyTiles.size()) * 0.2f);
 		for (int i = 0; i < nrCrates; ++i)
 		{
-			size_t index = random::GetRandomNumber(2, emptyTiles.size() - 1);
+
+			size_t index = random::GetRandomNumber(3, emptyTiles.size() - 1);
 			auto tile = emptyTiles[index];
-			emptyTiles.erase(emptyTiles.begin() + static_cast<long long>(index));
 			tile->SetCrate();
+			emptyTiles.clear();
+			emptyTiles = GetEmptyTiles();
 		}
 		// for each powerup spawn a crate
 		for (auto powerUp : powerUps)
 		{
-			size_t index = random::GetRandomNumber(2, emptyTiles.size() - 1);
+			size_t index = random::GetRandomNumber(3, emptyTiles.size() - 1);
 			auto tile = emptyTiles[index];
-			emptyTiles.erase(emptyTiles.begin() + static_cast<long long>(index));
 			tile->SetCrate(powerUp);
+			emptyTiles.clear();
+			emptyTiles = GetEmptyTiles();
 		}
+		//spawn the end
 		{
-			size_t index = random::GetRandomNumber(2, emptyTiles.size() - 1);
+			size_t index = random::GetRandomNumber(3, emptyTiles.size() - 1);
 			auto tile = emptyTiles[index];
-			emptyTiles.erase(emptyTiles.begin() + static_cast<long long>(index));
 			tile->SetCrate(Tile::PowerUpType::None, true);
+			emptyTiles.clear();
+			emptyTiles = GetEmptyTiles();
 		}
 
 		// spawn enemies
-		for (int i = 0; i < nrEnemies; ++i)
+		for (int i = 0; i < m_NrEnemies; ++i)
 		{
-			size_t index = random::GetRandomNumber(2, emptyTiles.size() - 1);
-			auto tile = emptyTiles[index];
-			emptyTiles.erase(emptyTiles.begin() + static_cast<long long>(index));
+			size_t index = random::GetRandomNumber(10, emptyTiles.size() - 1);
+			auto tile = emptyTiles[index];;
 			auto pos = tile->GetGameObject()->GetTransform();
 
 			// make enemy game objects using the pos
@@ -435,7 +439,7 @@ namespace lsmf
 		 */
 
 	}
-	std::vector<Tile*> TileGrid::GetEmptyTiles()
+	std::vector<Tile*> TileGrid::GetEmptyTiles() const
 	{
 		std::vector<Tile*> emptyTiles;
 		for (auto& row : m_Tiles)
@@ -449,5 +453,9 @@ namespace lsmf
 			}
 		}
 		return emptyTiles;
+	}
+	void TileGrid::EnemyDeath(Enemy::EnemyType)
+	{
+		m_NrEnemies--;
 	}
 }

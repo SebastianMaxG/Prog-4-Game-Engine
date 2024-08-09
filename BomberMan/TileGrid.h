@@ -4,10 +4,11 @@
 
 #include "Scene.h"
 #include "Tile.h"
+#include "signal.h"
+#include "Enemy.h"
 
 namespace lsmf
 {
-
     class TileGrid : public BaseComponent
 	{
     public:
@@ -18,11 +19,14 @@ namespace lsmf
         void LoadFromFile(const std::string& filename, Scene& scene);
         void GenerateRandom(const int level, Scene& scene);
 
-        std::vector<Tile*> GetEmptyTiles();
+        std::vector<Tile*> GetEmptyTiles() const;
 
 
         int GetWidth() const { return m_Width; }
         int GetHeight() const { return m_Height; }
+
+        void EnemyDeath(Enemy::EnemyType);
+        bool EnemiesAlive() const { return (m_NrEnemies > 0); }
 
     private:
         std::vector<std::vector<Tile*>> m_Tiles;
@@ -31,8 +35,11 @@ namespace lsmf
 
         int m_Width{};
         int m_Height{};
+        int m_NrEnemies{};
 
         bool m_Init{ false };
+
+        signal::Connection<Enemy::EnemyType>*  m_EnemyDeathConnection;
         
     };
 }

@@ -139,11 +139,13 @@ namespace lsmf
 	{
 		if (m_PlayerOnTile)
 		{
+			if (m_Grid->EnemiesAlive())
+			{
+				return;
+			}
 			sound::PlaySoundSignal.Emit("Bomberman SFX (6).wav", 5);
+			// TODO: Load next level
 
-			// TODO: check remaining enemies
-			// if enemies == 0
-			// enter exit (next level)
 		}
 	}
 
@@ -268,7 +270,7 @@ namespace lsmf
 		m_State = TileState::Exit;
 
 		m_CollisionComponent->ClearAllChannels();
-		m_CollisionComponent->AddResponseChannel(CollisionChannel::Player, CollisionType::Event);
+		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Exit);
 		m_CollisionComponent->Start();
 
 		m_CollisionConnection->Resume();

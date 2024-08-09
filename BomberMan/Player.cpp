@@ -44,6 +44,7 @@ namespace lsmf
 		m_CollisionComponent->AddResponseChannel(CollisionChannel::Crate, CollisionType::Physical);
 		m_CollisionComponent->AddResponseChannel(CollisionChannel::Enemy, CollisionType::Event);
 		m_CollisionComponent->AddResponseChannel(CollisionChannel::Bomb, CollisionType::Event);
+		m_CollisionComponent->AddResponseChannel(CollisionChannel::Exit, CollisionType::Event);
 
 
 
