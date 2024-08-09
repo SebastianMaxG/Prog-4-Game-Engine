@@ -36,7 +36,7 @@ namespace lsmf
 		}
 		return m_Tiles[x][y];
 	}
-	void TileGrid::LoadFromFile(const std::string& filename, Scene& scene)
+	void TileGrid::LoadFromFile(const std::string& filename, Scene* scene)
 	{
 		if (m_Init)
 		{
@@ -78,14 +78,14 @@ namespace lsmf
 				tile->SetGridPos(x, y, this);
 
 				go->AddComponent(std::move(tile));
-				scene.Add(std::move(go));
+				scene->Add(std::move(go));
 
 			}
 		}
 		m_Init = true;
 	}
 
-	void TileGrid::GenerateRandom(const int level, Scene& scene)
+	void TileGrid::GenerateRandom(const int level, Scene* scene)
 	{
 		if (m_Init)
 		{
@@ -108,7 +108,7 @@ namespace lsmf
 			m_Tiles[i][0] = (tile.get());
 			tile->SetGridPos(i, 0, this);
 			go->AddComponent(std::move(tile));
-			scene.Add(std::move(go));
+			scene->Add(std::move(go));
 		}
 		for (int i = 1; i < y - 1; ++i)
 		{
@@ -120,7 +120,7 @@ namespace lsmf
 			m_Tiles[x - 1][i] = (tile.get());
 			tile->SetGridPos(x, i, this);
 			go->AddComponent(std::move(tile));
-			scene.Add(std::move(go));
+			scene->Add(std::move(go));
 		}
 		for (int i = 0; i < x; ++i)
 		{
@@ -132,7 +132,7 @@ namespace lsmf
 			m_Tiles[i][y - 1] = (tile.get());
 			tile->SetGridPos(i, y - 1, this);
 			go->AddComponent(std::move(tile));
-			scene.Add(std::move(go));
+			scene->Add(std::move(go));
 		}
 		for (int i = 1; i < y - 1; ++i)
 		{
@@ -144,7 +144,7 @@ namespace lsmf
 			m_Tiles[0][i] = (tile.get());
 			tile->SetGridPos(0, i, this);
 			go->AddComponent(std::move(tile));
-			scene.Add(std::move(go));
+			scene->Add(std::move(go));
 		}
 
 		// fill the rest with empty tiles and every other row create a wall every other tile
@@ -168,7 +168,7 @@ namespace lsmf
 				m_Tiles[i][j] = (tile.get());
 				tile->SetGridPos(i, j, this);
 				go->AddComponent(std::move(tile));
-				scene.Add(std::move(go));
+				scene->Add(std::move(go));
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace lsmf
 			auto go = std::make_unique<lsmf::GameObject>();
 			go->GetTransform()->SetPosition(pos->GetPosition());
 			go->AddComponent(std::make_unique<lsmf::Enemy>(go.get(), enemies[i], this));
-			scene.Add(std::move(go));
+			scene->Add(std::move(go));
 
 		}
 

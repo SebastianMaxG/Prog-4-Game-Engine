@@ -11,7 +11,7 @@ namespace lsmf
 		void SetActive(bool active) { m_Active = active; }
 
 		void Add(std::unique_ptr<GameObject> object);
-		void Remove(GameObject* object);
+		std::unique_ptr<GameObject> Remove(GameObject* object);
 		void RemoveAll();
 
 		void FixedUpdate(double deltaTime);
@@ -27,7 +27,7 @@ namespace lsmf
 
 	private: 
 
-		bool m_Active;
+		bool m_Active{true};
 		std::string m_name;
 		std::vector <std::unique_ptr<GameObject>> m_objects{};
 	};

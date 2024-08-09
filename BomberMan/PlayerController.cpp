@@ -6,9 +6,10 @@
 namespace lsmf
 {
 
-    PlayerController::PlayerController(GameObject* gameObject, Player* player, int joystickId)
+    PlayerController::PlayerController(GameObject* gameObject, Player* player, int joystickId, bool keyboardInput)
         : ControllerComponent(gameObject)
 		, m_ControllerID(joystickId)
+		, m_UseKeyboard(keyboardInput)
 		, m_Player(player)
 	{}
 
@@ -25,6 +26,8 @@ namespace lsmf
             case SDLK_LSHIFT:
                 m_Player->Detonate();
 				break;
+            default: 
+                break;
             }
             return;
         }

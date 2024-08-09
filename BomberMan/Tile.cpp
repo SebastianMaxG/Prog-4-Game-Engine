@@ -4,6 +4,7 @@
 #include "CollisionHandeler.h"
 #include "Enemy.h"
 #include "GameObject.h"
+#include "GlobalSignals.h"
 #include "Player.h"
 #include "SoundSystem.h"
 #include "SpriteComponent.h"
@@ -144,7 +145,7 @@ namespace lsmf
 				return;
 			}
 			sound::PlaySoundSignal.Emit("Bomberman SFX (6).wav", 5);
-			// TODO: Load next level
+			globalSignals::OnPlayerWin.Emit();
 
 		}
 	}

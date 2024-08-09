@@ -24,6 +24,7 @@ namespace lsmf
         TextComponent* m_TextComponent{nullptr};
         Callback m_OnClick;
         bool m_Selected;
+        bool m_Enabled;
         std::string m_Text;
     };
 }

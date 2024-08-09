@@ -13,13 +13,16 @@ void Scene::Add(std::unique_ptr<GameObject> object)
 	m_objects.emplace_back(std::move(object));
 }
 
-void Scene::Remove(GameObject* object)
+std::unique_ptr<GameObject> Scene::Remove(GameObject* object)
 {
 	auto it = std::ranges::find_if(m_objects, [object](const std::unique_ptr<GameObject>& obj) { return obj.get() == object; });
 	if (it != m_objects.end())
 	{
+		std::unique_ptr<GameObject> removedObject = std::move(*it);
 		m_objects.erase(it);
+		return removedObject;
 	}
+	return nullptr; 
 }
 
 void Scene::RemoveAll()

@@ -23,7 +23,7 @@ namespace lsmf
             BSPtr->BindKey(SDLK_RETURN);
             BSPtr->BindKey(SDLK_SPACE);
             BSPtr->BindKey(SDL_MOUSEBUTTONDOWN);
-            BSPtr->BindKey(SDL_CONTROLLER_BUTTON_A);
+            BSPtr->BindKey(SDL_CONTROLLER_BUTTON_X);
 
             InputHandler::GetInstance().BindCommand("ButtonSelect", std::move(buttonSelect));
 		}
@@ -32,6 +32,11 @@ namespace lsmf
 
     void ButtonComponent::Update(double)
     {
+        if (m_Selected && m_Enabled)
+        {
+            m_OnClick();
+            m_Enabled = false;
+        }
     }
 
 
@@ -57,11 +62,15 @@ namespace lsmf
     {
         return m_Selected;
     }
-    void ButtonComponent::ButtonSelect(SDL_Event )
+    void ButtonComponent::ButtonSelect(SDL_Event e)
     {
+        if (e.type != SDL_KEYUP)
+        {
+            return;
+        }
 		if (m_Selected)
 		{
-            m_OnClick();
+            m_Enabled = true;
 		}
     }
 }

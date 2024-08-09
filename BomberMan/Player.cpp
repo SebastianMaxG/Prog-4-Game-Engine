@@ -9,6 +9,7 @@
 #include <algorithm>
 
 #include "CollisionHandeler.h"
+#include "GlobalSignals.h"
 #include "SoundSystem.h"
 #include "Signal.h"
 
@@ -16,7 +17,7 @@ namespace lsmf
 {
    
 
-	Player::Player(GameObject* gameObject, TileGrid* grid, int controllerId)
+	Player::Player(GameObject* gameObject, TileGrid* grid, int controllerId, bool keyboardInput)
 		: BaseComponent(gameObject)
 		, m_Grid(grid)
 	{
@@ -27,7 +28,7 @@ namespace lsmf
 		m_SpriteComponent->SetColumn(static_cast<int>(m_State));
 		m_SpriteComponent->SetPingPong(true);
 
-		auto controllerComponent = std::make_unique<PlayerController>(gameObject, this, controllerId);
+		auto controllerComponent = std::make_unique<PlayerController>(gameObject, this, controllerId, keyboardInput);
 		m_ControllerComponent = controllerComponent.get();
 		gameObject->AddComponent(std::move(controllerComponent));
 		m_ControllerComponent->SetSpeed(m_Speed * SPEED_MULTIPLIER);
@@ -64,6 +65,13 @@ namespace lsmf
 			m_DeathAnimationTimer -= deltaTime;
 			if (m_DeathAnimationTimer <= 0.0)
 			{
+				if (m_Lives <= 0)
+				{
+					Stop();
+					m_SpriteComponent->Stop();
+					m_CollisionComponent->Stop();
+					return;
+				}
 				m_SpriteComponent->SetFrames(3, 5, 3, m_FrameTime);
 
 				// Respawn the player after the death animation
@@ -148,7 +156,7 @@ namespace lsmf
 
 		if (m_Lives <= 0)
 		{
-			Stop();
+			globalSignals::OnPlayerDeath.Emit();
 		}
 		m_InvincibleTime = INVINCIBLE_DURATION;
 
@@ -249,5 +257,18 @@ namespace lsmf
 			m_Bombs.clear();
 			m_NrOfBombs = 0;
 		}
+	}
+
+	// make player ready for the next level
+	void Player::Reset()
+	{
+		m_Lives = 4;
+		Start();
+		m_CollisionComponent->Start();
+		m_ControllerComponent->Start();
+		m_SpriteComponent->Start();
+		m_IsDead = false;
+		SetState(PlayerState::Down);
+		m_SpriteComponent->SetFrame();
 	}
 }

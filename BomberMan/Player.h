@@ -24,7 +24,7 @@ namespace lsmf
 			Left = 3,
 			Dead = 4
 		};
-		Player(GameObject* gameObject, TileGrid* grid, int controllerId = -1);
+		Player(GameObject* gameObject, TileGrid* grid, int controllerId = -1, bool keyboardInput = false);
 
 		void Update(double deltaTime) override;
 		void FixedUpdate(double deltaTime) override;
@@ -38,6 +38,8 @@ namespace lsmf
 		void ActivateFlamePass();
 		void ActivateBombPass();
 		void ActivateInvincible();
+
+		void Reset();
 
 		void BombDetonated(Tile* tile);
 

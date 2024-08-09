@@ -16,8 +16,8 @@ namespace lsmf
 
         Tile* GetTile(int x, int y);  // Returns the tile at the given coordinates
         Tile* GetTile(const glm::vec2& pos, int& x, int& y);  // Returns the tile at the given position
-        void LoadFromFile(const std::string& filename, Scene& scene);
-        void GenerateRandom(const int level, Scene& scene);
+        void LoadFromFile(const std::string& filename, Scene* scene);
+        void GenerateRandom(const int level, Scene* scene);
 
         std::vector<Tile*> GetEmptyTiles() const;
 

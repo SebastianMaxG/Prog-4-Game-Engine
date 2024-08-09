@@ -119,8 +119,8 @@ void lsmf::Minigin::Run(const std::function<void()>& load)
 		lastTime = current;
 		lag += deltaTime;
 
-		doContinue = inputHandler.HandleInput();
 		input.ProcessInput();
+		doContinue = inputHandler.HandleInput();
 
 
 		while (lag >= fixed_time_step)
