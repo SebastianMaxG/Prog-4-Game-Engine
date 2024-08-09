@@ -10,5 +10,11 @@ namespace lsmf
 	{
 		inline std::jthread g_OnEnemyDeathThread;
 		inline signal::Signal<Enemy::EnemyType> OnEnemyDeath{ g_OnEnemyDeathThread };
+
+		inline signal::Signal<> OnPlayerDeath{};
+
+		inline signal::Signal<> OnPlayerWin{};
+
+
 	}
 }

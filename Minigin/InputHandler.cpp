@@ -16,7 +16,13 @@ namespace lsmf
 
     Command* InputHandler::GetCommand(const std::string& action) const
     {
-        return m_CommandMap.at(action).get();
+        //if a command is not found, return nullptr
+        if (const auto it = m_CommandMap.find(action); it != m_CommandMap.end())
+        {
+            return it->second.get();
+        }
+
+        return nullptr;
     }
 
     bool InputHandler::HandleInput()

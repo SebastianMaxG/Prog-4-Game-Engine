@@ -15,13 +15,19 @@ namespace lsmf
         m_TextComponent = textComp.get();
         gameObject->AddComponent(std::move(textComp));
 
-        auto buttonSelect = std::make_unique<Command>();
-        buttonSelect->BindFunction(this, &ButtonComponent::ButtonSelect);
-        buttonSelect->BindKey(SDLK_RETURN);
-        buttonSelect->BindKey(SDLK_SPACE);
-        buttonSelect->BindKey(SDL_MOUSEBUTTONDOWN);
-        buttonSelect->BindKey(SDL_CONTROLLER_BUTTON_A);
-        InputHandler::GetInstance().BindCommand("ButtonSelect", std::move(buttonSelect));
+        auto BSPtr =InputHandler::GetInstance().GetCommand("ButtonSelect");
+        if (!BSPtr)
+        {
+            auto buttonSelect = std::make_unique<Command>();
+            BSPtr = buttonSelect.get();
+            BSPtr->BindKey(SDLK_RETURN);
+            BSPtr->BindKey(SDLK_SPACE);
+            BSPtr->BindKey(SDL_MOUSEBUTTONDOWN);
+            BSPtr->BindKey(SDL_CONTROLLER_BUTTON_A);
+
+            InputHandler::GetInstance().BindCommand("ButtonSelect", std::move(buttonSelect));
+		}
+        BSPtr->BindFunction(this, &ButtonComponent::ButtonSelect);
     }
 
     void ButtonComponent::Update(double)

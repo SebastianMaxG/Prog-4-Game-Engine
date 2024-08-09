@@ -1,5 +1,4 @@
 #pragma once
-#include "SceneManager.h"
 #include "GameObject.h"
 
 namespace lsmf
@@ -7,8 +6,10 @@ namespace lsmf
 
 	class Scene final
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
 	public:
+		std::string GetName() const	{ return m_name;	}
+		void SetActive(bool active) { m_Active = active; }
+
 		void Add(std::unique_ptr<GameObject> object);
 		void Remove(GameObject* object);
 		void RemoveAll();
@@ -17,6 +18,7 @@ namespace lsmf
 		void Update(double deltaTime);
 		void Render() const;
 
+		Scene(const std::string& name);
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;
@@ -24,12 +26,10 @@ namespace lsmf
 		Scene& operator=(Scene&& other) = delete;
 
 	private: 
-		explicit Scene(const std::string& name);
 
+		bool m_Active;
 		std::string m_name;
-		std::vector < std::unique_ptr<GameObject>> m_objects{};
-
-		static unsigned int m_idCounter; 
+		std::vector <std::unique_ptr<GameObject>> m_objects{};
 	};
 
 }

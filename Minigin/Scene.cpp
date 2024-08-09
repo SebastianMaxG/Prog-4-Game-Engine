@@ -3,7 +3,6 @@
 
 using namespace lsmf;
 
-unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name) : m_name(name) {}
 
@@ -30,6 +29,8 @@ void Scene::RemoveAll()
 
 void lsmf::Scene::FixedUpdate(double deltaTime)
 {
+	if (!m_Active)
+		return;
 	for (auto& object : m_objects)
 	{
 		object->FixedUpdate(deltaTime);
@@ -38,6 +39,8 @@ void lsmf::Scene::FixedUpdate(double deltaTime)
 
 void Scene::Update(double deltaTime)
 {
+	if (!m_Active)
+		return;
 	// remove objects marked for deletion
 	std::erase_if(m_objects,
 		[](const std::unique_ptr<GameObject>& object)
@@ -53,6 +56,8 @@ void Scene::Update(double deltaTime)
 
 void Scene::Render() const
 {
+	if (!m_Active)
+		return;
 	for (const auto& object : m_objects)
 	{
 		object->Render();
