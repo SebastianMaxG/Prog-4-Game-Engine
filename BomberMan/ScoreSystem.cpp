@@ -37,7 +37,6 @@ namespace lsmf
 	}
 	ScoreSystem::ScoreSystem(GameObject* gameObject)
 		: BaseComponent(gameObject)
-		, m_Score(0)
 	{
 		m_EnemyConnection = globalSignals::OnEnemyDeath.Connect(this, &ScoreSystem::OnEnemyDeathScore);
 		auto font = lsmf::ResourceManager::GetInstance().LoadFont("NesLowercaseRegular-lePq.ttf", 16);

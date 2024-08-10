@@ -38,8 +38,6 @@ namespace lsmf
 		TextComponent* m_TextComponent;
 
 		signal::Connection<Enemy::EnemyType>* m_EnemyConnection;
-
-		HighScoreSystem m_HighScoreSystem{};
 	};
 
 }
