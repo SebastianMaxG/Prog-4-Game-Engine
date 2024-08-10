@@ -11,7 +11,8 @@ namespace lsmf
     {
         //make a text component
         auto textComponent = std::make_unique<TextComponent>(gameObject, " A A A ", font, SDL_Color{ 255, 255, 255, 255 });
-
+        m_TextComponent = textComponent.get();
+        gameObject->AddComponent(std::move(textComponent));
 
         //assign the commands to the functions
         auto nextLetter = std::make_unique<Command>();
@@ -41,10 +42,10 @@ namespace lsmf
 
     SelectComponent::~SelectComponent()
     {
-		InputHandler::GetInstance().UnBindCommand("NextLetter");
-		InputHandler::GetInstance().UnBindCommand("PreviousLetter");
-		InputHandler::GetInstance().UnBindCommand("Increment");
-		InputHandler::GetInstance().UnBindCommand("Decrement");
+		InputHandler::GetInstance().RemoveCommand("NextLetter");
+		InputHandler::GetInstance().RemoveCommand("PreviousLetter");
+		InputHandler::GetInstance().RemoveCommand("Increment");
+		InputHandler::GetInstance().RemoveCommand("Decrement");
     }
 
     void SelectComponent::Update(double )
@@ -121,6 +122,15 @@ namespace lsmf
             }
             m_NeedsUpdate = true;
         }
+    }
+    void SelectComponent::Deactivate() const
+    {
+        m_TextComponent->Stop();
+        InputHandler::GetInstance().RemoveCommand("NextLetter");
+        InputHandler::GetInstance().RemoveCommand("PreviousLetter");
+        InputHandler::GetInstance().RemoveCommand("Increment");
+        InputHandler::GetInstance().RemoveCommand("Decrement");
+
     }
     std::string SelectComponent::GetMarkedString() const
     {

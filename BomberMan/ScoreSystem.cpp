@@ -47,7 +47,7 @@ namespace lsmf
 	}
 	ScoreSystem::~ScoreSystem()
 	{
-		m_EnemyConnection->Disconnect();
+		//m_EnemyConnection->Disconnect();
 	}
 
 	void ScoreSystem::Update(double)

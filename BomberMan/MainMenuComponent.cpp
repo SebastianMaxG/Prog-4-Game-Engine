@@ -23,7 +23,7 @@ namespace lsmf
     MainMenuComponent::~MainMenuComponent()
     {
         m_Buttons.clear();
-        InputHandler::GetInstance().UnBindCommand("MenuMove");
+        InputHandler::GetInstance().RemoveCommand("MenuMove");
     }
 
     void MainMenuComponent::Update(double )

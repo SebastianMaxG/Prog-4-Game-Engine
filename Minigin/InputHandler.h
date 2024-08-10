@@ -10,7 +10,7 @@ namespace lsmf
     {
     public:
         void BindCommand(const std::string& action, std::unique_ptr<Command> command);
-        void UnBindCommand(const std::string& action);
+        void RemoveCommand(const std::string& action);
         Command* GetCommand(const std::string& action) const;
 
         bool HandleInput();

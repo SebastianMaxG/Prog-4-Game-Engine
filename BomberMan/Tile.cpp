@@ -381,6 +381,7 @@ namespace lsmf
 		{
 			m_BombDir = BombDir::center;
 			m_BombType = BombType::Explosion;
+			range = m_BombRange;
 		}
 		else if (range >= 0)
 			m_BombRange = range;

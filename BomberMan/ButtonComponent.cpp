@@ -11,7 +11,7 @@ namespace lsmf
         , m_Selected(false)
         , m_Text(text)
     {
-        auto textComp = std::make_unique<TextComponent>(gameObject, text, font, color);
+        auto textComp = std::make_unique<TextComponent>(gameObject, "- " + text + " -", font, color);
         m_TextComponent = textComp.get();
         gameObject->AddComponent(std::move(textComp));
 
@@ -32,7 +32,7 @@ namespace lsmf
 
     ButtonComponent::~ButtonComponent()
     {
-		InputHandler::GetInstance().UnBindCommand("ButtonSelect");
+		InputHandler::GetInstance().RemoveCommand("ButtonSelect");
     }
 
     void ButtonComponent::Update(double)
@@ -55,11 +55,11 @@ namespace lsmf
 
         if (m_Selected)
         {
-            m_TextComponent->SetText("o" + m_Text + "o");
+            m_TextComponent->SetText("o " + m_Text + " o");
         }
         else
         {
-            m_TextComponent->SetText(m_Text);
+            m_TextComponent->SetText("- " + m_Text + " -");
         }
     }
 

@@ -66,13 +66,14 @@ void Scene::Update(double deltaTime)
 		{
 			return object->IsMarkedForDestruction() or object == nullptr;
 		});
-	if (!m_Active || m_MarkedForDestuction)
-	{
-		return;		
-	}
+	
 
 	for (const auto& object : m_objects)
 	{
+		if (!m_Active || m_MarkedForDestuction)
+		{
+			return;
+		}
 		object->Update(deltaTime);
 	}
 }

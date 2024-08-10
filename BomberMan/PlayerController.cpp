@@ -35,10 +35,10 @@ namespace lsmf
 
     PlayerController::~PlayerController()
     {
-        InputHandler::GetInstance().UnBindCommand("PlayerMove");
-        InputHandler::GetInstance().UnBindCommand("Action1");
-        InputHandler::GetInstance().UnBindCommand("Action2");
-        InputHandler::GetInstance().UnBindCommand("NextLevel");
+        InputHandler::GetInstance().RemoveCommand("PlayerMove");
+        InputHandler::GetInstance().RemoveCommand("Action1");
+        InputHandler::GetInstance().RemoveCommand("Action2");
+        InputHandler::GetInstance().RemoveCommand("NextLevel");
 
     }
 

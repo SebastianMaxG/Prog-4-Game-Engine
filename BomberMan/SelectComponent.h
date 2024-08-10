@@ -22,6 +22,8 @@ namespace lsmf
         void Increment(SDL_Event e);
         void Decrement(SDL_Event e);
 
+        void Deactivate() const;
+
     private:
         std::string GetMarkedString() const;
 

@@ -10,7 +10,7 @@ namespace lsmf
         m_CommandMap[action] = std::move(command);
     }
 
-    void InputHandler::UnBindCommand(const std::string& action)
+    void InputHandler::RemoveCommand(const std::string& action)
     {
         if (m_CommandMap.find(action) != m_CommandMap.end())
         {
