@@ -10,29 +10,27 @@ namespace lsmf
     class SelectComponent final : public BaseComponent
     {
     public:
-        enum class Mode
-        {
-            Buttons,
-            Letters
-        };
-
-        SelectComponent(GameObject* gameObject, std::shared_ptr<TextComponent> textComponent);
-        ~SelectComponent() override = default;
+        SelectComponent(GameObject* gameObject, std::shared_ptr<Font>& font);
+        ~SelectComponent() override;
 
         void Update(double deltaTime) override;
-        void Render() const override;
 
-        void SwitchMode();
-        void Next();
-        void Previous();
+        std::string GetString() const;
+
+        void NextLetter(SDL_Event e);
+        void PreviousLetter(SDL_Event e);
+        void Increment(SDL_Event e);
+        void Decrement(SDL_Event e);
 
     private:
-        Mode m_CurrentMode;
-        std::shared_ptr<TextComponent> m_TextComponent;
-        std::vector<std::string> m_Buttons;
-        std::vector<std::string> m_Letters;
-        size_t m_CurrentIndex;
+        std::string GetMarkedString() const;
 
-        void UpdateText();
+        TextComponent* m_TextComponent;
+        std::vector<char> m_Letters{ 'A', 'A','A' };
+        const char m_MinLetter = 'A';
+        const char m_MaxLetter = 'Z';
+    	size_t m_CurrentIndex{};
+        bool m_NeedsUpdate;
+
     };
 }

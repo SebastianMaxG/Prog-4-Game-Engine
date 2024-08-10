@@ -1,90 +1,152 @@
 #include "SelectComponent.h"
+
+#include "Command.h"
+#include "InputHandler.h"
 #include "TextComponent.h"
 
 namespace lsmf
 {
-    SelectComponent::SelectComponent(GameObject* gameObject, std::shared_ptr<TextComponent> textComponent)
+    SelectComponent::SelectComponent(GameObject* gameObject, std::shared_ptr<Font>& font)
         : BaseComponent(gameObject)
-        , m_TextComponent(std::move(textComponent))
-        , m_CurrentMode(Mode::Buttons)
-        , m_CurrentIndex(0)
     {
-        // Initialize buttons and letters
-        m_Buttons = { "Button1", "Button2", "Button3" };
-        m_Letters =
-        {
-            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-        };
+        //make a text component
+        auto textComponent = std::make_unique<TextComponent>(gameObject, " A A A ", font, SDL_Color{ 255, 255, 255, 255 });
 
-        UpdateText();
+
+        //assign the commands to the functions
+        auto nextLetter = std::make_unique<Command>();
+        nextLetter->BindKey(SDLK_RIGHT);
+        nextLetter->BindKey(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+        nextLetter->BindFunction(this, &SelectComponent::NextLetter);
+        InputHandler::GetInstance().BindCommand("NextLetter", std::move(nextLetter));
+
+        auto previousLetter = std::make_unique<Command>();
+        previousLetter->BindKey(SDLK_LEFT);
+        previousLetter->BindKey(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+        previousLetter->BindFunction(this, &SelectComponent::PreviousLetter);
+        InputHandler::GetInstance().BindCommand("PreviousLetter", std::move(previousLetter));
+
+        auto increment = std::make_unique<Command>();
+        increment->BindKey(SDLK_UP);
+        increment->BindKey(SDL_CONTROLLER_BUTTON_DPAD_UP);
+        increment->BindFunction(this, &SelectComponent::Increment);
+        InputHandler::GetInstance().BindCommand("Increment", std::move(increment));
+
+        auto decrement = std::make_unique<Command>();
+        decrement->BindKey(SDLK_DOWN);
+        decrement->BindKey(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+        decrement->BindFunction(this, &SelectComponent::Decrement);
+        InputHandler::GetInstance().BindCommand("Decrement", std::move(decrement));
+    }
+
+    SelectComponent::~SelectComponent()
+    {
+		InputHandler::GetInstance().UnBindCommand("NextLetter");
+		InputHandler::GetInstance().UnBindCommand("PreviousLetter");
+		InputHandler::GetInstance().UnBindCommand("Increment");
+		InputHandler::GetInstance().UnBindCommand("Decrement");
     }
 
     void SelectComponent::Update(double )
     {
-    //    // Handle input for switching modes, next, and previous
-    //    // This is just a placeholder, replace with actual input handling
-    //    if (/* condition to switch mode */)
-    //    {
-    //        SwitchMode();
-    //    }
-    //    if (/* condition to go to next item */)
-    //    {
-    //        Next();
-    //    }
-    //    if (/* condition to go to previous item */)
-    //    {
-    //        Previous();
-    //    }
+        if (m_NeedsUpdate)
+        {
+            m_NeedsUpdate = false;
+            m_TextComponent->SetText(GetMarkedString());
+        }
     }
 
-    void SelectComponent::Render() const
+    std::string SelectComponent::GetString() const
     {
-        // Render logic if needed
+        // convert the vector of chars to a string
+        std::string str{};
+        for (char c : m_Letters)
+        {
+            str += c;
+		}
+        return str;
     }
 
-    void SelectComponent::SwitchMode()
+    void SelectComponent::NextLetter(SDL_Event e)
     {
-        m_CurrentMode = (m_CurrentMode == Mode::Buttons) ? Mode::Letters : Mode::Buttons;
-        m_CurrentIndex = 0; // Reset index when switching modes
-        UpdateText();
+        if (e.type == SDL_KEYUP or e.type == SDL_CONTROLLERBUTTONUP)
+        {
+            ++m_CurrentIndex;
+            if (m_CurrentIndex >= m_Letters.size())
+            {
+                m_CurrentIndex = 0;
+            }
+            m_NeedsUpdate = true;
+        }
     }
 
-    void SelectComponent::Next()
+    void SelectComponent::PreviousLetter(SDL_Event e)
     {
-        if (m_CurrentMode == Mode::Buttons)
+        if (e.type == SDL_KEYUP or e.type == SDL_CONTROLLERBUTTONUP)
         {
-            m_CurrentIndex = (m_CurrentIndex + 1) % m_Buttons.size();
+            if (m_CurrentIndex == 0)
+            {
+                m_CurrentIndex = m_Letters.size() - 1;
+            }
+            else
+            {
+                --m_CurrentIndex;
+            }
+            m_NeedsUpdate = true;
         }
-        else
-        {
-            m_CurrentIndex = (m_CurrentIndex + 1) % m_Letters.size();
-        }
-        UpdateText();
     }
 
-    void SelectComponent::Previous()
+    void SelectComponent::Increment(SDL_Event e)
     {
-        if (m_CurrentMode == Mode::Buttons)
+
+        if (e.type == SDL_KEYDOWN or e.type == SDL_CONTROLLERBUTTONDOWN)
         {
-            m_CurrentIndex = (m_CurrentIndex == 0) ? m_Buttons.size() - 1 : m_CurrentIndex - 1;
+            ++m_Letters[m_CurrentIndex];
+            if (m_Letters[m_CurrentIndex] > m_MaxLetter)
+            {
+                m_Letters[m_CurrentIndex] = m_MinLetter;
+            }
+            m_NeedsUpdate = true;
         }
-        else
-        {
-            m_CurrentIndex = (m_CurrentIndex == 0) ? m_Letters.size() - 1 : m_CurrentIndex - 1;
-        }
-        UpdateText();
     }
 
-    void SelectComponent::UpdateText()
+    void SelectComponent::Decrement(SDL_Event e)
     {
-        if (m_CurrentMode == Mode::Buttons)
+        if (e.type == SDL_KEYDOWN or e.type == SDL_CONTROLLERBUTTONDOWN)
         {
-            m_TextComponent->SetText(m_Buttons[m_CurrentIndex]);
+            --m_Letters[m_CurrentIndex];
+            if (m_Letters[m_CurrentIndex] < m_MinLetter)
+            {
+                m_Letters[m_CurrentIndex] = m_MaxLetter;
+            }
+            m_NeedsUpdate = true;
         }
-        else
+    }
+    std::string SelectComponent::GetMarkedString() const
+    {
+        //return the string with the current letter marked
+
+        std::string str{};
+        for (size_t i = 0; i < m_Letters.size(); ++i)
         {
-            m_TextComponent->SetText(m_Letters[m_CurrentIndex]);
+            if (i == m_CurrentIndex)
+            {
+                str += "o";
+            }
+            else
+            {
+	            				str += " ";
+			}
+            str += m_Letters[i];
+            if (i == m_CurrentIndex)
+            {
+                str += "o";
+            }
+            else
+            {
+                str += " ";
+            }
         }
+        return str;
     }
 }
