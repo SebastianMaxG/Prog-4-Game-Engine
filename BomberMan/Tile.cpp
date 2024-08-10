@@ -153,7 +153,7 @@ namespace lsmf
 			}
 			sound::PlaySoundSignal.Emit("Bomberman SFX (6).wav", 5);
 			globalSignals::OnPlayerWin.Emit();
-			globalSignals::OnPlayerWin.Emit();
+			globalSignals::OnPlayerWin.Update();
 
 
 		}

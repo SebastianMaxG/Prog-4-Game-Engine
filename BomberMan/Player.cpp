@@ -162,6 +162,14 @@ namespace lsmf
 		if (m_Lives <= 0)
 		{
 			globalSignals::OnPlayerDeath.Emit();
+			globalSignals::OnPlayerDeath.Update();
+
+			// remove the dropable powerups
+			m_Remote = false;
+			m_BombPass = false;
+			m_FlamePass = false;
+			m_WallPass = false;
+
 		}
 		m_InvincibleTime = INVINCIBLE_DURATION;
 

@@ -46,8 +46,14 @@ namespace lsmf
 		m_TextComponent = textComponent.get();
 		gameObject->AddComponent(std::move(textComponent));
 	}
-	ScoreSystem::~ScoreSystem() noexcept
+	ScoreSystem::~ScoreSystem()
 	{
+		m_EnemyConnection->Disconnect();
+	}
+
+	void ScoreSystem::Update(double)
+	{
+		globalSignals::OnEnemyDeath.Update();
 	}
 }
 

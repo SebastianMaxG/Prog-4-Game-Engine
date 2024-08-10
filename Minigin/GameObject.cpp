@@ -13,7 +13,12 @@ namespace lsmf
 	{
 		m_TransformComponent = std::make_unique<TransformComponent>(this);
 	}
-	GameObject::~GameObject() = default;
+	GameObject::~GameObject()
+	{
+		m_Components.clear();
+		m_ChildrenPtrs.clear();
+		m_ParentPtr = nullptr;
+	}
 
 	void GameObject::FixedUpdate(double deltaTime)
 	{

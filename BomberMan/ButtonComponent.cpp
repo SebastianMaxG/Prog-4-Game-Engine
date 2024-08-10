@@ -30,6 +30,11 @@ namespace lsmf
         BSPtr->BindFunction(this, &ButtonComponent::ButtonSelect);
     }
 
+    ButtonComponent::~ButtonComponent()
+    {
+		InputHandler::GetInstance().UnBindCommand("ButtonSelect");
+    }
+
     void ButtonComponent::Update(double)
     {
         if (m_Selected && m_Enabled)

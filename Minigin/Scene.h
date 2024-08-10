@@ -9,6 +9,7 @@ namespace lsmf
 	public:
 		std::string GetName() const	{ return m_name;	}
 		void SetActive(bool active) { m_Active = active; }
+		void MarkForDestruction() { m_MarkedForDestuction = true; }
 
 		void Add(std::unique_ptr<GameObject> object);
 		std::unique_ptr<GameObject> Remove(GameObject* object);
@@ -30,6 +31,7 @@ namespace lsmf
 	private: 
 
 		bool m_Active{true};
+		bool m_MarkedForDestuction{false};
 		std::string m_name;
 		std::vector <std::unique_ptr<GameObject>> m_objects{};
 	};

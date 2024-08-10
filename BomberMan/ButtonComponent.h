@@ -12,7 +12,7 @@ namespace lsmf
         using Callback = std::function<void()>;
 
         ButtonComponent(GameObject* gameObject, Callback onClick, const std::string& text, std::shared_ptr<Font>& font, SDL_Color color = { 255,255,255,255 });
-        ~ButtonComponent() override = default;
+        ~ButtonComponent() override;
 
         void Update(double deltaTime) override;
 

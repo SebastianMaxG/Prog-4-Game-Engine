@@ -6,7 +6,10 @@ using namespace lsmf;
 
 Scene::Scene(const std::string& name) : m_name(name) {}
 
-Scene::~Scene() = default;
+Scene::~Scene()
+{
+	m_objects.clear();
+}
 
 void Scene::Add(std::unique_ptr<GameObject> object)
 {
@@ -57,16 +60,18 @@ void lsmf::Scene::FixedUpdate(double deltaTime)
 
 void Scene::Update(double deltaTime)
 {
-	if (!m_Active)
-		return;
 	// remove objects marked for deletion
 	std::erase_if(m_objects,
 		[](const std::unique_ptr<GameObject>& object)
 		{
-			return object->IsMarkedForDestruction();
+			return object->IsMarkedForDestruction() or object == nullptr;
 		});
+	if (!m_Active)
+	{
+		return;		
+	}
 
-	for (auto& object : m_objects)
+	for (const auto& object : m_objects)
 	{
 		object->Update(deltaTime);
 	}

@@ -8,8 +8,7 @@ namespace lsmf
 {
 	namespace globalSignals
 	{
-		inline std::jthread g_OnEnemyDeathThread;
-		inline signal::Signal<Enemy::EnemyType> OnEnemyDeath{ g_OnEnemyDeathThread };
+		inline signal::Signal<Enemy::EnemyType> OnEnemyDeath{ };
 
 		inline signal::Signal<> OnPlayerDeath{};
 

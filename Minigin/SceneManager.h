@@ -16,6 +16,7 @@ namespace lsmf
 		Scene* CreateScene(const std::string& name);
 		void DeleteScene (const std::string& name);
 		Scene* GetScene(const std::string& name);
+		void ClearScenes();
 
 		void Update(double deltaTime);
 		void FixedUpdate(double deltaTime);

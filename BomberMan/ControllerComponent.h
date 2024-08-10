@@ -17,11 +17,13 @@ namespace lsmf {
 
         void FixedUpdate(double deltaTime) override;
         virtual void HandleInput(SDL_Event event) = 0;
+        virtual bool GetLeft() const { return m_Left; }
 
         void SetSpeed(double speed) { m_Speed = speed; }
 
     protected:
         void Move(double deltaTime);
+        bool m_Left = true;
         Transform m_MoveTransform;
     private:
         signal::Connection<SDL_Event>* m_Connection;

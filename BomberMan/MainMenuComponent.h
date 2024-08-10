@@ -10,7 +10,7 @@ namespace lsmf
     {
     public:
         MainMenuComponent(GameObject* gameObject);
-        ~MainMenuComponent() override = default;
+        ~MainMenuComponent() override;
 
         void Update(double deltaTime) override;
 

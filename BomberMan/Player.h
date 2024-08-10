@@ -47,6 +47,8 @@ namespace lsmf
 		void CollisionEvent(GameObject* collider, GameObject* other);
 		void PlaceBomb();
 		void Detonate();
+
+		bool IsAlive() const { return !m_IsDead; }
 	private:
 
 		TileGrid* m_Grid;

@@ -19,7 +19,9 @@ namespace lsmf
 		//static signal::Signal<Enemy::EnemyType> OnEnemyDeath{g_OnEnemyDeath};
 
 		ScoreSystem(GameObject* gameObject);
-		~ScoreSystem() noexcept;
+		~ScoreSystem() override;
+
+		void Update(double) override;
 
 
 		ScoreSystem(const ScoreSystem& other) = delete;

@@ -1,6 +1,7 @@
 #include "PlayerController.h"
 
 #include <encdec.h>
+#include <iostream>
 #include <SDL.h>
 
 #include "GlobalEngineSignals.h"
@@ -18,66 +19,18 @@ namespace lsmf
 		, m_Player(player)
     {
 
-	    {
-		    auto playerMoveCommand = InputHandler::GetInstance().GetCommand("PlayerMove");
-	    	if (!playerMoveCommand)
-	    	{
-	    		auto playerMove = std::make_unique<Command>();
-	    		playerMoveCommand = playerMove.get();
-	    		playerMoveCommand->BindKey(SDLK_UP);
-	    		playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_UP);
-	    		playerMoveCommand->BindKey(SDLK_DOWN);
-	    		playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
-	    		playerMoveCommand->BindKey(SDLK_LEFT);
-	    		playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
-	    		playerMoveCommand->BindKey(SDLK_RIGHT);
-	    		playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+        InitCommands();
+    }
 
-	    		InputHandler::GetInstance().BindCommand("PlayerMove", std::move(playerMove));
-	    	}
-	    	playerMoveCommand->BindFunction(this, &PlayerController::PlayerMove);
-	    }
+    PlayerController::PlayerController(GameObject* gameObject, Enemy* player, int joystickId, bool keyboardInput)
 
-	    {
-		    auto action2Command = InputHandler::GetInstance().GetCommand("Action2");
-        	if (!action2Command)
-        	{
-        		auto action2 = std::make_unique<Command>();
-        		action2Command = action2.get();
-        		action2Command->BindKey(SDLK_LSHIFT);
-        		action2Command->BindKey(SDL_CONTROLLER_BUTTON_X);
-
-        		InputHandler::GetInstance().BindCommand("Action2", std::move(action2));
-        	}
-        	action2Command->BindFunction(this, &PlayerController::Action2);
-	    }
-
-	    {
-		    auto action1Command = InputHandler::GetInstance().GetCommand("Action1");
-        	if (!action1Command)
-        	{
-        		auto action1 = std::make_unique<Command>();
-        		action1Command = action1.get();
-        		action1Command->BindKey(SDLK_SPACE);
-        		action1Command->BindKey(SDL_CONTROLLER_BUTTON_A);
-
-        		InputHandler::GetInstance().BindCommand("Action1", std::move(action1));
-        	}
-        	action1Command->BindFunction(this, &PlayerController::Action1);
-	    }
-
-	    {
-            auto NextLevelCommand = InputHandler::GetInstance().GetCommand("NextLevel");
-	    	if (!NextLevelCommand)
-	    	{
-	    		auto nextLevel = std::make_unique<Command>();
-                NextLevelCommand = nextLevel.get();
-                NextLevelCommand->BindKey(SDLK_F2);
-
-	    		InputHandler::GetInstance().BindCommand("NextLevel", std::move(nextLevel));
-	    	}
-            NextLevelCommand->BindFunction(this, &PlayerController::NextLevel);
-	    }
+        : ControllerComponent(gameObject)
+        , m_ControllerID(joystickId)
+        , m_UseKeyboard(keyboardInput)
+        , m_Player(nullptr)
+		, m_Enemy(player)
+    {
+        InitCommands();
     }
 
     PlayerController::~PlayerController()
@@ -195,7 +148,27 @@ namespace lsmf
     {
         if (m_UseKeyboard)
         {
-            if (event.type != SDL_KEYDOWN)
+            if (event.type == SDL_KEYDOWN)
+            {
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_UP:
+                    yDir = -1;
+                    break;
+                case SDLK_DOWN:
+                    yDir = 1;
+                    break;
+                case SDLK_LEFT:
+                    xDir = -1;
+                    break;
+                case SDLK_RIGHT:
+                    xDir = 1;
+                    break;
+                default:
+                    break;
+                }
+            }
+            else if (event.type == SDL_KEYUP)
             {
                 switch (event.key.keysym.sym)
                 {
@@ -210,108 +183,113 @@ namespace lsmf
                 default:
                     break;
                 }
-                m_MoveTransform.SetPosition({ xDir, yDir, 0 });
-                return;
-			}
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_UP:
-                yDir = -1;
-                break;
-            case SDLK_DOWN:
-                yDir = 1;
-                break;
-            case SDLK_LEFT:
-                xDir = -1;
-                break;
-            case SDLK_RIGHT:
-                xDir = 1;
-                break;
-            default:
-                break;
             }
         }
-        if (m_ControllerID == event.cbutton.which)
+
+
+        if (event.type == SDL_CONTROLLERBUTTONDOWN || event.type == SDL_CONTROLLERBUTTONUP)
         {
-            if (event.type != SDL_CONTROLLERBUTTONDOWN)
+            if (m_ControllerID == event.cdevice.which)
             {
-                switch (event.cbutton.button)
+                if (event.type == SDL_CONTROLLERBUTTONDOWN)
                 {
-                case SDL_CONTROLLER_BUTTON_DPAD_UP:
-                case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-                    yDir = 0;
-                    break;
-                case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-                case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-                    xDir = 0;
-                    break;
-                default:
-                    break;
+                    switch (event.cbutton.button)
+                    {
+                    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+                        yDir = -1;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+                        yDir = 1;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+                        xDir = -1;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+                        xDir = 1;
+                        break;
+                    default:
+                        break;
+                    }
                 }
-                m_MoveTransform.SetPosition({ xDir, yDir, 0 });
-                return;
-            }
-            switch (event.cbutton.button)
-            {
-            case SDL_CONTROLLER_BUTTON_DPAD_UP:
-                yDir = -1;
-                break;
-            case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-                yDir = 1;
-                break;
-            case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-                xDir = -1;
-                break;
-            case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-                xDir = 1;
-                break;
-            default:
-                break;
+                else if (event.type == SDL_CONTROLLERBUTTONUP)
+                {
+                    switch (event.cbutton.button)
+                    {
+                    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+                    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+                        yDir = 0;
+                        break;
+                    case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+                    case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+                        xDir = 0;
+                        break;
+                    default:
+                        break;
+                    }
+                }
             }
         }
+
         m_MoveTransform.SetPosition({ xDir, yDir, 0 });
+
+        if (m_Enemy)
+        {
+            if (m_MoveTransform.GetPosition().x > 0)
+            {
+                m_Left = false;
+            }
+            else if (m_MoveTransform.GetPosition().x < 0)
+            {
+                m_Left = true;
+            }
+        }
     }
 
     void PlayerController::Action1(SDL_Event event)
     {
-        if (event.type != SDL_KEYDOWN)
-        {
-            return;
-        }
+        
         if (m_UseKeyboard)
         {
-            if (event.key.keysym.sym == SDLK_SPACE)
+            if (event.type == SDL_KEYUP)
             {
-                m_Player->PlaceBomb();
+                if (event.key.keysym.sym == SDLK_SPACE)
+                {
+                    m_Player->PlaceBomb();
+                }
             }
         }
-        if (m_ControllerID == event.cbutton.which)
+        if (event.type == SDL_CONTROLLERBUTTONDOWN)
         {
-            if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+            if (m_ControllerID == event.cdevice.which)
             {
-                m_Player->PlaceBomb();
+                if (event.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+                {
+                    m_Player->PlaceBomb();
+                }
             }
         }
     }
 
     void PlayerController::Action2(SDL_Event event)
     {
-        if (event.type != SDL_KEYDOWN)
-        {
-            return;
-		}
         if (m_UseKeyboard)
         {
-            if (event.key.keysym.sym == SDLK_LSHIFT)
+            if (event.type == SDL_KEYUP)
             {
-                m_Player->Detonate();
+                if (event.key.keysym.sym == SDLK_LSHIFT)
+                {
+                    m_Player->PlaceBomb();
+                }
             }
         }
-        if (m_ControllerID == event.cbutton.which)
+    	if (event.type == SDL_CONTROLLERBUTTONDOWN)
         {
-            if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+            if (m_ControllerID == event.cdevice.which)
             {
-                m_Player->Detonate();
+                if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+                {
+                    m_Player->PlaceBomb();
+                }
             }
         }
     }
@@ -322,9 +300,82 @@ namespace lsmf
         {
             return;
         }
-        globalSignals::OnPlayerWin.Emit();
-        globalSignals::OnPlayerWin.Update();
+        if (event.key.keysym.sym == SDLK_F2)
+        {
+            globalSignals::OnPlayerWin.Emit();
+            globalSignals::OnPlayerWin.Update();
+        }
+        else
+        {
+	        std::cout << "Next level command not found" << std::endl;
+        }
+
         
+    }
+
+    void PlayerController::InitCommands()
+    {
+
+        {
+            auto playerMoveCommand = InputHandler::GetInstance().GetCommand("PlayerMove");
+            if (!playerMoveCommand)
+            {
+                auto playerMove = std::make_unique<Command>();
+                playerMoveCommand = playerMove.get();
+                playerMoveCommand->BindKey(SDLK_UP);
+                playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_UP);
+                playerMoveCommand->BindKey(SDLK_DOWN);
+                playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_DOWN);
+                playerMoveCommand->BindKey(SDLK_LEFT);
+                playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_LEFT);
+                playerMoveCommand->BindKey(SDLK_RIGHT);
+                playerMoveCommand->BindKey(SDL_CONTROLLER_BUTTON_DPAD_RIGHT);
+
+                InputHandler::GetInstance().BindCommand("PlayerMove", std::move(playerMove));
+            }
+            playerMoveCommand->BindFunction(this, &PlayerController::PlayerMove);
+        }
+
+        {
+            auto action2Command = InputHandler::GetInstance().GetCommand("Action2");
+            if (!action2Command)
+            {
+                auto action2 = std::make_unique<Command>();
+                action2Command = action2.get();
+                action2Command->BindKey(SDLK_LSHIFT);
+                action2Command->BindKey(SDL_CONTROLLER_BUTTON_X);
+
+                InputHandler::GetInstance().BindCommand("Action2", std::move(action2));
+            }
+            action2Command->BindFunction(this, &PlayerController::Action2);
+        }
+
+        {
+            auto action1Command = InputHandler::GetInstance().GetCommand("Action1");
+            if (!action1Command)
+            {
+                auto action1 = std::make_unique<Command>();
+                action1Command = action1.get();
+                action1Command->BindKey(SDLK_SPACE);
+                action1Command->BindKey(SDL_CONTROLLER_BUTTON_A);
+
+                InputHandler::GetInstance().BindCommand("Action1", std::move(action1));
+            }
+            action1Command->BindFunction(this, &PlayerController::Action1);
+        }
+
+        {
+            auto NextLevelCommand = InputHandler::GetInstance().GetCommand("NextLevel");
+            if (!NextLevelCommand)
+            {
+                auto nextLevel = std::make_unique<Command>();
+                NextLevelCommand = nextLevel.get();
+                NextLevelCommand->BindKey(SDLK_F2);
+
+                InputHandler::GetInstance().BindCommand("NextLevel", std::move(nextLevel));
+            }
+            NextLevelCommand->BindFunction(this, &PlayerController::NextLevel);
+        }
     }
 
     void PlayerController::Update(double)
@@ -364,6 +415,12 @@ namespace lsmf
 
     bool PlayerController::IsMoving()
     {
+        if (!m_Player)
+        {
+            return false;
+		}
+
+
         if (m_MoveTransform.GetPosition().x > 0)
         {
             m_Player->SetState(Player::PlayerState::Right);

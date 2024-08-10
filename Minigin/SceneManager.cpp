@@ -52,6 +52,7 @@ void lsmf::SceneManager::DeleteScene(const std::string& name)
 	auto it = std::ranges::find_if(m_scenes, [&name](const std::unique_ptr<Scene>& scene) {return scene->GetName() == name; });
 	if (it != m_scenes.end())
 	{
+		it->get()->SetActive(false);
 		m_ScenesToBeDeleted.push_back(it->get());
 	}
 }
@@ -64,4 +65,10 @@ lsmf::Scene* lsmf::SceneManager::GetScene(const std::string& name)
 		return it->get();
 	}
 	return nullptr;
+}
+
+void lsmf::SceneManager::ClearScenes()
+{
+	m_scenes.clear();
+	m_ScenesToBeDeleted.clear();
 }

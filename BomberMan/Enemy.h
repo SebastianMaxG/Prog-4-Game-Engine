@@ -34,6 +34,7 @@ namespace lsmf
 		};
 
 		Enemy(GameObject* gameObject, EnemyType type = EnemyType::Balloom, TileGrid* grid = nullptr);
+		Enemy(GameObject* gameObject, int controllerId, bool keyboardInput = false, EnemyType type = EnemyType::Balloom);
 		~Enemy() override;
 
 		void Update(double deltaTime) override;
@@ -44,7 +45,11 @@ namespace lsmf
 
 		void CollisionEvent(GameObject* collider, GameObject* other);
 
+		void Reset(TileGrid* tileGrid);
+
 	private:
+		void Init(GameObject* gameObject, EnemyType type);
+
 		EnemyType m_Type = EnemyType::Balloom;
 		SpriteComponent* m_SpriteComponent;
 
@@ -61,6 +66,9 @@ namespace lsmf
 		bool m_IsSmart = false;
 		bool m_Left = false;
 		bool m_Dead = false;
+
+		//Versus
+		bool m_IsPlayer = false;
 
 
 		signal::Connection<GameObject*, GameObject*>* m_CollisionConnection{};

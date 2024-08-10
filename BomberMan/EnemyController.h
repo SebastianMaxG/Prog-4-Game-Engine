@@ -18,7 +18,7 @@ namespace lsmf
         };
 
 
-        EnemyController(GameObject* m_GameObjectPtr, TileGrid* tileGrid);
+        EnemyController(GameObject* gameObjectPtr, TileGrid* tileGrid);
         ~EnemyController() override;
 
         EnemyController(const EnemyController& other) = delete;
@@ -28,7 +28,6 @@ namespace lsmf
 
         void HandleInput(SDL_Event event) override;
 
-        bool GetLeft() const { return m_Left; }
         void LockVerticalMovement() { m_CanMoveVertical = false; }
 
 
@@ -37,7 +36,6 @@ namespace lsmf
     private:
 
         TileGrid* m_TileGrid;
-        bool m_Left = true;
         bool m_CanMoveVertical = true;
         glm::vec2 m_MoveDirection;
 
