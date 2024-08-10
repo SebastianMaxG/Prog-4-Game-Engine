@@ -3,22 +3,22 @@
 
 void lsmf::SceneManager::Update(double deltaTime)
 {
-	RemoveDeletedScenes();
-	for (auto& scene : m_scenes)
+	for (const auto& scene : m_scenes)
 	{
 		scene->Update(deltaTime);
 	}
+	RemoveDeletedScenes();
 }
 
-void lsmf::SceneManager::FixedUpdate(double deltaTime)
+void lsmf::SceneManager::FixedUpdate(double deltaTime) const
 {
-	for (auto& scene : m_scenes)
+	for (const auto& scene : m_scenes)
 	{
 		scene->FixedUpdate(deltaTime);
 	}
 }
 
-void lsmf::SceneManager::Render()
+void lsmf::SceneManager::Render() const
 {
 	for (const auto& scene : m_scenes)
 	{
@@ -28,15 +28,8 @@ void lsmf::SceneManager::Render()
 
 void lsmf::SceneManager::RemoveDeletedScenes()
 {
-	for (auto scene : m_ScenesToBeDeleted)
-	{
-		auto it = std::ranges::find_if(m_scenes, [scene](const std::unique_ptr<Scene>& scenePtr) {return scenePtr.get() == scene; });
-		if (it != m_scenes.end())
-		{
-			m_scenes.erase(it);
-		}
-	}
-	m_ScenesToBeDeleted.clear();
+	std::erase_if(m_scenes, [](const std::unique_ptr<Scene>& scene) {return scene->IsMarkedForDestruction(); });
+
 }
 
 lsmf::Scene* lsmf::SceneManager::CreateScene(const std::string& name)
@@ -52,8 +45,7 @@ void lsmf::SceneManager::DeleteScene(const std::string& name)
 	auto it = std::ranges::find_if(m_scenes, [&name](const std::unique_ptr<Scene>& scene) {return scene->GetName() == name; });
 	if (it != m_scenes.end())
 	{
-		it->get()->SetActive(false);
-		m_ScenesToBeDeleted.push_back(it->get());
+		it->get()->MarkForDestruction();
 	}
 }
 
@@ -70,5 +62,4 @@ lsmf::Scene* lsmf::SceneManager::GetScene(const std::string& name)
 void lsmf::SceneManager::ClearScenes()
 {
 	m_scenes.clear();
-	m_ScenesToBeDeleted.clear();
 }

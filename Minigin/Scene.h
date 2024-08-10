@@ -9,19 +9,24 @@ namespace lsmf
 	public:
 		std::string GetName() const	{ return m_name;	}
 		void SetActive(bool active) { m_Active = active; }
-		void MarkForDestruction() { m_MarkedForDestuction = true; }
+		void MarkForDestruction()
+		{
+			m_MarkedForDestuction = true;
+			RemoveAll();
+		}
+		bool IsMarkedForDestruction() const { return m_MarkedForDestuction; }
 
 		void Add(std::unique_ptr<GameObject> object);
 		std::unique_ptr<GameObject> Remove(GameObject* object);
-		void RemoveAll();
+		void RemoveAll() const;
 		//get game object by name
 		 GameObject* Get(const std::string& name) const;
 
-		void FixedUpdate(double deltaTime);
+		void FixedUpdate(double deltaTime) const;
 		void Update(double deltaTime);
 		void Render() const;
 
-		Scene(const std::string& name);
+		Scene(std::string name);
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;

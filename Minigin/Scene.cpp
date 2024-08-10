@@ -4,7 +4,7 @@
 using namespace lsmf;
 
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(std::string name) : m_name(std::move(name)) {}
 
 Scene::~Scene()
 {
@@ -28,7 +28,7 @@ std::unique_ptr<GameObject> Scene::Remove(GameObject* object)
 	return nullptr; 
 }
 
-void Scene::RemoveAll()
+void Scene::RemoveAll() const
 {
 	//mark all objects for deletion
 	for (auto& object : m_objects)
@@ -48,9 +48,9 @@ GameObject* Scene::Get(const std::string& name) const
 	return nullptr;
 }
 
-void lsmf::Scene::FixedUpdate(double deltaTime)
+void lsmf::Scene::FixedUpdate(double deltaTime) const
 {
-	if (!m_Active)
+	if (!m_Active || m_MarkedForDestuction)
 		return;
 	for (auto& object : m_objects)
 	{
@@ -66,7 +66,7 @@ void Scene::Update(double deltaTime)
 		{
 			return object->IsMarkedForDestruction() or object == nullptr;
 		});
-	if (!m_Active)
+	if (!m_Active || m_MarkedForDestuction)
 	{
 		return;		
 	}
@@ -79,7 +79,7 @@ void Scene::Update(double deltaTime)
 
 void Scene::Render() const
 {
-	if (!m_Active)
+	if (!m_Active || m_MarkedForDestuction)
 		return;
 	for (const auto& object : m_objects)
 	{

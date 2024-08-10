@@ -19,8 +19,8 @@ namespace lsmf
 		void ClearScenes();
 
 		void Update(double deltaTime);
-		void FixedUpdate(double deltaTime);
-		void Render();
+		void FixedUpdate(double deltaTime) const;
+		void Render() const;
 	private:
 		void RemoveDeletedScenes();
 		friend class Singleton<SceneManager>;
