@@ -72,6 +72,9 @@ namespace lsmf
 			{
 				if (m_Lives <= 0)
 				{
+
+					globalSignals::OnPlayerDeath.Emit();
+					globalSignals::OnPlayerDeath.Update();
 					Stop();
 					m_SpriteComponent->Stop();
 					m_CollisionComponent->Stop();
@@ -161,8 +164,6 @@ namespace lsmf
 
 		if (m_Lives <= 0)
 		{
-			globalSignals::OnPlayerDeath.Emit();
-			globalSignals::OnPlayerDeath.Update();
 
 			// remove the dropable powerups
 			m_Remote = false;
