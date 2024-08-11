@@ -120,7 +120,7 @@ namespace lsmf
 
 		for (Tile* tile : m_Bombs)
 		{
-			if (tile->GetState() != TileState::Bomb)
+			if (tile->GetState() != Tile::TileState::Bomb)
 			{
 				BombDetonated(tile);
 				return;
@@ -230,7 +230,7 @@ namespace lsmf
 		{
 			if (Tile* tile = dynamic_cast<Tile*>(other->GetComponent(typeid(Tile))))
 			{
-				if (tile->GetState() == TileState::Bomb)
+				if (tile->GetState() == Tile::TileState::Bomb)
 				{
 					m_BombOverlap = true;
 				}
@@ -244,7 +244,7 @@ namespace lsmf
 		{
 			return;
 		}
-		if (m_CurrentTile->GetState() != TileState::Empty)
+		if (m_CurrentTile->GetState() != Tile::TileState::Empty)
 		{
 			return;
 		}

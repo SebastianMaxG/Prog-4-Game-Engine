@@ -15,7 +15,7 @@ namespace lsmf
         : ControllerComponent(gameObject), m_TileGrid(tileGrid)
     {
   //      Tile* tile{};
-		//while (!tile || tile->GetState() != TileState::Empty)
+		//while (!tile || tile->GetState() != Tile::TileState::Empty)
 		//{
 		//	// Initialize the enemy's position to a random tile
 		//	const int x = rand() % m_TileGrid->GetWidth();
@@ -102,21 +102,21 @@ namespace lsmf
                 {
                     // get the tiles around the enemy that are not solid objects
                     std::vector<Tile*> validTiles;
-                    if (Tile* tile = m_TileGrid->GetTile(x - 1, y); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                    if (Tile* tile = m_TileGrid->GetTile(x - 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                     {
                         validTiles.push_back(tile);
                     }
-                    if (Tile* tile = m_TileGrid->GetTile(x + 1, y); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                    if (Tile* tile = m_TileGrid->GetTile(x + 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                     {
                         validTiles.push_back(tile);
                     }
                     if (m_CanMoveVertical)
                     {
-                        if (Tile* tile = m_TileGrid->GetTile(x, y - 1); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                        if (Tile* tile = m_TileGrid->GetTile(x, y - 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                         {
                             validTiles.push_back(tile);
                         }
-                        if (Tile* tile = m_TileGrid->GetTile(x, y + 1); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                        if (Tile* tile = m_TileGrid->GetTile(x, y + 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                         {
                             validTiles.push_back(tile);
                         }
@@ -159,9 +159,9 @@ namespace lsmf
             {
                 switch (collisionTile->GetState())
                 {
-                case TileState::Wall:
-                case TileState::Crate:
-                case TileState::Bomb:
+                case Tile::TileState::Wall:
+                case Tile::TileState::Crate:
+                case Tile::TileState::Bomb:
                 {
                     const glm::vec2  pos = { GetGameObject()->GetTransform()->GetPosition() };
                     int x, y;
@@ -169,21 +169,21 @@ namespace lsmf
 
                     // get the tiles around the enemy that are not solid objects
                     std::vector<Tile*> validTiles;
-                    if (Tile* tile = m_TileGrid->GetTile(x - 1, y); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                    if (Tile* tile = m_TileGrid->GetTile(x - 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                     {
                         validTiles.push_back(tile);
                     }
-                    if (Tile* tile = m_TileGrid->GetTile(x + 1, y); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                    if (Tile* tile = m_TileGrid->GetTile(x + 1, y); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                     {
                         validTiles.push_back(tile);
                     }
                     if (m_CanMoveVertical)
                     {
-                        if (Tile* tile = m_TileGrid->GetTile(x, y - 1); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                        if (Tile* tile = m_TileGrid->GetTile(x, y - 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                         {
                             validTiles.push_back(tile);
                         }
-                        if (Tile* tile = m_TileGrid->GetTile(x, y + 1); tile && tile->GetState() != TileState::Wall && tile->GetState() != TileState::Crate && tile->GetState() != TileState::Bomb)
+                        if (Tile* tile = m_TileGrid->GetTile(x, y + 1); tile && tile->GetState() != Tile::TileState::Wall && tile->GetState() != Tile::TileState::Crate && tile->GetState() != Tile::TileState::Bomb)
                         {
                             validTiles.push_back(tile);
                         }

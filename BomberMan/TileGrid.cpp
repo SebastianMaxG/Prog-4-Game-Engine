@@ -447,7 +447,7 @@ namespace lsmf
 		{
 			for (auto tile : row)
 			{
-				if (tile->GetState() == TileState::Empty)
+				if (tile->GetState() == Tile::TileState::Empty)
 				{
 					emptyTiles.push_back(tile);
 				}
