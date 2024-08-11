@@ -276,9 +276,9 @@ namespace lsmf
         {
             if (event.type == SDL_KEYUP)
             {
-                if (event.key.keysym.sym == SDLK_LSHIFT)
+                if (event.key.keysym.sym == SDLK_z)
                 {
-                    m_Player->PlaceBomb();
+                    m_Player->Detonate();
                 }
             }
         }
@@ -288,7 +288,7 @@ namespace lsmf
             {
                 if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
                 {
-                    m_Player->PlaceBomb();
+                    m_Player->Detonate();
                 }
             }
         }
@@ -342,7 +342,7 @@ namespace lsmf
             {
                 auto action2 = std::make_unique<Command>();
                 action2Command = action2.get();
-                action2Command->BindKey(SDLK_LSHIFT);
+                action2Command->BindKey(SDLK_z);
                 action2Command->BindKey(SDL_CONTROLLER_BUTTON_X);
 
                 InputHandler::GetInstance().BindCommand("Action2", std::move(action2));

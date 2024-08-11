@@ -21,12 +21,15 @@ namespace lsmf
 
         std::vector<Tile*> GetEmptyTiles() const;
 
+        void SetPlayer(Player* player);
 
         int GetWidth() const { return m_Width; }
         int GetHeight() const { return m_Height; }
 
         void EnemyDeath(Enemy::EnemyType);
         bool EnemiesAlive() const { return (m_NrEnemies > 0); }
+
+        const std::vector<Player*>* GetPlayers() const;
 
     private:
         std::vector<std::vector<Tile*>> m_Tiles;
@@ -40,6 +43,8 @@ namespace lsmf
         bool m_Init{ false };
 
         signal::Connection<Enemy::EnemyType>*  m_EnemyDeathConnection;
+
+        std::vector<Player*> m_Players;
         
     };
 }

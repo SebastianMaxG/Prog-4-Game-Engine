@@ -197,6 +197,10 @@ namespace lsmf
 			{
 				controller->LockVerticalMovement();
 			}
+			if (m_IsSmart)
+			{
+				controller->Smart();
+			}
 		}
 	}
 }

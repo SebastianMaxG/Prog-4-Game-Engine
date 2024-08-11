@@ -73,6 +73,11 @@ namespace lsmf
 			m_GridY = y;
 			m_Grid = grid;
 		}
+		void GetGridPos(int& x, int& y) const
+		{
+			x = m_GridX;
+			y = m_GridY;
+		}
 		
 		void BreakCrate();
 

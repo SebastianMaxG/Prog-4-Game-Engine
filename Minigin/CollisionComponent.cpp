@@ -13,6 +13,8 @@ lsmf::CollisionComponent::CollisionComponent(GameObject* m_GameObjectPtr, SDL_Re
 
 void lsmf::CollisionComponent::FixedUpdate(double)
 {
+	std::lock_guard<std::mutex> lock(m_CollisionMutex);
+
 	//set the hitbox x and y to the gameobject x and y
 	 m_HitBox.x = static_cast<int>(GetGameObject()->GetTransform()->GetPosition().x);
 	 m_HitBox.y = static_cast<int>(GetGameObject()->GetTransform()->GetPosition().y);
@@ -28,6 +30,8 @@ void lsmf::CollisionComponent::FixedUpdate(double)
 
 void lsmf::CollisionComponent::RemoveResponseChannel(CollisionChannel channel, CollisionType type)
 {
+	std::lock_guard<std::mutex> lock(m_CollisionMutex);
+
 	const auto range = m_ResponseChannels.equal_range(channel);
 	for (auto it = range.first; it != range.second; )
 	{
@@ -40,4 +44,30 @@ void lsmf::CollisionComponent::RemoveResponseChannel(CollisionChannel channel, C
 			++it;
 		}
 	}
+}
+
+void lsmf::CollisionComponent::AddCollidingChannel(CollisionChannel channel)
+{
+	//add a mutex here
+	std::lock_guard<std::mutex> lock(m_CollisionMutex);
+	m_CollidingChannels.insert(channel);
+}
+
+void lsmf::CollisionComponent::RemoveCollidingChannel(CollisionChannel channel)
+{
+	std::lock_guard<std::mutex> lock(m_CollisionMutex);
+
+	m_CollidingChannels.erase(channel);
+}
+
+void lsmf::CollisionComponent::ClearAllChannels()
+{
+	std::lock_guard<std::mutex> lock(m_CollisionMutex);
+
+	if (m_CollidingChannels.empty() && m_ResponseChannels.empty())
+	{
+		return;
+	}
+	m_CollidingChannels.clear();
+	m_ResponseChannels.clear();
 }

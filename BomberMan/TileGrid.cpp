@@ -6,6 +6,7 @@
 
 #include "TransformComponent.h"
 #include "GlobalSignals.h"
+#include "Player.h"
 
 namespace lsmf
 {
@@ -454,8 +455,19 @@ namespace lsmf
 		}
 		return emptyTiles;
 	}
+
+	void TileGrid::SetPlayer(Player* player)
+	{
+		m_Players.push_back(player);
+	}
+
 	void TileGrid::EnemyDeath(Enemy::EnemyType)
 	{
 		m_NrEnemies--;
+	}
+
+	const std::vector<Player*>* TileGrid::GetPlayers() const
+	{
+		return &m_Players;
 	}
 }

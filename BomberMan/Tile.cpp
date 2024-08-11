@@ -368,15 +368,18 @@ namespace lsmf
 	{
 		m_BombSpriteComponent->SetFrame();
 		m_BombDir = dir;
+
 		if (m_Type == TileType::Crate)
 		{
 			BreakCrate();
 			return;
 		}
-		if (m_State == TileState::PowerUp or m_State == TileState::Wall or m_State == TileState::Exit)
+
+		if (m_State == TileState::PowerUp || m_State == TileState::Wall || m_State == TileState::Exit)
 		{
 			return;
 		}
+
 		if (m_State == TileState::Bomb)
 		{
 			m_BombDir = BombDir::center;
@@ -384,52 +387,51 @@ namespace lsmf
 			range = m_BombRange;
 		}
 		else if (range >= 0)
-			m_BombRange = range;
-
-
-		if (m_State == TileState::Explosion)
 		{
-			m_BombDir = BombDir::center;
+			m_BombRange = range;
 		}
-
-
-		
 
 		m_Type = TileType::Empty;
 		m_State = TileState::Explosion;
 
 		m_BombSpriteComponent->Start();
 		m_PowerUpSpriteComponent->Stop();
-		if (m_BombRange > 0)
+
+		if (m_BombRange > 0 && m_Grid)
 		{
-			if (m_Grid)
-			{
-				switch (m_BombDir)
+			auto triggerExplosion = [&](int x, int y, BombDir direction)
 				{
-				case BombDir::center:
-					m_Grid->GetTile(m_GridX, m_GridY + 1)->EnterExplosion(range - 1, BombDir::up);	   
-					m_Grid->GetTile(m_GridX, m_GridY - 1)->EnterExplosion(range - 1, BombDir::down);   
-					m_Grid->GetTile(m_GridX + 1, m_GridY)->EnterExplosion(range - 1, BombDir::right);  
-					m_Grid->GetTile(m_GridX - 1, m_GridY)->EnterExplosion(range - 1, BombDir::left);   
-					m_BombType = BombType::Explosion;
-					break;
-				case BombDir::up:
-					m_Grid->GetTile(m_GridX, m_GridY + 1)->EnterExplosion(range - 1, BombDir::up);
-					m_BombType = BombType::ExplosionVCenter;
-					break;
-				case BombDir::down:
-					m_Grid->GetTile(m_GridX, m_GridY - 1)->EnterExplosion(range - 1, BombDir::down);
-					m_BombType = BombType::ExplosionVCenter;
-					break;
-				case BombDir::right:
-					m_Grid->GetTile(m_GridX + 1, m_GridY)->EnterExplosion(range - 1, BombDir::right);
-					m_BombType = BombType::ExplosionHCenter;
-					break;
-				case BombDir::left:
-					m_Grid->GetTile(m_GridX - 1, m_GridY)->EnterExplosion(range - 1, BombDir::left);
-					m_BombType = BombType::ExplosionHCenter;
-					break;
-				}
+					if (Tile* nextTile = m_Grid->GetTile(x, y))
+					{
+						nextTile->EnterExplosion(range - 1, direction);
+					}
+				};
+
+			switch (m_BombDir)
+			{
+			case BombDir::center:
+				triggerExplosion(m_GridX, m_GridY + 1, BombDir::up);
+				triggerExplosion(m_GridX, m_GridY - 1, BombDir::down);
+				triggerExplosion(m_GridX + 1, m_GridY, BombDir::right);
+				triggerExplosion(m_GridX - 1, m_GridY, BombDir::left);
+				m_BombType = BombType::Explosion;
+				break;
+			case BombDir::up:
+				triggerExplosion(m_GridX, m_GridY + 1, BombDir::up);
+				m_BombType = BombType::ExplosionVCenter;
+				break;
+			case BombDir::down:
+				triggerExplosion(m_GridX, m_GridY - 1, BombDir::down);
+				m_BombType = BombType::ExplosionVCenter;
+				break;
+			case BombDir::right:
+				triggerExplosion(m_GridX + 1, m_GridY, BombDir::right);
+				m_BombType = BombType::ExplosionHCenter;
+				break;
+			case BombDir::left:
+				triggerExplosion(m_GridX - 1, m_GridY, BombDir::left);
+				m_BombType = BombType::ExplosionHCenter;
+				break;
 			}
 		}
 		else if (m_BombRange == 0)
@@ -457,17 +459,14 @@ namespace lsmf
 		{
 			EnterEmpty();
 		}
-		m_BombSpriteComponent->SetFrame();
 
+		m_BombSpriteComponent->SetFrame();
 		m_BombSpriteComponent->SetColumn(static_cast<int>(m_BombType));
 		m_ExplosionTime = EXPLOSION_TIME;
 
 		m_CollisionComponent->Start();
-
 		m_CollisionComponent->ClearAllChannels();
 		m_CollisionComponent->AddCollidingChannel(CollisionChannel::Explosion);
-
 		m_CollisionConnection->Resume();
-
 	}
 }

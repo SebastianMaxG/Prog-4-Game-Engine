@@ -23,6 +23,7 @@ namespace lsmf
 		TextComponent(TextComponent&& other) = delete;
 		TextComponent& operator=(const TextComponent& other) = delete;
 		TextComponent& operator=(TextComponent&& other) = delete;
+
 	private:
 		bool m_needsUpdate;
 		std::string m_text;

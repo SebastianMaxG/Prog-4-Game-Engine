@@ -125,7 +125,7 @@ namespace lsmf
     }
     void SelectComponent::Deactivate() const
     {
-        m_TextComponent->Stop();
+        m_TextComponent->SetText(" ");
         InputHandler::GetInstance().RemoveCommand("NextLetter");
         InputHandler::GetInstance().RemoveCommand("PreviousLetter");
         InputHandler::GetInstance().RemoveCommand("Increment");
