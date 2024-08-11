@@ -1,12 +1,11 @@
 #pragma once
 #include "ControllerComponent.h"
 #include <random>
-
 #include "Tile.h"
 
 namespace lsmf
 {
-	class TileGrid;
+    class TileGrid;
 
     class EnemyController : public ControllerComponent
     {
@@ -19,6 +18,13 @@ namespace lsmf
             Right
         };
 
+        enum class State
+        {
+            Idle,
+            Moving,
+            Chasing,
+            Colliding
+        };
 
         EnemyController(GameObject* gameObjectPtr, TileGrid* tileGrid);
         ~EnemyController() override;
@@ -29,26 +35,26 @@ namespace lsmf
         const EnemyController& operator=(EnemyController&& other) = delete;
 
         void Update(double deltaTime) override;
-
         void HandleInput(SDL_Event event) override;
 
         void LockVerticalMovement() { m_CanMoveVertical = false; }
         void Smart() { m_Smart = true; }
 
-
         void CollisionEvent(GameObject* collider, GameObject* other);
 
     private:
+        void UpdateIdleState(double deltaTime);
+        void UpdateMovingState(double deltaTime);
+        void UpdateChasingState(double deltaTime);
+        void UpdateCollidingState(double deltaTime);
 
         TileGrid* m_TileGrid;
         bool m_CanMoveVertical = true;
-        bool m_Smart {false};
+        bool m_Smart{ false };
         glm::vec2 m_MoveDirection;
-
         signal::Connection<GameObject*, GameObject*>* m_CollisionConnection;
-
         Tile* m_CurrentTile{};
         std::vector<Player*> m_Players;
-
+        State m_CurrentState = State::Idle;
     };
 }
