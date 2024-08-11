@@ -60,7 +60,7 @@ namespace lsmf
 
 		bool m_IsDead = false;
 		bool m_IsMoving = false;
-		bool m_Remote = true;
+		bool m_Remote = false;
 		bool m_WallPass = false;
 		bool m_FlamePass = false;
 		bool m_BombPass = false;
@@ -69,9 +69,9 @@ namespace lsmf
 
 
 		int m_Speed = 3;
-		int m_NrOfBombs = 1;
+		int m_NrOfBombs = 0;
 		int m_BombRange = 1;
-		int m_BombCount = 2;
+		int m_BombCount = 1;
 
 
 		glm::vec2 m_StartPos = { 0,0 };
