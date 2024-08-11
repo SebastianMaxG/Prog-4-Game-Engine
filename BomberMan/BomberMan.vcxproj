@@ -166,6 +166,7 @@
     <ClCompile Include="SelectComponent.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileGrid.cpp" />
+    <ClCompile Include="TileState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="SelectComponent.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileGrid.h" />
+    <ClInclude Include="TileState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
