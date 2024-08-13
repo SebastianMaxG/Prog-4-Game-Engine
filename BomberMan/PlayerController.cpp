@@ -300,7 +300,7 @@ namespace lsmf
         {
             return;
         }
-        if (event.key.keysym.sym == SDLK_F2)
+        if (event.key.keysym.sym == SDLK_F1)
         {
             globalSignals::OnPlayerWin.Emit();
             globalSignals::OnPlayerWin.Update();
@@ -370,7 +370,7 @@ namespace lsmf
             {
                 auto nextLevel = std::make_unique<Command>();
                 NextLevelCommand = nextLevel.get();
-                NextLevelCommand->BindKey(SDLK_F2);
+                NextLevelCommand->BindKey(SDLK_F1);
 
                 InputHandler::GetInstance().BindCommand("NextLevel", std::move(nextLevel));
             }

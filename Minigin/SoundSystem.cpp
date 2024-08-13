@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "AudioClip.h"
+#include "InputHandler.h"
 #include "ResourceManager.h"
 
 namespace lsmf
@@ -19,6 +20,12 @@ namespace lsmf
         {
             throw std::runtime_error(std::string("Failed to initialize SDL_mixer: ") + Mix_GetError());
         }
+
+
+        auto mute = std::make_unique<Command>();
+        mute->BindKey(SDLK_F2);
+        mute->BindFunction(this, &SDLSoundSystem::Mute);
+        InputHandler::GetInstance().BindCommand("Mute", std::move(mute));
     }
 
     SDLSoundSystem::~SDLSoundSystem()
@@ -70,6 +77,24 @@ namespace lsmf
 		}
     }
 
+    void SDLSoundSystem::Mute(SDL_Event event)
+    {
+		if (event.type == SDL_KEYUP)
+		{
+			if (event.key.keysym.sym == SDLK_F2)
+			{
+                muted = !muted;
+                if (muted)
+				{
+					Mix_Volume(-1, 0);
+				}
+				else
+				{
+					Mix_Volume(-1, MIX_MAX_VOLUME);
+				}
+			}
+		}
+    }
 
 
     //--------------------------------------------------------------------------

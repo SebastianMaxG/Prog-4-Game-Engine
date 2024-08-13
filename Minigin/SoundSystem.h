@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <memory>
+#include <SDL_events.h>
 #include <string>
 #include <unordered_map>
 #include "Signal.h"
@@ -10,6 +11,7 @@ namespace lsmf
 	{
         inline std::jthread g_PlaySoundThread;
         inline signal::Signal<const std::string, float> PlaySoundSignal{g_PlaySoundThread};
+        inline signal::Signal<> StopAllSoundsSignal{g_PlaySoundThread};
 	}
 
 
@@ -21,6 +23,7 @@ namespace lsmf
         SoundSystem()
         {
         	m_PlaySoundConnection = sound::PlaySoundSignal.Connect(this, &SoundSystem::PlaySound);
+            m_StopAllSoundsConnection = sound::StopAllSoundsSignal.Connect(this, &SoundSystem::StopAllSounds);
 		}
         virtual ~SoundSystem();
 
@@ -37,6 +40,7 @@ namespace lsmf
         virtual void Load (const std::string& file) = 0;
 	protected:
         signal::Connection<const std::string, float>* m_PlaySoundConnection;
+        signal::Connection<>* m_StopAllSoundsConnection;
     };
 
     class SDLSoundSystem : public SoundSystem
@@ -50,9 +54,11 @@ namespace lsmf
         void UnloadAll() override;
         void Unload(const std::string& file) override;
         void Load(const std::string& file) override;
+        void Mute(SDL_Event event);
 
     private:
         std::unordered_map<std::string, std::shared_ptr<AudioClip>> audioClipCache;
+        bool muted = false;
 
     };
 

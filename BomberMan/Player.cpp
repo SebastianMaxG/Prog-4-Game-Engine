@@ -285,6 +285,7 @@ namespace lsmf
 		SetState(PlayerState::Down);
 		m_SpriteComponent->SetFrame();
 		m_Bombs.clear();
+		m_NrOfBombs = 0;
 
 		m_Grid = grid;
 		m_CurrentTile = nullptr;
