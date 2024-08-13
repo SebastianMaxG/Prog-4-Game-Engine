@@ -286,7 +286,7 @@ namespace lsmf
         {
             if (m_ControllerID == event.cdevice.which)
             {
-                if (event.cbutton.button == SDL_CONTROLLER_BUTTON_X)
+                if (event.cbutton.button == SDL_CONTROLLER_BUTTON_B)
                 {
                     m_Player->Detonate();
                 }
@@ -343,7 +343,7 @@ namespace lsmf
                 auto action2 = std::make_unique<Command>();
                 action2Command = action2.get();
                 action2Command->BindKey(SDLK_z);
-                action2Command->BindKey(SDL_CONTROLLER_BUTTON_X);
+                action2Command->BindKey(SDL_CONTROLLER_BUTTON_B);
 
                 InputHandler::GetInstance().BindCommand("Action2", std::move(action2));
             }

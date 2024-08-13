@@ -23,7 +23,7 @@ namespace lsmf
             BSPtr->BindKey(SDLK_RETURN);
             BSPtr->BindKey(SDLK_SPACE);
             BSPtr->BindKey(SDL_MOUSEBUTTONDOWN);
-            BSPtr->BindKey(SDL_CONTROLLER_BUTTON_X);
+            BSPtr->BindKey(SDL_CONTROLLER_BUTTON_B);
 
             InputHandler::GetInstance().BindCommand("ButtonSelect", std::move(buttonSelect));
 		}
@@ -69,7 +69,7 @@ namespace lsmf
     }
     void ButtonComponent::ButtonSelect(SDL_Event e)
     {
-        if (e.type != SDL_KEYUP)
+        if (e.type != SDL_KEYUP and e.type != SDL_CONTROLLERBUTTONUP)
         {
             return;
         }
