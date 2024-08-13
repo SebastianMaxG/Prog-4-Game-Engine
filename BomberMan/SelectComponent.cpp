@@ -10,7 +10,7 @@ namespace lsmf
         : BaseComponent(gameObject)
     {
         //make a text component
-        auto textComponent = std::make_unique<TextComponent>(gameObject, " A A A ", font, SDL_Color{ 255, 255, 255, 255 });
+        auto textComponent = std::make_unique<TextComponent>(gameObject, "oAo-A--A-", font, SDL_Color{ 255, 255, 255, 255 });
         m_TextComponent = textComponent.get();
         gameObject->AddComponent(std::move(textComponent));
 
@@ -145,8 +145,8 @@ namespace lsmf
             }
             else
             {
-	            				str += " ";
-			}
+                str += "-";
+            }
             str += m_Letters[i];
             if (i == m_CurrentIndex)
             {
@@ -154,7 +154,7 @@ namespace lsmf
             }
             else
             {
-                str += " ";
+                str += "-";
             }
         }
         return str;
